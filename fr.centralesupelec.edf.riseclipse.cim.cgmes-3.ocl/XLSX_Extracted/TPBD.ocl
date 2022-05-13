@@ -1,0 +1,86 @@
+/*
+*************************************************************************
+**  This file is part of the RiseClipse tool
+**
+**  The content of this file is based on data available on the ENTSO-E
+**  web site (https://www.entsoe.eu/digital/cim/cim-conformity-and-interoperability/)
+**
+**  This file is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
+**  
+**  Contributors:
+**      Computer Science Department, CentraleSupélec
+**      EDF R&D
+**  Contacts:
+**      dominique.marcadet@centralesupelec.fr
+**      aurelie.dehouck-neveu@edf.fr
+**  Web site:
+**      https://riseclipse.github.io/
+*************************************************************************
+*/
+
+import cim : 'http://iec.ch/TC57/CIM100'
+import md : 'http://iec.ch/TC57/61970-552/ModelDescription/1'
+
+import '../Helpers/CheckProfile.ocl'
+import '../Helpers/Constants.ocl'
+
+
+package cim
+
+
+context IdentifiedObject
+--docReference non-QoCDC Key=53e78cf7-89a5-485c-9b54-7bc35a1eb86a Profile=TPBD
+--message The length of the string is 16 characters as defined by the EIC code.
+    inv TPBD_IdentifiedObject_energyIdentCodeEic_stringLength
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/TPBD/IdentifiedObject_energyIdentCodeEic_stringLength;'
+          + '0;'
+          + self.ID + ': The length of the string is 16 characters as defined by the EIC code.'
+        )
+    :
+        self.isInTopologyBoundaryProfile() implies (
+            self.energyIdentCodeEic <> null implies (
+                self.energyIdentCodeEic.size() = EIC_LENGTH
+            )
+        )
+
+--docReference non-QoCDC Key=3bf038a6-3fc8-4041-ad6f-f26135e54945 Profile=TPBD
+--message Length of the string 12 characters maximum.
+    inv TPBD_IdentifiedObject_shortName_stringLength
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/TPBD/IdentifiedObject_shortName_stringLength;'
+          + '0;'
+          + self.ID + ': Length of the string 12 characters maximum.'
+        )
+    :
+        self.isInTopologyBoundaryProfile() implies (
+            self.shortName <> null implies self.shortName.size() <= SHORT_NAME_LENGTH
+        )
+
+--docReference non-QoCDC Key=75d0320d-4cb6-4328-bb2b-d43a74e692fe Profile=TPBD
+--message The string is maximum 256 characters.
+    inv TPBD_IdentifiedObject_description_stringLength
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/TPBD/IdentifiedObject_description_stringLength;'
+          + '0;'
+          + self.ID + ': The string is maximum 256 characters.'
+        )
+    :
+        self.isInTopologyBoundaryProfile() implies (
+            self.description <> null implies self.description.size() <= IO_DESCRIPTION_LENGTH
+        )
+
+--docReference non-QoCDC Key=3e7289b1-d2b8-4692-be94-f3a6887e0f5e Profile=TPBD
+--message The string IdentifiedObject.name is maximum 128 characters.
+    inv TPBD_IdentifiedObject_name_stringLength
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/TPBD/IdentifiedObject_name_stringLength;'
+          + '0;'
+          + self.ID + ': The string IdentifiedObject.name is maximum 128 characters.'
+        )
+    :
+        self.isInTopologyBoundaryProfile() implies (
+            self.name <> null implies self.name.size() <= 128.0
+        )
+
+endpackage

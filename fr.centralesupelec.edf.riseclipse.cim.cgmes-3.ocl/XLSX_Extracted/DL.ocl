@@ -1,0 +1,107 @@
+/*
+*************************************************************************
+**  This file is part of the RiseClipse tool
+**
+**  The content of this file is based on data available on the ENTSO-E
+**  web site (https://www.entsoe.eu/digital/cim/cim-conformity-and-interoperability/)
+**
+**  This file is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
+**  
+**  Contributors:
+**      Computer Science Department, CentraleSupélec
+**      EDF R&D
+**  Contacts:
+**      dominique.marcadet@centralesupelec.fr
+**      aurelie.dehouck-neveu@edf.fr
+**  Web site:
+**      https://riseclipse.github.io/
+*************************************************************************
+*/
+
+import cim : 'http://iec.ch/TC57/CIM100'
+import md : 'http://iec.ch/TC57/61970-552/ModelDescription/1'
+
+import '../Helpers/CheckProfile.ocl'
+
+
+package cim
+
+
+context DiagramObject
+--docReference non-QoCDC Key=a2c794c4-4634-4fdb-9417-faa8c6da4553 Profile=DL
+--message The association end role description stated that: The domain object to which this diagram object is associated. Therefore, the association cannot point to cim:Diagram, cim:DiagramObject, cim:VisibilityLayer, cim:DiagramStyle, cim:DiagramObjectStyle or cim:TextDiagramObject.
+    inv DL_DiagramObject_internalValueType
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/DL/DiagramObject_internalValueType;'
+          + '0;'
+          + self.ID + ': The association end role description stated that: The domain object to which this diagram object is associated. Therefore, the association cannot point to cim:Diagram, cim:DiagramObject, cim:VisibilityLayer, cim:DiagramStyle, cim:DiagramObjectStyle or cim:TextDiagramObject'
+        )
+    :
+        self.isInDiagramLayoutProfile() and self.IdentifiedObject <> null implies (
+            not self.IdentifiedObject.oclIsKindOf( Diagram            ) and
+            not self.IdentifiedObject.oclIsKindOf( DiagramObject      ) and
+            not self.IdentifiedObject.oclIsKindOf( VisibilityLayer    ) and
+            not self.IdentifiedObject.oclIsKindOf( DiagramStyle       ) and
+            not self.IdentifiedObject.oclIsKindOf( DiagramObjectStyle ) and
+            not self.IdentifiedObject.oclIsKindOf( TextDiagramObject  )
+        )
+
+--docReference non-QoCDC Key=c5665967-6f0f-47c3-bf49-83aedfee8a49 Profile=DL
+--message The DiagramObject should link to SynchronousMachine and not GeneratingUnit.
+    inv DL_DiagramObject_valueType
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/DL/DiagramObject_valueType;'
+          + '0;'
+          + self.ID + ': The DiagramObject should link to SynchronousMachine and not GeneratingUnit'
+        )
+    :
+        self.isInDiagramLayoutProfile() and self.IdentifiedObject <> null implies (
+            not self.IdentifiedObject.oclIsKindOf( GeneratingUnit )
+        )
+
+context DiagramObjectPoint
+--docReference non-QoCDC Key=9c73e8f8-1362-4448-9988-67537ebaa36a Profile=DL
+--message The property (attribute) shall be a positive value.
+    inv DL_DiagramObjectPoint_sequenceNumber_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/DL/DiagramObjectPoint_sequenceNumber_valueRange;'
+          + '0;'
+          + self.ID + ': The property (attribute) shall be a positive value'
+        )
+    :
+        self.isInDiagramLayoutProfile() implies (
+            self.sequenceNumber <> null implies self.sequenceNumber >  0.0
+        )
+
+context DiagramStyle
+--docReference non-QoCDC Key=b2a8634e-5dc5-45b6-ac80-4ba877f956ba Profile=DL
+--message The inherited IdentifiedObject.name shall have one of the following names: "node-breaker", "bus-branch", "hybrid (node-breaker and bus-branch)" or "geoschematic".
+    inv DL_DiagramStyle_name_allowedNameValues
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/DL/DiagramStyle_name_allowedNameValues;'
+          + '0;'
+          + self.ID + ': The inherited IdentifiedObject.name shall have one of the following names: "node-breaker", "bus-branch", "hybrid (node-breaker and bus-branch)" or "geoschematic"'
+        )
+    :
+        self.isInDiagramLayoutProfile() implies (
+            self.name = 'node-breaker' or
+            self.name = 'bus-branch'   or
+            self.name = 'hybrid'       or
+            self.name = 'geoschematic'
+        )
+
+context IdentifiedObject
+--docReference non-QoCDC Key=7e3ed7f1-1596-4a71-a0a9-32dcfbf84951 Profile=DL
+--message The string IdentifiedObject.name has a maximum of 128 characters.
+    inv DL_IdentifiedObject_name_stringLength
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/DL/IdentifiedObject_name_stringLength;'
+          + '0;'
+          + self.ID + ': The string IdentifiedObject.name has a maximum of 128 characters'
+        )
+    :
+        self.isInDiagramLayoutProfile() implies (
+            self.name <> null implies self.name.size() <= 128
+        )
+
+endpackage

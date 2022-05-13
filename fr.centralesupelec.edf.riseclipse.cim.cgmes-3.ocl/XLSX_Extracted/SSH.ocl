@@ -1,0 +1,630 @@
+/*
+*************************************************************************
+**  This file is part of the RiseClipse tool
+**
+**  The content of this file is based on data available on the ENTSO-E
+**  web site (https://www.entsoe.eu/digital/cim/cim-conformity-and-interoperability/)
+**
+**  This file is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
+**  
+**  Contributors:
+**      Computer Science Department, CentraleSupélec
+**      EDF R&D
+**  Contacts:
+**      dominique.marcadet@centralesupelec.fr
+**      aurelie.dehouck-neveu@edf.fr
+**  Web site:
+**      https://riseclipse.github.io/
+*************************************************************************
+*/
+
+import cim : 'http://iec.ch/TC57/CIM100'
+import md : 'http://iec.ch/TC57/61970-552/ModelDescription/1'
+
+import '../Helpers/CheckProfile.ocl'
+
+
+package cim
+
+
+context ACDCConverter
+--docReference non-QoCDC Key=0f6bb0cb-939c-4a36-9d53-97509e1913fe Profile=SSH
+--message The attribute shall be a positive value.
+    inv SSH_ACDCConverter_targetUdc_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/ACDCConverter_targetUdc_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.targetUdc <> null implies self.targetUdc > 0.0
+        )
+
+context ActivePowerLimit
+--docReference non-QoCDC Key=3f666d94-a7de-4604-bdbd-d047f431e130 Profile=SSH
+--message The attribute shall be a positive value or zero.
+    inv SSH_ActivePowerLimit_value_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/ActivePowerLimit_value_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value or zero.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.value <> null implies self.value >= 0.0
+        )
+
+context ApparentPowerLimit
+--docReference non-QoCDC Key=46ae65c2-b2c0-4a0a-923e-ac40ba856e74 Profile=SSH
+--message The attribute shall be a positive value or zero.
+    inv SSH_ApparentPowerLimit_value_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/ApparentPowerLimit_value_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value or zero.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.value <> null implies self.value >= 0.0
+        )
+
+context BatteryUnit
+--docReference non-QoCDC Key=7ef56f90-6158-4225-a0c9-474c8b86a326 Profile=SSH
+--message The attribute shall be a positive value or zero and lower than BatteryUnit.ratedE.
+    inv SSH_BatteryUnit_storedE_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/BatteryUnit_storedE_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value or zero and lower than BatteryUnit.ratedE.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.storedE <> null implies self.storedE >= 0.0
+        )
+
+--docReference non-QoCDC Key=562c4a2b-d23f-4820-bd69-fb831f12161c Profile=SSH
+--message The attribute shall be a positive value or zero and lower than BatteryUnit.ratedE.
+    inv SSH_BatteryUnit_storedE_valueRangePair
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/BatteryUnit_storedE_valueRangePair;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value or zero and lower than BatteryUnit.ratedE.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.storedE <> null and self.ratedE <> null implies self.storedE < self.ratedE
+        )
+
+context ControlArea
+def : INTERCH_IMBALANCE_ERROR : Real = 200
+def : INTERCH_IMBALANCE_EMF : Real = 2
+def : INTERCH_IMBALANCE_WARNING : Real = 50
+--docReference non-QoCDC Key=f7b3ebf8-9084-4d17-ba18-2fe1dcf3a79e Profile=SSH
+--message Control area constraints in power flow are represented as a set of area control equality constraints of the form: Control Area Net Interchange = SUM (control area flow into the area on each tie)
+    inv SSH_ControlArea_netInterchangeCalculation
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/ControlArea_netInterchangeCalculation;'
+          + '0;'
+          + self.ID + ': Control area constraints in power flow are represented as a set of area control equality constraints of the form: Control Area Net Interchange = SUM (control area flow into the area on each tie)'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.type = ControlAreaTypeKind::Interchange implies
+                let ties          : Set( TieFlow             ) = self.TieFlow in
+                let tie_trmnls    : Bag( Terminal            ) = ties             ->select( Terminal         <> null ).Terminal in
+                let tie_cns       : Bag( ConnectivityNode    ) = tie_trmnls       ->select( ConnectivityNode <> null ).ConnectivityNode in
+                let tie_ei_trmnls : Bag( Terminal            ) = tie_cns.Terminals->select( ConductingEquipment.oclIsKindOf( EquivalentInjection )) in
+                let ei            : Bag( EquivalentInjection ) = tie_ei_trmnls.ConductingEquipment.oclAsType( EquivalentInjection ) in
+                let eip           : Bag( Real                ) = ei.p in
+                let eip_diff      : Real = eip->sum() + self.netInterchange in
+                eip_diff = 0
+        )
+
+--docReference non-QoCDC Key=ec141c2f-4d66-462d-b2f3-c30220bc449d Profile=SSH
+--message The attribute shall be a positive value or zero.
+    inv SSH_ControlArea_pTolerance_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/ControlArea_pTolerance_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value or zero.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.pTolerance <> null implies self.pTolerance >= 0.0
+        )
+
+context CsConverter
+--docReference non-QoCDC Key=6aeb4ab0-583a-47a8-bb7a-28d7b650c676 Profile=SSH
+--message It is only applicable for rectifier if continuous tap changer control is used. 
+    inv SSH_CsConverter_applicability_rectifier
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/CsConverter_applicability_rectifier;'
+          + '0;'
+          + self.ID + ': It is only applicable for rectifier if continuous tap changer control is used. '
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.PccTerminal <> null implies
+                self.PccTerminal.TransformerEnd->notEmpty() and
+                self.PccTerminal.RegulatingControl->select( oclIsKindOf( TapChangerControl ) and not discrete )->notEmpty() implies
+                    self.targetAlpha->notEmpty()
+        )
+
+--docReference non-QoCDC Key=d1b0b9c6-2967-40d2-902d-ba0e1bd031b6 Profile=SSH
+--message The attribute shall be a positive value.
+    inv SSH_CsConverter_targetAlpha_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/CsConverter_targetAlpha_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.targetAlpha <> null implies self.targetAlpha > 0.0
+        )
+
+--docReference non-QoCDC Key=6431d4e2-b7c7-4b49-a126-44acdfba2313 Profile=SSH
+--message Allowed values are within the range minAlpha<=targetAlpha<=maxAlpha.
+    inv SSH_CsConverter_targetAlpha_valueRangePairFrom
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/CsConverter_targetAlpha_valueRangePairFrom;'
+          + '0;'
+          + self.ID + ': Allowed values are within the range minAlpha<=targetAlpha<=maxAlpha.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.minAlpha <> null and self.targetAlpha  <> null implies self.minAlpha <= self.targetAlpha
+        )
+
+--docReference non-QoCDC Key=9e282796-3d68-4b2d-98c6-ac5810de5698 Profile=SSH
+--message Allowed values are within the range minAlpha<=targetAlpha<=maxAlpha.
+    inv SSH_CsConverter_targetAlpha_valueRangePairTo
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/CsConverter_targetAlpha_valueRangePairTo;'
+          + '0;'
+          + self.ID + ': Allowed values are within the range minAlpha<=targetAlpha<=maxAlpha.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.targetAlpha <> null and self.maxAlpha  <> null implies self.targetAlpha <= self.maxAlpha
+        )
+
+--docReference non-QoCDC Key=797fb550-9e23-42a1-a517-661d195438a3 Profile=SSH
+--message It is only applicable for inverter if continuous tap changer control is used.
+    inv SSH_CsConverter_applicability_inverter
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/CsConverter_applicability_inverter;'
+          + '0;'
+          + self.ID + ': It is only applicable for inverter if continuous tap changer control is used.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.PccTerminal <> null implies
+                self.PccTerminal.TransformerEnd->notEmpty() and
+                self.PccTerminal.RegulatingControl->select( oclIsKindOf( TapChangerControl ) and not discrete )->notEmpty() implies
+                    self.targetGamma->notEmpty()
+        )
+
+--docReference non-QoCDC Key=72eb459b-5eda-4f72-a5cd-2a31612c6aab Profile=SSH
+--message The attribute shall be a positive value.
+    inv SSH_CsConverter_targetGamma_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/CsConverter_targetGamma_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.targetGamma <> null implies self.targetGamma > 0.0
+        )
+
+--docReference non-QoCDC Key=a4ed53bc-0bc7-4751-a78d-91428655ac10 Profile=SSH
+--message Allowed values are within the range minGamma<=targetGamma<=maxGamma. 
+    inv SSH_CsConverter_targetGamma_valueRangePairFrom
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/CsConverter_targetGamma_valueRangePairFrom;'
+          + '0;'
+          + self.ID + ': Allowed values are within the range minGamma<=targetGamma<=maxGamma. '
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.minGamma <> null and self.targetGamma  <> null implies self.minGamma <= self.targetGamma
+        )
+
+--docReference non-QoCDC Key=8b77ecdf-d06c-4f31-a787-7f0a2b4c92a6 Profile=SSH
+--message Allowed values are within the range minGamma<=targetGamma<=maxGamma. 
+    inv SSH_CsConverter_targetGamma_valueRangePairTo
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/CsConverter_targetGamma_valueRangePairTo;'
+          + '0;'
+          + self.ID + ': Allowed values are within the range minGamma<=targetGamma<=maxGamma. '
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.targetGamma <> null and self.maxGamma  <> null implies self.targetGamma <= self.maxGamma
+        )
+
+--docReference non-QoCDC Key=de882bb7-94eb-465c-922d-0b1937ef153b Profile=SSH
+--message The attribute shall be a positive value.
+    inv SSH_CsConverter_targetIdc_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/CsConverter_targetIdc_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.targetIdc <> null implies self.targetIdc > 0.0
+        )
+
+context CurrentLimit
+--docReference non-QoCDC Key=131264b3-f6a3-4f9a-b10e-55068a700f77 Profile=SSH
+--message The attribute shall be a positive value or zero.
+    inv SSH_CurrentLimit_value_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/CurrentLimit_value_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value or zero.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.value <> null implies self.value >= 0.0
+        )
+
+context EnergyConsumer
+--docReference non-QoCDC Key=91050fbb-115f-4eb2-a0e9-b1f83b68e214 Profile=SSH
+--message Negative reactive power loads shall not be exchanged. In cases where this is needed EquivalentInjection is used instead.
+    inv SSH_EnergyConsumer_q_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/EnergyConsumer_q_valueRange;'
+          + '0;'
+          + self.ID + ': Negative reactive power loads shall not be exchanged. In cases where this is needed EquivalentInjection is used instead.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.q <> null implies self.q >= 0.0
+        )
+
+context EnergySource
+--docReference non-QoCDC Key=e156efb7-3bfc-49dc-9075-aaa4997119d5 Profile=SSH
+--message The attribute shall be a positive value or zero.
+    inv SSH_EnergySource_voltageAngle_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/EnergySource_voltageAngle_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value or zero.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.voltageAngle <> null implies self.voltageAngle >= 0.0
+        )
+
+--docReference non-QoCDC Key=c25183aa-76e9-4342-b924-987e29d2a1ca Profile=SSH
+--message The attribute shall be a positive value or zero.
+    inv SSH_EnergySource_voltageMagnitude_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/EnergySource_voltageMagnitude_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value or zero.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.voltageMagnitude <> null implies self.voltageMagnitude >= 0.0
+        )
+
+context EquivalentInjection
+def : SSH_SV_MAX_Q_DIFF : Real = 50
+def : SSH_SV_TOT_P_DIFF : Real = 200
+def : SSH_SV_MAX_P_DIFF : Real = 10
+--docReference non-QoCDC Key=bc492c0a-d014-409f-b7d6-f4c80b09ed1f Profile=SSH
+--message The attribute shall be a positive value.
+    inv SSH_EquivalentInjection_regulationTarget_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/EquivalentInjection_regulationTarget_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.regulationTarget <> null implies self.regulationTarget >  0.0
+        )
+
+context GeneratingUnit
+--docReference non-QoCDC Key=15073e2d-5f77-47b2-b8e8-08416b2acde9 Profile=SSH
+--message The attribute shall be a positive value or zero.
+    inv SSH_GeneratingUnit_normalPF_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/GeneratingUnit_normalPF_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value or zero.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.normalPF <> null implies self.normalPF >= 0.0
+        )
+
+context RegulatingControl
+--docReference non-QoCDC Key=8e69ca8e-67ff-4d9a-927e-4533e414514f Profile=SSH
+--message The attribute minAllowedTargetValue and maxAllowedTargetValue are required in the following cases: - For a power generating module operated in power factor control mode to specify maximum and minimum power factor values; - ....
+    inv SSH_RegulatingControl_requiredAttributes
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/RegulatingControl_requiredAttributes;'
+          + '0;'
+          + self.ID + ': The attribute minAllowedTargetValue and maxAllowedTargetValue are required in the following cases: - For a power generating module operated in power factor control mode to specify maximum and minimum power factor values; - ....'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.mode = RegulatingControlModeKind::powerFactor implies
+                self.minAllowedTargetValue <> null and self.maxAllowedTargetValue <> null
+        )
+
+--docReference non-QoCDC Key=2f5b5104-48c0-4d26-8ac0-77c4ac19769b Profile=SSH
+--message This is a deadband used with discrete control to avoid excessive update of controls like tap changers and shunt compensator banks while regulating. … If RegulatingControl.discrete is set to false, the RegulatingControl.targetDeadband is to be ignored.
+    inv SSH_RegulatingControl_applicability
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/RegulatingControl_applicability;'
+          + '0;'
+          + self.ID + ': This is a deadband used with discrete control to avoid excessive update of controls like tap changers and shunt compensator banks while regulating. … If RegulatingControl.discrete is set to false, the RegulatingControl.targetDeadband is to be ignored.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.discrete = true or self.targetDeadband <> null
+        )
+
+--docReference non-QoCDC Key=92f9ee27-c330-4c87-9369-0bf578432fac Profile=SSH
+--message The attribute shall be a positive value or zero.
+    inv SSH_RegulatingControl_targetDeadband_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/RegulatingControl_targetDeadband_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value or zero.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.targetDeadband <> null implies self.targetDeadband >= 0.0
+        )
+
+--docReference non-QoCDC Key=51d8f12c-eea9-4979-8a59-adc5fc06d6fa Profile=SSH
+--message RegulatingControl.targetValue shall be positive value in cases where the RegulatingControl.mode is set to voltage in EQ profile.
+    inv SSH_RegulatingControl_value
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/RegulatingControl_value;'
+          + '0;'
+          + self.ID + ': RegulatingControl.targetValue shall be positive value in cases where the RegulatingControl.mode is set to voltage in EQ profile.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.mode = RegulatingControlModeKind::voltage implies self.targetValue > 0
+        )
+
+context ShuntCompensator
+--docReference non-QoCDC Key=1c023f83-1b50-4643-b366-201fe34f4ec2 Profile=SSH
+--message Non integer values are allowed to support continuous variables.  For LinearShuntConpensator the value shall be between zero and ShuntCompensator.maximumSections. At value zero the shunt compensator conductance and admittance is zero. 
+    inv SSH_ShuntCompensator_valueLinear
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/ShuntCompensator_valueLinear;'
+          + '0;'
+          + self.ID + ': Non integer values are allowed to support continuous variables.  For LinearShuntConpensator the value shall be between zero and ShuntCompensator.maximumSections. At value zero the shunt compensator conductance and admittance is zero. '
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.sections <> null and self.maximumSections <> null implies (
+                self.sections >=0 and self.sections <= self.maximumSections and
+                self.RegulatingControl <> null implies (
+                    self.RegulatingControl.discrete = true and self.RegulatingControl.enabled = true implies
+                        self.sections = self.sections.round()
+                )
+            )
+        )
+
+--docReference non-QoCDC Key=473b21ed-6daa-4de4-8062-aa3e7164919b Profile=SSH
+--message The attribute shall be a positive value or zero. 
+    inv SSH_ShuntCompensator_sections_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/ShuntCompensator_sections_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value or zero. '
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.sections <> null implies self.sections >= 0.0
+        )
+
+context SynchronousMachine
+--docReference non-QoCDC Key=6bc29b34-145f-40a2-8477-aa9b739fd5b4 Profile=SSH
+--message The SynchronousMachine.operatingMode shall be consistent with the SynchronousMachine.type. - SynchronousMachine.operatingMode = “motor” shall be provided for SynchronousMachine.type in ["motor", "generatorOrMotor", "motorOrCondenser", "generatorOrCondenserOrMotor"], -SynchronousMachine.operatingMode = “condenser" shall be provided for SynchronousMachine.type in ["condenser", "generatorOrCondenser", "motorOrCondenser", "generatorOrCondenserOrMotor"], and  -SynchronousMachine.operatingMode = “generator” shall be provided for SynchronousMachine.type in ["generator", "generatorOrMotor", "generatorOrCondenser", "generatorOrCondenserOrMotor"].
+    inv SSH_SynchronousMachine_matchType
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/SynchronousMachine_matchType;'
+          + '0;'
+          + self.ID + ': The SynchronousMachine.operatingMode shall be consistent with the SynchronousMachine.type. - SynchronousMachine.operatingMode = “motor” shall be provided for SynchronousMachine.type in ["motor", "generatorOrMotor", "motorOrCondenser", "generatorOrCondenserOrMotor"], -SynchronousMachine.operatingMode = “condenser" shall be provided for SynchronousMachine.type in ["condenser", "generatorOrCondenser", "motorOrCondenser", "generatorOrCondenserOrMotor"], and  -SynchronousMachine.operatingMode = “generator” shall be provided for SynchronousMachine.type in ["generator", "generatorOrMotor", "generatorOrCondenser", "generatorOrCondenserOrMotor"].'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.operatingMode = SynchronousMachineOperatingMode::motor implies (
+                self.type = SynchronousMachineKind::motor            or
+                self.type = SynchronousMachineKind::generatorOrMotor or
+                self.type = SynchronousMachineKind::motorOrCondenser or
+                self.type = SynchronousMachineKind::generatorOrCondenserOrMotor
+            )
+            and
+            self.operatingMode = SynchronousMachineOperatingMode::condenser implies (
+                self.type = SynchronousMachineKind::condenser            or
+                self.type = SynchronousMachineKind::generatorOrCondenser or
+                self.type = SynchronousMachineKind::motorOrCondenser     or
+                self.type = SynchronousMachineKind::generatorOrCondenserOrMotor
+            )
+            and
+            self.operatingMode = SynchronousMachineOperatingMode::generator implies (
+                self.type = SynchronousMachineKind::generator            or
+                self.type = SynchronousMachineKind::generatorOrMotor     or
+                self.type = SynchronousMachineKind::generatorOrCondenser or
+                self.type = SynchronousMachineKind::generatorOrCondenserOrMotor
+            )
+        )
+
+context TapChanger
+--docReference non-QoCDC Key=4522bc7a-900d-470a-af50-477ddc6ef948 Profile=SSH
+--message The attribute shall be equal to or greater than lowStep and equal to or less than highStep.
+    inv SSH_TapChanger_step_valueRangePairFrom
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/TapChanger_step_valueRangePairFrom;'
+          + '0;'
+          + self.ID + ': The attribute shall be equal to or greater than lowStep and equal to or less than highStep.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.lowStep <> null and self.step <> null implies self.lowStep <= self.step
+        )
+
+--docReference non-QoCDC Key=8d17a38d-b999-447d-a2a0-c7b86c3e8e3a Profile=SSH
+--message The attribute shall be equal to or greater than lowStep and equal to or less than highStep.
+    inv SSH_TapChanger_step_valueRangePairTo
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/TapChanger_step_valueRangePairTo;'
+          + '0;'
+          + self.ID + ': The attribute shall be equal to or greater than lowStep and equal to or less than highStep.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.step <> null and self.highStep <> null implies self.step <= self.highStep
+        )
+
+--docReference non-QoCDC Key=9f5f69ed-7318-4e94-862c-4654d52bc2ac Profile=SSH
+--message Non integer values are allowed to support continuous tap variables.
+    inv SSH_TapChanger_valueType
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/TapChanger_valueType;'
+          + '0;'
+          + self.ID + ': Non integer values are allowed to support continuous tap variables.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.TapChangerControl <> null implies
+                self.TapChangerControl.discrete = true and self.TapChangerControl.enabled = true implies
+                    self.step = self.step.round()
+        )
+
+--docReference non-QoCDC Key=b5128c83-02f2-4a1f-b98a-45dfc4b51e00 Profile=SSH
+--message In cases where RegulatingControl.discrete is true and RegulatingControl.enabled is true, TapChanger.step shall be integer. 
+    inv SSH_TapChanger_value
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/TapChanger_value;'
+          + '0;'
+          + self.ID + ': In cases where RegulatingControl.discrete is true and RegulatingControl.enabled is true, TapChanger.step shall be integer. '
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.TapChangerControl <> null implies
+                self.TapChangerControl.discrete = true and self.TapChangerControl.enabled = true implies
+                    self.step = self.step.round()
+        )
+
+context VoltageLimit
+--docReference non-QoCDC Key=9128c56d-f181-4bb7-b97d-3d72a7648798 Profile=SSH
+--message The attribute shall be a positive value or zero.
+    inv SSH_VoltageLimit_value_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/VoltageLimit_value_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value or zero.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.value <> null implies self.value >= 0.0
+        )
+
+context VsConverter
+--docReference non-QoCDC Key=f29b82d3-1089-4895-b738-ad25cb4361aa Profile=SSH
+--message The attribute shall be a positive value.
+    inv SSH_VsConverter_droopCompensation_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/VsConverter_droopCompensation_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.droopCompensation <> null implies self.droopCompensation > 0.0
+        )
+
+--docReference non-QoCDC Key=c038f465-886b-451f-bca9-485a83727863 Profile=SSH
+--message The attribute shall be a positive value.
+    inv SSH_VsConverter_droop_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/VsConverter_droop_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.droop <> null implies self.droop > 0.0
+        )
+
+--docReference non-QoCDC Key=f6384339-5302-4829-b864-c60c908c53dc Profile=SSH
+--message The attribute shall be a positive value or zero.
+    inv SSH_VsConverter_qShare_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/VsConverter_qShare_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value or zero.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.qShare <> null implies self.qShare >= 0.0
+        )
+
+--docReference non-QoCDC Key=9e7d8ba0-e580-4a0b-9bde-1e76f7b773f8 Profile=SSH
+--message The attribute shall be a positive value.
+    inv SSH_VsConverter_targetPWMfactor_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/VsConverter_targetPWMfactor_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.targetPWMfactor <> null implies self.targetPWMfactor > 0.0
+        )
+
+--docReference non-QoCDC Key=c0b526c8-32da-4045-8345-ad486310fc15 Profile=SSH
+--message The attribute shall be a positive value.
+    inv SSH_VsConverter_targetPhasePcc_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/VsConverter_targetPhasePcc_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.targetPhasePcc <> null implies self.targetPhasePcc > 0.0
+        )
+
+--docReference non-QoCDC Key=087ee81c-e8b3-4e87-adc0-1e62774f7725 Profile=SSH
+--message The attribute shall be a positive value.
+    inv SSH_VsConverter_targetPowerFactorPcc_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/VsConverter_targetPowerFactorPcc_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.targetPowerFactorPcc <> null implies self.targetPowerFactorPcc > 0.0
+        )
+
+--docReference non-QoCDC Key=8a83f92c-cf57-4eea-9a0a-8df4835fe5fc Profile=SSH
+--message The attribute shall be a positive value.
+    inv SSH_VsConverter_targetUpcc_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SSH/VsConverter_targetUpcc_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies (
+            self.targetUpcc <> null implies self.targetUpcc > 0.0
+        )
+
+endpackage

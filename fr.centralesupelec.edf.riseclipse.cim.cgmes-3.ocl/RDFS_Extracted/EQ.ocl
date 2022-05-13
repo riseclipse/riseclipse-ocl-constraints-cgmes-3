@@ -1,0 +1,1749 @@
+/*
+*************************************************************************
+**  This file is part of the RiseClipse tool
+**
+**  The content of this file is based on data available on the ENTSO-E
+**  web site (https://www.entsoe.eu/digital/cim/cim-conformity-and-interoperability/)
+**
+**  This file is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
+**  
+**  Contributors:
+**      Computer Science Department, CentraleSupélec
+**      EDF R&D
+**  Contacts:
+**      dominique.marcadet@centralesupelec.fr
+**      aurelie.dehouck-neveu@edf.fr
+**  Web site:
+**      https://riseclipse.github.io/
+*************************************************************************
+*/
+
+import cim : 'http://iec.ch/TC57/CIM100'
+import md : 'http://iec.ch/TC57/61970-552/ModelDescription/1'
+
+import '../Helpers/CheckProfile.ocl'
+
+
+package cim
+
+
+context SwitchSchedule
+-- Switch must be set.
+    inv EQ_SwitchSchedule_Switch
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/SwitchSchedule_Switch_must_be_set;'
+          + '0;'
+          + 'Switch must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.Switch <> null
+
+
+context PhaseTapChangerTabular
+-- PhaseTapChangerTable must be set.
+    inv EQ_PhaseTapChangerTabular_PhaseTapChangerTable
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/PhaseTapChangerTabular_PhaseTapChangerTable_must_be_set;'
+          + '0;'
+          + 'PhaseTapChangerTable must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.PhaseTapChangerTable <> null
+
+
+context TapSchedule
+-- TapChanger must be set.
+    inv EQ_TapSchedule_TapChanger
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/TapSchedule_TapChanger_must_be_set;'
+          + '0;'
+          + 'TapChanger must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.TapChanger <> null
+
+
+context NonlinearShuntCompensatorPoint
+-- NonlinearShuntCompensator must be set.
+    inv EQ_NonlinearShuntCompensatorPoint_NonlinearShuntCompensator
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/NonlinearShuntCompensatorPoint_NonlinearShuntCompensator_must_be_set;'
+          + '0;'
+          + 'NonlinearShuntCompensator must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.NonlinearShuntCompensator <> null
+
+-- b must be set.
+    inv EQ_NonlinearShuntCompensatorPoint_b
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/NonlinearShuntCompensatorPoint_b_must_be_set;'
+          + '0;'
+          + 'b must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.b <> null
+
+-- g must be set.
+    inv EQ_NonlinearShuntCompensatorPoint_g
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/NonlinearShuntCompensatorPoint_g_must_be_set;'
+          + '0;'
+          + 'g must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.g <> null
+
+-- sectionNumber must be set.
+    inv EQ_NonlinearShuntCompensatorPoint_sectionNumber
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/NonlinearShuntCompensatorPoint_sectionNumber_must_be_set;'
+          + '0;'
+          + 'sectionNumber must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.sectionNumber <> null
+
+
+context ExternalNetworkInjection
+-- governorSCD must be set.
+    inv EQ_ExternalNetworkInjection_governorSCD
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ExternalNetworkInjection_governorSCD_must_be_set;'
+          + '0;'
+          + 'governorSCD must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.governorSCD <> null
+
+-- maxP must be set.
+    inv EQ_ExternalNetworkInjection_maxP
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ExternalNetworkInjection_maxP_must_be_set;'
+          + '0;'
+          + 'maxP must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.maxP <> null
+
+-- maxQ must be set.
+    inv EQ_ExternalNetworkInjection_maxQ
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ExternalNetworkInjection_maxQ_must_be_set;'
+          + '0;'
+          + 'maxQ must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.maxQ <> null
+
+-- minP must be set.
+    inv EQ_ExternalNetworkInjection_minP
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ExternalNetworkInjection_minP_must_be_set;'
+          + '0;'
+          + 'minP must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.minP <> null
+
+-- minQ must be set.
+    inv EQ_ExternalNetworkInjection_minQ
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ExternalNetworkInjection_minQ_must_be_set;'
+          + '0;'
+          + 'minQ must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.minQ <> null
+
+
+context LinearShuntCompensator
+-- bPerSection must be set.
+    inv EQ_LinearShuntCompensator_bPerSection
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/LinearShuntCompensator_bPerSection_must_be_set;'
+          + '0;'
+          + 'bPerSection must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.bPerSection <> null
+
+-- gPerSection must be set.
+    inv EQ_LinearShuntCompensator_gPerSection
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/LinearShuntCompensator_gPerSection_must_be_set;'
+          + '0;'
+          + 'gPerSection must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.gPerSection <> null
+
+
+context DCSeriesDevice
+-- inductance must be set.
+    inv EQ_DCSeriesDevice_inductance
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/DCSeriesDevice_inductance_must_be_set;'
+          + '0;'
+          + 'inductance must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.inductance <> null
+
+-- resistance must be set.
+    inv EQ_DCSeriesDevice_resistance
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/DCSeriesDevice_resistance_must_be_set;'
+          + '0;'
+          + 'resistance must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.resistance <> null
+
+
+context OperationalLimitType
+-- direction must be set.
+    inv EQ_OperationalLimitType_direction
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/OperationalLimitType_direction_must_be_set;'
+          + '0;'
+          + 'direction must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.direction <> null
+
+-- isInfiniteDuration must be set.
+    inv EQ_OperationalLimitType_isInfiniteDuration
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/OperationalLimitType_isInfiniteDuration_must_be_set;'
+          + '0;'
+          + 'isInfiniteDuration must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.isInfiniteDuration <> null
+
+
+context ControlAreaGeneratingUnit
+-- ControlArea must be set.
+    inv EQ_ControlAreaGeneratingUnit_ControlArea
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ControlAreaGeneratingUnit_ControlArea_must_be_set;'
+          + '0;'
+          + 'ControlArea must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.ControlArea <> null
+
+-- GeneratingUnit must be set.
+    inv EQ_ControlAreaGeneratingUnit_GeneratingUnit
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ControlAreaGeneratingUnit_GeneratingUnit_must_be_set;'
+          + '0;'
+          + 'GeneratingUnit must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.GeneratingUnit <> null
+
+
+context NonConformLoadSchedule
+-- NonConformLoadGroup must be set.
+    inv EQ_NonConformLoadSchedule_NonConformLoadGroup
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/NonConformLoadSchedule_NonConformLoadGroup_must_be_set;'
+          + '0;'
+          + 'NonConformLoadGroup must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.NonConformLoadGroup <> null
+
+
+context VoltageLimit
+-- normalValue must be set.
+    inv EQ_VoltageLimit_normalValue
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/VoltageLimit_normalValue_must_be_set;'
+          + '0;'
+          + 'normalValue must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.normalValue <> null
+
+
+context LoadArea
+-- SubLoadAreas must be set.
+    inv EQ_LoadArea_SubLoadAreas
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/LoadArea_SubLoadAreas_must_be_set;'
+          + '0;'
+          + 'SubLoadAreas must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.SubLoadAreas->size() > 0
+
+
+context Bay
+-- VoltageLevel must be set.
+    inv EQ_Bay_VoltageLevel
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/Bay_VoltageLevel_must_be_set;'
+          + '0;'
+          + 'VoltageLevel must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.VoltageLevel <> null
+
+
+context BatteryUnit
+-- ratedE must be set.
+    inv EQ_BatteryUnit_ratedE
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/BatteryUnit_ratedE_must_be_set;'
+          + '0;'
+          + 'ratedE must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.ratedE <> null
+
+
+context PhaseTapChangerNonLinear
+-- voltageStepIncrement must be set.
+    inv EQ_PhaseTapChangerNonLinear_voltageStepIncrement
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/PhaseTapChangerNonLinear_voltageStepIncrement_must_be_set;'
+          + '0;'
+          + 'voltageStepIncrement must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.voltageStepIncrement <> null
+
+-- xMax must be set.
+    inv EQ_PhaseTapChangerNonLinear_xMax
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/PhaseTapChangerNonLinear_xMax_must_be_set;'
+          + '0;'
+          + 'xMax must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.xMax <> null
+
+-- xMin must be set.
+    inv EQ_PhaseTapChangerNonLinear_xMin
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/PhaseTapChangerNonLinear_xMin_must_be_set;'
+          + '0;'
+          + 'xMin must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.xMin <> null
+
+
+context SeriesCompensator
+-- r must be set.
+    inv EQ_SeriesCompensator_r
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/SeriesCompensator_r_must_be_set;'
+          + '0;'
+          + 'r must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.r <> null
+
+-- x must be set.
+    inv EQ_SeriesCompensator_x
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/SeriesCompensator_x_must_be_set;'
+          + '0;'
+          + 'x must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.x <> null
+
+
+context EquivalentBranch
+-- r must be set.
+    inv EQ_EquivalentBranch_r
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/EquivalentBranch_r_must_be_set;'
+          + '0;'
+          + 'r must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.r <> null
+
+-- x must be set.
+    inv EQ_EquivalentBranch_x
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/EquivalentBranch_x_must_be_set;'
+          + '0;'
+          + 'x must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.x <> null
+
+
+context GrossToNetActivePowerCurve
+-- GeneratingUnit must be set.
+    inv EQ_GrossToNetActivePowerCurve_GeneratingUnit
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/GrossToNetActivePowerCurve_GeneratingUnit_must_be_set;'
+          + '0;'
+          + 'GeneratingUnit must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.GeneratingUnit <> null
+
+
+context BaseVoltage
+-- nominalVoltage must be set.
+    inv EQ_BaseVoltage_nominalVoltage
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/BaseVoltage_nominalVoltage_must_be_set;'
+          + '0;'
+          + 'nominalVoltage must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.nominalVoltage <> null
+
+
+context TapChangerTablePoint
+-- step must be set.
+    inv EQ_TapChangerTablePoint_step
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/TapChangerTablePoint_step_must_be_set;'
+          + '0;'
+          + 'step must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.step <> null
+
+
+context Terminal
+-- ConductingEquipment must be set.
+    inv EQ_Terminal_ConductingEquipment
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/Terminal_ConductingEquipment_must_be_set;'
+          + '0;'
+          + 'ConductingEquipment must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.ConductingEquipment <> null
+
+
+context ACDCTerminal
+-- sequenceNumber must be set.
+    inv EQ_ACDCTerminal_sequenceNumber
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ACDCTerminal_sequenceNumber_must_be_set;'
+          + '0;'
+          + 'sequenceNumber must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.sequenceNumber <> null
+
+
+context PhaseTapChangerTablePoint
+-- PhaseTapChangerTable must be set.
+    inv EQ_PhaseTapChangerTablePoint_PhaseTapChangerTable
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/PhaseTapChangerTablePoint_PhaseTapChangerTable_must_be_set;'
+          + '0;'
+          + 'PhaseTapChangerTable must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.PhaseTapChangerTable <> null
+
+-- angle must be set.
+    inv EQ_PhaseTapChangerTablePoint_angle
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/PhaseTapChangerTablePoint_angle_must_be_set;'
+          + '0;'
+          + 'angle must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.angle <> null
+
+
+context ActivePowerLimit
+-- normalValue must be set.
+    inv EQ_ActivePowerLimit_normalValue
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ActivePowerLimit_normalValue_must_be_set;'
+          + '0;'
+          + 'normalValue must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.normalValue <> null
+
+
+context HydroPowerPlant
+-- hydroPlantStorageType must be set.
+    inv EQ_HydroPowerPlant_hydroPlantStorageType
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/HydroPowerPlant_hydroPlantStorageType_must_be_set;'
+          + '0;'
+          + 'hydroPlantStorageType must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.hydroPlantStorageType <> null
+
+
+context DCLineSegment
+-- capacitance must be set.
+    inv EQ_DCLineSegment_capacitance
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/DCLineSegment_capacitance_must_be_set;'
+          + '0;'
+          + 'capacitance must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.capacitance <> null
+
+-- inductance must be set.
+    inv EQ_DCLineSegment_inductance
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/DCLineSegment_inductance_must_be_set;'
+          + '0;'
+          + 'inductance must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.inductance <> null
+
+-- resistance must be set.
+    inv EQ_DCLineSegment_resistance
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/DCLineSegment_resistance_must_be_set;'
+          + '0;'
+          + 'resistance must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.resistance <> null
+
+
+context Substation
+-- Region must be set.
+    inv EQ_Substation_Region
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/Substation_Region_must_be_set;'
+          + '0;'
+          + 'Region must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.Region <> null
+
+
+context PowerElectronicsUnit
+-- PowerElectronicsConnection must be set.
+    inv EQ_PowerElectronicsUnit_PowerElectronicsConnection
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/PowerElectronicsUnit_PowerElectronicsConnection_must_be_set;'
+          + '0;'
+          + 'PowerElectronicsConnection must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.PowerElectronicsConnection <> null
+
+
+context Clamp
+-- ACLineSegment must be set.
+    inv EQ_Clamp_ACLineSegment
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/Clamp_ACLineSegment_must_be_set;'
+          + '0;'
+          + 'ACLineSegment must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.ACLineSegment <> null
+
+
+context RatioTapChanger
+-- stepVoltageIncrement must be set.
+    inv EQ_RatioTapChanger_stepVoltageIncrement
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/RatioTapChanger_stepVoltageIncrement_must_be_set;'
+          + '0;'
+          + 'stepVoltageIncrement must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.stepVoltageIncrement <> null
+
+-- TransformerEnd must be set.
+    inv EQ_RatioTapChanger_TransformerEnd
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/RatioTapChanger_TransformerEnd_must_be_set;'
+          + '0;'
+          + 'TransformerEnd must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.TransformerEnd <> null
+
+
+context NonlinearShuntCompensator
+-- NonlinearShuntCompensatorPoints must be set.
+    inv EQ_NonlinearShuntCompensator_NonlinearShuntCompensatorPoints
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/NonlinearShuntCompensator_NonlinearShuntCompensatorPoints_must_be_set;'
+          + '0;'
+          + 'NonlinearShuntCompensatorPoints must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.NonlinearShuntCompensatorPoints->size() > 0
+
+
+context SeasonDayTypeSchedule
+-- DayType must be set.
+    inv EQ_SeasonDayTypeSchedule_DayType
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/SeasonDayTypeSchedule_DayType_must_be_set;'
+          + '0;'
+          + 'DayType must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.DayType <> null
+
+-- Season must be set.
+    inv EQ_SeasonDayTypeSchedule_Season
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/SeasonDayTypeSchedule_Season_must_be_set;'
+          + '0;'
+          + 'Season must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.Season <> null
+
+
+context DCTerminal
+-- DCConductingEquipment must be set.
+    inv EQ_DCTerminal_DCConductingEquipment
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/DCTerminal_DCConductingEquipment_must_be_set;'
+          + '0;'
+          + 'DCConductingEquipment must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.DCConductingEquipment <> null
+
+
+context EquivalentShunt
+-- b must be set.
+    inv EQ_EquivalentShunt_b
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/EquivalentShunt_b_must_be_set;'
+          + '0;'
+          + 'b must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.b <> null
+
+-- g must be set.
+    inv EQ_EquivalentShunt_g
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/EquivalentShunt_g_must_be_set;'
+          + '0;'
+          + 'g must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.g <> null
+
+
+context CurveData
+-- Curve must be set.
+    inv EQ_CurveData_Curve
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/CurveData_Curve_must_be_set;'
+          + '0;'
+          + 'Curve must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.Curve <> null
+
+-- xvalue must be set.
+    inv EQ_CurveData_xvalue
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/CurveData_xvalue_must_be_set;'
+          + '0;'
+          + 'xvalue must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.xvalue <> null
+
+-- y1value must be set.
+    inv EQ_CurveData_y1value
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/CurveData_y1value_must_be_set;'
+          + '0;'
+          + 'y1value must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.y1value <> null
+
+
+context DCConductingEquipment
+-- ratedUdc must be set.
+    inv EQ_DCConductingEquipment_ratedUdc
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/DCConductingEquipment_ratedUdc_must_be_set;'
+          + '0;'
+          + 'ratedUdc must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.ratedUdc <> null
+
+
+context RegulationSchedule
+-- RegulatingControl must be set.
+    inv EQ_RegulationSchedule_RegulatingControl
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/RegulationSchedule_RegulatingControl_must_be_set;'
+          + '0;'
+          + 'RegulatingControl must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.RegulatingControl <> null
+
+
+context SynchronousMachine
+-- type must be set.
+    inv EQ_SynchronousMachine_type
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/SynchronousMachine_type_must_be_set;'
+          + '0;'
+          + 'type must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.type <> null
+
+
+context LoadResponseCharacteristic
+-- exponentModel must be set.
+    inv EQ_LoadResponseCharacteristic_exponentModel
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/LoadResponseCharacteristic_exponentModel_must_be_set;'
+          + '0;'
+          + 'exponentModel must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.exponentModel <> null
+
+
+context AuxiliaryEquipment
+-- Terminal must be set.
+    inv EQ_AuxiliaryEquipment_Terminal
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/AuxiliaryEquipment_Terminal_must_be_set;'
+          + '0;'
+          + 'Terminal must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.Terminal <> null
+
+
+context TapChanger
+-- highStep must be set.
+    inv EQ_TapChanger_highStep
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/TapChanger_highStep_must_be_set;'
+          + '0;'
+          + 'highStep must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.highStep <> null
+
+-- lowStep must be set.
+    inv EQ_TapChanger_lowStep
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/TapChanger_lowStep_must_be_set;'
+          + '0;'
+          + 'lowStep must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.lowStep <> null
+
+-- ltcFlag must be set.
+    inv EQ_TapChanger_ltcFlag
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/TapChanger_ltcFlag_must_be_set;'
+          + '0;'
+          + 'ltcFlag must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.ltcFlag <> null
+
+-- neutralStep must be set.
+    inv EQ_TapChanger_neutralStep
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/TapChanger_neutralStep_must_be_set;'
+          + '0;'
+          + 'neutralStep must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.neutralStep <> null
+
+-- neutralU must be set.
+    inv EQ_TapChanger_neutralU
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/TapChanger_neutralU_must_be_set;'
+          + '0;'
+          + 'neutralU must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.neutralU <> null
+
+-- normalStep must be set.
+    inv EQ_TapChanger_normalStep
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/TapChanger_normalStep_must_be_set;'
+          + '0;'
+          + 'normalStep must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.normalStep <> null
+
+
+context RegularIntervalSchedule
+-- TimePoints must be set.
+    inv EQ_RegularIntervalSchedule_TimePoints
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/RegularIntervalSchedule_TimePoints_must_be_set;'
+          + '0;'
+          + 'TimePoints must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.TimePoints->size() > 0
+
+-- timeStep must be set.
+    inv EQ_RegularIntervalSchedule_timeStep
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/RegularIntervalSchedule_timeStep_must_be_set;'
+          + '0;'
+          + 'timeStep must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.timeStep <> null
+
+-- endTime must be set.
+    inv EQ_RegularIntervalSchedule_endTime
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/RegularIntervalSchedule_endTime_must_be_set;'
+          + '0;'
+          + 'endTime must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.endTime <> null
+
+
+context WindGeneratingUnit
+-- windGenUnitType must be set.
+    inv EQ_WindGeneratingUnit_windGenUnitType
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/WindGeneratingUnit_windGenUnitType_must_be_set;'
+          + '0;'
+          + 'windGenUnitType must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.windGenUnitType <> null
+
+
+context Curve
+-- curveStyle must be set.
+    inv EQ_Curve_curveStyle
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/Curve_curveStyle_must_be_set;'
+          + '0;'
+          + 'curveStyle must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.curveStyle <> null
+
+-- xUnit must be set.
+    inv EQ_Curve_xUnit
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/Curve_xUnit_must_be_set;'
+          + '0;'
+          + 'xUnit must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.xUnit <> null
+
+-- y1Unit must be set.
+    inv EQ_Curve_y1Unit
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/Curve_y1Unit_must_be_set;'
+          + '0;'
+          + 'y1Unit must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.y1Unit <> null
+
+-- CurveDatas must be set.
+    inv EQ_Curve_CurveDatas
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/Curve_CurveDatas_must_be_set;'
+          + '0;'
+          + 'CurveDatas must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.CurveDatas->size() > 0
+
+
+context RegulatingControl
+-- mode must be set.
+    inv EQ_RegulatingControl_mode
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/RegulatingControl_mode_must_be_set;'
+          + '0;'
+          + 'mode must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.mode <> null
+
+-- Terminal must be set.
+    inv EQ_RegulatingControl_Terminal
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/RegulatingControl_Terminal_must_be_set;'
+          + '0;'
+          + 'Terminal must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.Terminal <> null
+
+
+context TapChangerControl
+-- TapChanger must be set.
+    inv EQ_TapChangerControl_TapChanger
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/TapChangerControl_TapChanger_must_be_set;'
+          + '0;'
+          + 'TapChanger must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.TapChanger->size() > 0
+
+
+context ConformLoadGroup
+-- EnergyConsumers must be set.
+    inv EQ_ConformLoadGroup_EnergyConsumers
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ConformLoadGroup_EnergyConsumers_must_be_set;'
+          + '0;'
+          + 'EnergyConsumers must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.EnergyConsumers->size() > 0
+
+
+context RegularTimePoint
+-- sequenceNumber must be set.
+    inv EQ_RegularTimePoint_sequenceNumber
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/RegularTimePoint_sequenceNumber_must_be_set;'
+          + '0;'
+          + 'sequenceNumber must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.sequenceNumber <> null
+
+-- value1 must be set.
+    inv EQ_RegularTimePoint_value1
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/RegularTimePoint_value1_must_be_set;'
+          + '0;'
+          + 'value1 must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.value1 <> null
+
+-- IntervalSchedule must be set.
+    inv EQ_RegularTimePoint_IntervalSchedule
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/RegularTimePoint_IntervalSchedule_must_be_set;'
+          + '0;'
+          + 'IntervalSchedule must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.IntervalSchedule <> null
+
+
+context RatioTapChangerTable
+-- RatioTapChangerTablePoint must be set.
+    inv EQ_RatioTapChangerTable_RatioTapChangerTablePoint
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/RatioTapChangerTable_RatioTapChangerTablePoint_must_be_set;'
+          + '0;'
+          + 'RatioTapChangerTablePoint must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.RatioTapChangerTablePoint->size() > 0
+
+
+context ConformLoadSchedule
+-- ConformLoadGroup must be set.
+    inv EQ_ConformLoadSchedule_ConformLoadGroup
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ConformLoadSchedule_ConformLoadGroup_must_be_set;'
+          + '0;'
+          + 'ConformLoadGroup must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.ConformLoadGroup <> null
+
+
+context NonConformLoad
+-- LoadGroup must be set.
+    inv EQ_NonConformLoad_LoadGroup
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/NonConformLoad_LoadGroup_must_be_set;'
+          + '0;'
+          + 'LoadGroup must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.LoadGroup <> null
+
+
+context SubGeographicalRegion
+-- Region must be set.
+    inv EQ_SubGeographicalRegion_Region
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/SubGeographicalRegion_Region_must_be_set;'
+          + '0;'
+          + 'Region must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.Region <> null
+
+
+context DCShunt
+-- capacitance must be set.
+    inv EQ_DCShunt_capacitance
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/DCShunt_capacitance_must_be_set;'
+          + '0;'
+          + 'capacitance must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.capacitance <> null
+
+-- resistance must be set.
+    inv EQ_DCShunt_resistance
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/DCShunt_resistance_must_be_set;'
+          + '0;'
+          + 'resistance must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.resistance <> null
+
+
+context OperationalLimit
+-- OperationalLimitSet must be set.
+    inv EQ_OperationalLimit_OperationalLimitSet
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/OperationalLimit_OperationalLimitSet_must_be_set;'
+          + '0;'
+          + 'OperationalLimitSet must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.OperationalLimitSet <> null
+
+-- OperationalLimitType must be set.
+    inv EQ_OperationalLimit_OperationalLimitType
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/OperationalLimit_OperationalLimitType_must_be_set;'
+          + '0;'
+          + 'OperationalLimitType must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.OperationalLimitType <> null
+
+
+context ACDCConverterDCTerminal
+-- DCConductingEquipment must be set.
+    inv EQ_ACDCConverterDCTerminal_DCConductingEquipment
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ACDCConverterDCTerminal_DCConductingEquipment_must_be_set;'
+          + '0;'
+          + 'DCConductingEquipment must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.DCConductingEquipment <> null
+
+-- polarity must be set.
+    inv EQ_ACDCConverterDCTerminal_polarity
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ACDCConverterDCTerminal_polarity_must_be_set;'
+          + '0;'
+          + 'polarity must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.polarity <> null
+
+
+context Switch
+-- normalOpen must be set.
+    inv EQ_Switch_normalOpen
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/Switch_normalOpen_must_be_set;'
+          + '0;'
+          + 'normalOpen must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.normalOpen <> null
+
+-- retained must be set.
+    inv EQ_Switch_retained
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/Switch_retained_must_be_set;'
+          + '0;'
+          + 'retained must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.retained <> null
+
+
+context ACLineSegment
+-- bch must be set.
+    inv EQ_ACLineSegment_bch
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ACLineSegment_bch_must_be_set;'
+          + '0;'
+          + 'bch must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.bch <> null
+
+-- r must be set.
+    inv EQ_ACLineSegment_r
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ACLineSegment_r_must_be_set;'
+          + '0;'
+          + 'r must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.r <> null
+
+-- x must be set.
+    inv EQ_ACLineSegment_x
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ACLineSegment_x_must_be_set;'
+          + '0;'
+          + 'x must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.x <> null
+
+
+context SubLoadArea
+-- LoadArea must be set.
+    inv EQ_SubLoadArea_LoadArea
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/SubLoadArea_LoadArea_must_be_set;'
+          + '0;'
+          + 'LoadArea must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.LoadArea <> null
+
+-- LoadGroups must be set.
+    inv EQ_SubLoadArea_LoadGroups
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/SubLoadArea_LoadGroups_must_be_set;'
+          + '0;'
+          + 'LoadGroups must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.LoadGroups->size() > 0
+
+
+context BasicIntervalSchedule
+-- startTime must be set.
+    inv EQ_BasicIntervalSchedule_startTime
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/BasicIntervalSchedule_startTime_must_be_set;'
+          + '0;'
+          + 'startTime must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.startTime <> null
+
+-- value1Unit must be set.
+    inv EQ_BasicIntervalSchedule_value1Unit
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/BasicIntervalSchedule_value1Unit_must_be_set;'
+          + '0;'
+          + 'value1Unit must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.value1Unit <> null
+
+
+context Season
+-- endDate must be set.
+    inv EQ_Season_endDate
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/Season_endDate_must_be_set;'
+          + '0;'
+          + 'endDate must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.endDate <> null
+
+-- startDate must be set.
+    inv EQ_Season_startDate
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/Season_startDate_must_be_set;'
+          + '0;'
+          + 'startDate must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.startDate <> null
+
+
+context GeneratingUnit
+-- maxOperatingP must be set.
+    inv EQ_GeneratingUnit_maxOperatingP
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/GeneratingUnit_maxOperatingP_must_be_set;'
+          + '0;'
+          + 'maxOperatingP must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.maxOperatingP <> null
+
+-- minOperatingP must be set.
+    inv EQ_GeneratingUnit_minOperatingP
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/GeneratingUnit_minOperatingP_must_be_set;'
+          + '0;'
+          + 'minOperatingP must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.minOperatingP <> null
+
+-- RotatingMachine must be set.
+    inv EQ_GeneratingUnit_RotatingMachine
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/GeneratingUnit_RotatingMachine_must_be_set;'
+          + '0;'
+          + 'RotatingMachine must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.RotatingMachine->size() > 0
+
+
+context CurrentLimit
+-- normalValue must be set.
+    inv EQ_CurrentLimit_normalValue
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/CurrentLimit_normalValue_must_be_set;'
+          + '0;'
+          + 'normalValue must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.normalValue <> null
+
+
+context TransformerEnd
+-- BaseVoltage must be set.
+    inv EQ_TransformerEnd_BaseVoltage
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/TransformerEnd_BaseVoltage_must_be_set;'
+          + '0;'
+          + 'BaseVoltage must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.BaseVoltage <> null
+
+-- Terminal must be set.
+    inv EQ_TransformerEnd_Terminal
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/TransformerEnd_Terminal_must_be_set;'
+          + '0;'
+          + 'Terminal must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.Terminal <> null
+
+-- endNumber must be set.
+    inv EQ_TransformerEnd_endNumber
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/TransformerEnd_endNumber_must_be_set;'
+          + '0;'
+          + 'endNumber must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.endNumber <> null
+
+
+context Cut
+-- ACLineSegment must be set.
+    inv EQ_Cut_ACLineSegment
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/Cut_ACLineSegment_must_be_set;'
+          + '0;'
+          + 'ACLineSegment must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.ACLineSegment <> null
+
+
+context PhaseTapChangerAsymmetrical
+-- windingConnectionAngle must be set.
+    inv EQ_PhaseTapChangerAsymmetrical_windingConnectionAngle
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/PhaseTapChangerAsymmetrical_windingConnectionAngle_must_be_set;'
+          + '0;'
+          + 'windingConnectionAngle must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.windingConnectionAngle <> null
+
+
+context IdentifiedObject
+-- mRID must be set.
+    inv EQ_IdentifiedObject_mRID
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/IdentifiedObject_mRID_must_be_set;'
+          + '0;'
+          + 'mRID must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.mRID <> null
+
+-- name must be set.
+    inv EQ_IdentifiedObject_name
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/IdentifiedObject_name_must_be_set;'
+          + '0;'
+          + 'name must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.name <> null
+
+
+context TieFlow
+-- ControlArea must be set.
+    inv EQ_TieFlow_ControlArea
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/TieFlow_ControlArea_must_be_set;'
+          + '0;'
+          + 'ControlArea must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.ControlArea <> null
+
+-- Terminal must be set.
+    inv EQ_TieFlow_Terminal
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/TieFlow_Terminal_must_be_set;'
+          + '0;'
+          + 'Terminal must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.Terminal <> null
+
+-- positiveFlowIn must be set.
+    inv EQ_TieFlow_positiveFlowIn
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/TieFlow_positiveFlowIn_must_be_set;'
+          + '0;'
+          + 'positiveFlowIn must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.positiveFlowIn <> null
+
+
+context DCConverterUnit
+-- operationMode must be set.
+    inv EQ_DCConverterUnit_operationMode
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/DCConverterUnit_operationMode_must_be_set;'
+          + '0;'
+          + 'operationMode must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.operationMode <> null
+
+
+context ControlArea
+-- type must be set.
+    inv EQ_ControlArea_type
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ControlArea_type_must_be_set;'
+          + '0;'
+          + 'type must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.type <> null
+
+-- EnergyArea must be set.
+    inv EQ_ControlArea_EnergyArea
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ControlArea_EnergyArea_must_be_set;'
+          + '0;'
+          + 'EnergyArea must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.EnergyArea <> null
+
+
+context OperationalLimitSet
+-- Terminal must be set.
+    inv EQ_OperationalLimitSet_Terminal
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/OperationalLimitSet_Terminal_must_be_set;'
+          + '0;'
+          + 'Terminal must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.Terminal <> null
+
+
+context PhaseTapChangerTable
+-- PhaseTapChangerTablePoint must be set.
+    inv EQ_PhaseTapChangerTable_PhaseTapChangerTablePoint
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/PhaseTapChangerTable_PhaseTapChangerTablePoint_must_be_set;'
+          + '0;'
+          + 'PhaseTapChangerTablePoint must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.PhaseTapChangerTablePoint->size() > 0
+
+
+context ConformLoad
+-- LoadGroup must be set.
+    inv EQ_ConformLoad_LoadGroup
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ConformLoad_LoadGroup_must_be_set;'
+          + '0;'
+          + 'LoadGroup must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.LoadGroup <> null
+
+
+context HydroPump
+-- RotatingMachine must be set.
+    inv EQ_HydroPump_RotatingMachine
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/HydroPump_RotatingMachine_must_be_set;'
+          + '0;'
+          + 'RotatingMachine must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.RotatingMachine <> null
+
+
+context LoadGroup
+-- SubLoadArea must be set.
+    inv EQ_LoadGroup_SubLoadArea
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/LoadGroup_SubLoadArea_must_be_set;'
+          + '0;'
+          + 'SubLoadArea must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.SubLoadArea <> null
+
+
+context DCNode
+-- DCEquipmentContainer must be set.
+    inv EQ_DCNode_DCEquipmentContainer
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/DCNode_DCEquipmentContainer_must_be_set;'
+          + '0;'
+          + 'DCEquipmentContainer must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.DCEquipmentContainer <> null
+
+
+context StaticVarCompensator
+-- capacitiveRating must be set.
+    inv EQ_StaticVarCompensator_capacitiveRating
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/StaticVarCompensator_capacitiveRating_must_be_set;'
+          + '0;'
+          + 'capacitiveRating must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.capacitiveRating <> null
+
+-- inductiveRating must be set.
+    inv EQ_StaticVarCompensator_inductiveRating
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/StaticVarCompensator_inductiveRating_must_be_set;'
+          + '0;'
+          + 'inductiveRating must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.inductiveRating <> null
+
+-- slope must be set.
+    inv EQ_StaticVarCompensator_slope
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/StaticVarCompensator_slope_must_be_set;'
+          + '0;'
+          + 'slope must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.slope <> null
+
+
+context ConnectivityNode
+-- ConnectivityNodeContainer must be set.
+    inv EQ_ConnectivityNode_ConnectivityNodeContainer
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ConnectivityNode_ConnectivityNodeContainer_must_be_set;'
+          + '0;'
+          + 'ConnectivityNodeContainer must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.ConnectivityNodeContainer <> null
+
+
+context FossilFuel
+-- fossilFuelType must be set.
+    inv EQ_FossilFuel_fossilFuelType
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/FossilFuel_fossilFuelType_must_be_set;'
+          + '0;'
+          + 'fossilFuelType must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.fossilFuelType <> null
+
+-- ThermalGeneratingUnit must be set.
+    inv EQ_FossilFuel_ThermalGeneratingUnit
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/FossilFuel_ThermalGeneratingUnit_must_be_set;'
+          + '0;'
+          + 'ThermalGeneratingUnit must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.ThermalGeneratingUnit <> null
+
+
+context VoltageLevel
+-- BaseVoltage must be set.
+    inv EQ_VoltageLevel_BaseVoltage
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/VoltageLevel_BaseVoltage_must_be_set;'
+          + '0;'
+          + 'BaseVoltage must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.BaseVoltage <> null
+
+-- Substation must be set.
+    inv EQ_VoltageLevel_Substation
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/VoltageLevel_Substation_must_be_set;'
+          + '0;'
+          + 'Substation must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.Substation <> null
+
+
+context ReactiveCapabilityCurve
+-- InitiallyUsedBySynchronousMachines must be set.
+    inv EQ_ReactiveCapabilityCurve_InitiallyUsedBySynchronousMachines
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ReactiveCapabilityCurve_InitiallyUsedBySynchronousMachines_must_be_set;'
+          + '0;'
+          + 'InitiallyUsedBySynchronousMachines must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.InitiallyUsedBySynchronousMachines->size() > 0
+
+
+context ShuntCompensator
+-- maximumSections must be set.
+    inv EQ_ShuntCompensator_maximumSections
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ShuntCompensator_maximumSections_must_be_set;'
+          + '0;'
+          + 'maximumSections must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.maximumSections <> null
+
+-- nomU must be set.
+    inv EQ_ShuntCompensator_nomU
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ShuntCompensator_nomU_must_be_set;'
+          + '0;'
+          + 'nomU must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.nomU <> null
+
+-- normalSections must be set.
+    inv EQ_ShuntCompensator_normalSections
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ShuntCompensator_normalSections_must_be_set;'
+          + '0;'
+          + 'normalSections must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.normalSections <> null
+
+
+context ApparentPowerLimit
+-- normalValue must be set.
+    inv EQ_ApparentPowerLimit_normalValue
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/ApparentPowerLimit_normalValue_must_be_set;'
+          + '0;'
+          + 'normalValue must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.normalValue <> null
+
+
+context PhaseTapChanger
+-- TransformerEnd must be set.
+    inv EQ_PhaseTapChanger_TransformerEnd
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/PhaseTapChanger_TransformerEnd_must_be_set;'
+          + '0;'
+          + 'TransformerEnd must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.TransformerEnd <> null
+
+
+context PowerTransformerEnd
+-- PowerTransformer must be set.
+    inv EQ_PowerTransformerEnd_PowerTransformer
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/PowerTransformerEnd_PowerTransformer_must_be_set;'
+          + '0;'
+          + 'PowerTransformer must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.PowerTransformer <> null
+
+-- b must be set.
+    inv EQ_PowerTransformerEnd_b
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/PowerTransformerEnd_b_must_be_set;'
+          + '0;'
+          + 'b must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.b <> null
+
+-- ratedU must be set.
+    inv EQ_PowerTransformerEnd_ratedU
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/PowerTransformerEnd_ratedU_must_be_set;'
+          + '0;'
+          + 'ratedU must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.ratedU <> null
+
+-- r must be set.
+    inv EQ_PowerTransformerEnd_r
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/PowerTransformerEnd_r_must_be_set;'
+          + '0;'
+          + 'r must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.r <> null
+
+-- x must be set.
+    inv EQ_PowerTransformerEnd_x
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/PowerTransformerEnd_x_must_be_set;'
+          + '0;'
+          + 'x must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.x <> null
+
+
+context NonConformLoadGroup
+-- EnergyConsumers must be set.
+    inv EQ_NonConformLoadGroup_EnergyConsumers
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/NonConformLoadGroup_EnergyConsumers_must_be_set;'
+          + '0;'
+          + 'EnergyConsumers must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.EnergyConsumers->size() > 0
+
+
+context BusNameMarker
+-- Terminal must be set.
+    inv EQ_BusNameMarker_Terminal
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/BusNameMarker_Terminal_must_be_set;'
+          + '0;'
+          + 'Terminal must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.Terminal->size() > 0
+
+
+context EquivalentInjection
+-- regulationCapability must be set.
+    inv EQ_EquivalentInjection_regulationCapability
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/EquivalentInjection_regulationCapability_must_be_set;'
+          + '0;'
+          + 'regulationCapability must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.regulationCapability <> null
+
+
+context PhaseTapChangerLinear
+-- stepPhaseShiftIncrement must be set.
+    inv EQ_PhaseTapChangerLinear_stepPhaseShiftIncrement
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/PhaseTapChangerLinear_stepPhaseShiftIncrement_must_be_set;'
+          + '0;'
+          + 'stepPhaseShiftIncrement must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.stepPhaseShiftIncrement <> null
+
+-- xMax must be set.
+    inv EQ_PhaseTapChangerLinear_xMax
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/PhaseTapChangerLinear_xMax_must_be_set;'
+          + '0;'
+          + 'xMax must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.xMax <> null
+
+-- xMin must be set.
+    inv EQ_PhaseTapChangerLinear_xMin
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/PhaseTapChangerLinear_xMin_must_be_set;'
+          + '0;'
+          + 'xMin must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.xMin <> null
+
+
+context RatioTapChangerTablePoint
+-- RatioTapChangerTable must be set.
+    inv EQ_RatioTapChangerTablePoint_RatioTapChangerTable
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQ/RatioTapChangerTablePoint_RatioTapChangerTable_must_be_set;'
+          + '0;'
+          + 'RatioTapChangerTable must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.RatioTapChangerTable <> null
+
+
+
+endpackage

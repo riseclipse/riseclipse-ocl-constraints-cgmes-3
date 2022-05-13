@@ -1,0 +1,347 @@
+/*
+*************************************************************************
+**  This file is part of the RiseClipse tool
+**
+**  The content of this file is based on data available on the ENTSO-E
+**  web site (https://www.entsoe.eu/digital/cim/cim-conformity-and-interoperability/)
+**
+**  This file is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
+**  
+**  Contributors:
+**      Computer Science Department, CentraleSupélec
+**      EDF R&D
+**  Contacts:
+**      dominique.marcadet@centralesupelec.fr
+**      aurelie.dehouck-neveu@edf.fr
+**  Web site:
+**      https://riseclipse.github.io/
+*************************************************************************
+*/
+
+import cim : 'http://iec.ch/TC57/CIM100'
+import md : 'http://iec.ch/TC57/61970-552/ModelDescription/1'
+
+import '../Helpers/CheckProfile.ocl'
+
+
+package cim
+
+
+context ACDCConverter
+-- idc must be set.
+    inv SV_ACDCConverter_idc
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/ACDCConverter_idc_must_be_set;'
+          + '0;'
+          + 'idc must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.idc <> null
+
+-- poleLossP must be set.
+    inv SV_ACDCConverter_poleLossP
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/ACDCConverter_poleLossP_must_be_set;'
+          + '0;'
+          + 'poleLossP must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.poleLossP <> null
+
+-- uc must be set.
+    inv SV_ACDCConverter_uc
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/ACDCConverter_uc_must_be_set;'
+          + '0;'
+          + 'uc must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.uc <> null
+
+-- udc must be set.
+    inv SV_ACDCConverter_udc
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/ACDCConverter_udc_must_be_set;'
+          + '0;'
+          + 'udc must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.udc <> null
+
+
+context VsConverter
+-- delta must be set.
+    inv SV_VsConverter_delta
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/VsConverter_delta_must_be_set;'
+          + '0;'
+          + 'delta must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.delta <> null
+
+-- uv must be set.
+    inv SV_VsConverter_uv
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/VsConverter_uv_must_be_set;'
+          + '0;'
+          + 'uv must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.uv <> null
+
+
+context SvPowerFlow
+-- p must be set.
+    inv SV_SvPowerFlow_p
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/SvPowerFlow_p_must_be_set;'
+          + '0;'
+          + 'p must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.p <> null
+
+-- q must be set.
+    inv SV_SvPowerFlow_q
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/SvPowerFlow_q_must_be_set;'
+          + '0;'
+          + 'q must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.q <> null
+
+-- Terminal must be set.
+    inv SV_SvPowerFlow_Terminal
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/SvPowerFlow_Terminal_must_be_set;'
+          + '0;'
+          + 'Terminal must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.Terminal <> null
+
+
+context SvSwitch
+-- open must be set.
+    inv SV_SvSwitch_open
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/SvSwitch_open_must_be_set;'
+          + '0;'
+          + 'open must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.open <> null
+
+-- Switch must be set.
+    inv SV_SvSwitch_Switch
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/SvSwitch_Switch_must_be_set;'
+          + '0;'
+          + 'Switch must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.Switch <> null
+
+
+context CsConverter
+-- alpha must be set.
+    inv SV_CsConverter_alpha
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/CsConverter_alpha_must_be_set;'
+          + '0;'
+          + 'alpha must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.alpha <> null
+
+-- gamma must be set.
+    inv SV_CsConverter_gamma
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/CsConverter_gamma_must_be_set;'
+          + '0;'
+          + 'gamma must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.gamma <> null
+
+
+context SvTapStep
+-- position must be set.
+    inv SV_SvTapStep_position
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/SvTapStep_position_must_be_set;'
+          + '0;'
+          + 'position must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.position <> null
+
+-- TapChanger must be set.
+    inv SV_SvTapStep_TapChanger
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/SvTapStep_TapChanger_must_be_set;'
+          + '0;'
+          + 'TapChanger must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.TapChanger <> null
+
+
+context SvStatus
+-- ConductingEquipment must be set.
+    inv SV_SvStatus_ConductingEquipment
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/SvStatus_ConductingEquipment_must_be_set;'
+          + '0;'
+          + 'ConductingEquipment must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.ConductingEquipment <> null
+
+-- inService must be set.
+    inv SV_SvStatus_inService
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/SvStatus_inService_must_be_set;'
+          + '0;'
+          + 'inService must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.inService <> null
+
+
+context SvShuntCompensatorSections
+-- ShuntCompensator must be set.
+    inv SV_SvShuntCompensatorSections_ShuntCompensator
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/SvShuntCompensatorSections_ShuntCompensator_must_be_set;'
+          + '0;'
+          + 'ShuntCompensator must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.ShuntCompensator <> null
+
+-- sections must be set.
+    inv SV_SvShuntCompensatorSections_sections
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/SvShuntCompensatorSections_sections_must_be_set;'
+          + '0;'
+          + 'sections must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.sections <> null
+
+
+context SvVoltage
+-- angle must be set.
+    inv SV_SvVoltage_angle
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/SvVoltage_angle_must_be_set;'
+          + '0;'
+          + 'angle must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.angle <> null
+
+-- v must be set.
+    inv SV_SvVoltage_v
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/SvVoltage_v_must_be_set;'
+          + '0;'
+          + 'v must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.v <> null
+
+-- TopologicalNode must be set.
+    inv SV_SvVoltage_TopologicalNode
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/SvVoltage_TopologicalNode_must_be_set;'
+          + '0;'
+          + 'TopologicalNode must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.TopologicalNode <> null
+
+
+context TopologicalIsland
+-- AngleRefTopologicalNode must be set.
+    inv SV_TopologicalIsland_AngleRefTopologicalNode
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/TopologicalIsland_AngleRefTopologicalNode_must_be_set;'
+          + '0;'
+          + 'AngleRefTopologicalNode must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.AngleRefTopologicalNode <> null
+
+-- TopologicalNodes must be set.
+    inv SV_TopologicalIsland_TopologicalNodes
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/TopologicalIsland_TopologicalNodes_must_be_set;'
+          + '0;'
+          + 'TopologicalNodes must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.TopologicalNodes->size() > 0
+
+
+context DCTopologicalIsland
+-- DCTopologicalNodes must be set.
+    inv SV_DCTopologicalIsland_DCTopologicalNodes
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/DCTopologicalIsland_DCTopologicalNodes_must_be_set;'
+          + '0;'
+          + 'DCTopologicalNodes must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.DCTopologicalNodes->size() > 0
+
+
+context SvInjection
+-- pInjection must be set.
+    inv SV_SvInjection_pInjection
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/SvInjection_pInjection_must_be_set;'
+          + '0;'
+          + 'pInjection must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.pInjection <> null
+
+-- TopologicalNode must be set.
+    inv SV_SvInjection_TopologicalNode
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/SvInjection_TopologicalNode_must_be_set;'
+          + '0;'
+          + 'TopologicalNode must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.TopologicalNode <> null
+
+
+context IdentifiedObject
+-- mRID must be set.
+    inv SV_IdentifiedObject_mRID
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/IdentifiedObject_mRID_must_be_set;'
+          + '0;'
+          + 'mRID must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.mRID <> null
+
+-- name must be set.
+    inv SV_IdentifiedObject_name
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SV/IdentifiedObject_name_must_be_set;'
+          + '0;'
+          + 'name must be set in ' + self.ID
+        )
+    :
+        self.isInStateVariablesProfile() implies self.name <> null
+
+
+
+endpackage

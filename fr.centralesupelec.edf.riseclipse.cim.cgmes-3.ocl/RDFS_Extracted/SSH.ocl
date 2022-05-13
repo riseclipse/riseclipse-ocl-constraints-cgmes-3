@@ -1,0 +1,525 @@
+/*
+*************************************************************************
+**  This file is part of the RiseClipse tool
+**
+**  The content of this file is based on data available on the ENTSO-E
+**  web site (https://www.entsoe.eu/digital/cim/cim-conformity-and-interoperability/)
+**
+**  This file is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
+**  
+**  Contributors:
+**      Computer Science Department, CentraleSupélec
+**      EDF R&D
+**  Contacts:
+**      dominique.marcadet@centralesupelec.fr
+**      aurelie.dehouck-neveu@edf.fr
+**  Web site:
+**      https://riseclipse.github.io/
+*************************************************************************
+*/
+
+import cim : 'http://iec.ch/TC57/CIM100'
+import md : 'http://iec.ch/TC57/61970-552/ModelDescription/1'
+
+import '../Helpers/CheckProfile.ocl'
+
+
+package cim
+
+
+context ACDCConverter
+-- p must be set.
+    inv SSH_ACDCConverter_p
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/ACDCConverter_p_must_be_set;'
+          + '0;'
+          + 'p must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.p <> null
+
+-- q must be set.
+    inv SSH_ACDCConverter_q
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/ACDCConverter_q_must_be_set;'
+          + '0;'
+          + 'q must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.q <> null
+
+
+context VsConverter
+-- pPccControl must be set.
+    inv SSH_VsConverter_pPccControl
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/VsConverter_pPccControl_must_be_set;'
+          + '0;'
+          + 'pPccControl must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.pPccControl <> null
+
+-- qPccControl must be set.
+    inv SSH_VsConverter_qPccControl
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/VsConverter_qPccControl_must_be_set;'
+          + '0;'
+          + 'qPccControl must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.qPccControl <> null
+
+
+context ExternalNetworkInjection
+-- referencePriority must be set.
+    inv SSH_ExternalNetworkInjection_referencePriority
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/ExternalNetworkInjection_referencePriority_must_be_set;'
+          + '0;'
+          + 'referencePriority must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.referencePriority <> null
+
+-- p must be set.
+    inv SSH_ExternalNetworkInjection_p
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/ExternalNetworkInjection_p_must_be_set;'
+          + '0;'
+          + 'p must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.p <> null
+
+-- q must be set.
+    inv SSH_ExternalNetworkInjection_q
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/ExternalNetworkInjection_q_must_be_set;'
+          + '0;'
+          + 'q must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.q <> null
+
+
+context Switch
+-- open must be set.
+    inv SSH_Switch_open
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/Switch_open_must_be_set;'
+          + '0;'
+          + 'open must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.open <> null
+
+-- locked must be set.
+    inv SSH_Switch_locked
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/Switch_locked_must_be_set;'
+          + '0;'
+          + 'locked must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.locked <> null
+
+
+context VoltageLimit
+-- value must be set.
+    inv SSH_VoltageLimit_value
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/VoltageLimit_value_must_be_set;'
+          + '0;'
+          + 'value must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.value <> null
+
+
+context PowerElectronicsConnection
+-- p must be set.
+    inv SSH_PowerElectronicsConnection_p
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/PowerElectronicsConnection_p_must_be_set;'
+          + '0;'
+          + 'p must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.p <> null
+
+-- q must be set.
+    inv SSH_PowerElectronicsConnection_q
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/PowerElectronicsConnection_q_must_be_set;'
+          + '0;'
+          + 'q must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.q <> null
+
+
+context BatteryUnit
+-- batteryState must be set.
+    inv SSH_BatteryUnit_batteryState
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/BatteryUnit_batteryState_must_be_set;'
+          + '0;'
+          + 'batteryState must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.batteryState <> null
+
+-- storedE must be set.
+    inv SSH_BatteryUnit_storedE
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/BatteryUnit_storedE_must_be_set;'
+          + '0;'
+          + 'storedE must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.storedE <> null
+
+
+context GeneratingUnit
+-- normalPF must be set.
+    inv SSH_GeneratingUnit_normalPF
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/GeneratingUnit_normalPF_must_be_set;'
+          + '0;'
+          + 'normalPF must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.normalPF <> null
+
+
+context RegulatingCondEq
+-- controlEnabled must be set.
+    inv SSH_RegulatingCondEq_controlEnabled
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/RegulatingCondEq_controlEnabled_must_be_set;'
+          + '0;'
+          + 'controlEnabled must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.controlEnabled <> null
+
+
+context ACDCTerminal
+-- connected must be set.
+    inv SSH_ACDCTerminal_connected
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/ACDCTerminal_connected_must_be_set;'
+          + '0;'
+          + 'connected must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.connected <> null
+
+
+context CurrentLimit
+-- value must be set.
+    inv SSH_CurrentLimit_value
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/CurrentLimit_value_must_be_set;'
+          + '0;'
+          + 'value must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.value <> null
+
+
+context ActivePowerLimit
+-- value must be set.
+    inv SSH_ActivePowerLimit_value
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/ActivePowerLimit_value_must_be_set;'
+          + '0;'
+          + 'value must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.value <> null
+
+
+context IdentifiedObject
+-- mRID must be set.
+    inv SSH_IdentifiedObject_mRID
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/IdentifiedObject_mRID_must_be_set;'
+          + '0;'
+          + 'mRID must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.mRID <> null
+
+
+context Equipment
+-- inService must be set.
+    inv SSH_Equipment_inService
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/Equipment_inService_must_be_set;'
+          + '0;'
+          + 'inService must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.inService <> null
+
+
+context ControlArea
+-- netInterchange must be set.
+    inv SSH_ControlArea_netInterchange
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/ControlArea_netInterchange_must_be_set;'
+          + '0;'
+          + 'netInterchange must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.netInterchange <> null
+
+
+context EnergySource
+-- activePower must be set.
+    inv SSH_EnergySource_activePower
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/EnergySource_activePower_must_be_set;'
+          + '0;'
+          + 'activePower must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.activePower <> null
+
+-- reactivePower must be set.
+    inv SSH_EnergySource_reactivePower
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/EnergySource_reactivePower_must_be_set;'
+          + '0;'
+          + 'reactivePower must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.reactivePower <> null
+
+
+context AsynchronousMachine
+-- asynchronousMachineType must be set.
+    inv SSH_AsynchronousMachine_asynchronousMachineType
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/AsynchronousMachine_asynchronousMachineType_must_be_set;'
+          + '0;'
+          + 'asynchronousMachineType must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.asynchronousMachineType <> null
+
+
+context CsConverter
+-- operatingMode must be set.
+    inv SSH_CsConverter_operatingMode
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/CsConverter_operatingMode_must_be_set;'
+          + '0;'
+          + 'operatingMode must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.operatingMode <> null
+
+-- pPccControl must be set.
+    inv SSH_CsConverter_pPccControl
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/CsConverter_pPccControl_must_be_set;'
+          + '0;'
+          + 'pPccControl must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.pPccControl <> null
+
+
+context StaticVarCompensator
+-- q must be set.
+    inv SSH_StaticVarCompensator_q
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/StaticVarCompensator_q_must_be_set;'
+          + '0;'
+          + 'q must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.q <> null
+
+
+context SynchronousMachine
+-- operatingMode must be set.
+    inv SSH_SynchronousMachine_operatingMode
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/SynchronousMachine_operatingMode_must_be_set;'
+          + '0;'
+          + 'operatingMode must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.operatingMode <> null
+
+-- referencePriority must be set.
+    inv SSH_SynchronousMachine_referencePriority
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/SynchronousMachine_referencePriority_must_be_set;'
+          + '0;'
+          + 'referencePriority must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.referencePriority <> null
+
+
+context TapChanger
+-- controlEnabled must be set.
+    inv SSH_TapChanger_controlEnabled
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/TapChanger_controlEnabled_must_be_set;'
+          + '0;'
+          + 'controlEnabled must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.controlEnabled <> null
+
+-- step must be set.
+    inv SSH_TapChanger_step
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/TapChanger_step_must_be_set;'
+          + '0;'
+          + 'step must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.step <> null
+
+
+context ShuntCompensator
+-- sections must be set.
+    inv SSH_ShuntCompensator_sections
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/ShuntCompensator_sections_must_be_set;'
+          + '0;'
+          + 'sections must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.sections <> null
+
+
+context ApparentPowerLimit
+-- value must be set.
+    inv SSH_ApparentPowerLimit_value
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/ApparentPowerLimit_value_must_be_set;'
+          + '0;'
+          + 'value must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.value <> null
+
+
+context RegulatingControl
+-- discrete must be set.
+    inv SSH_RegulatingControl_discrete
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/RegulatingControl_discrete_must_be_set;'
+          + '0;'
+          + 'discrete must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.discrete <> null
+
+-- enabled must be set.
+    inv SSH_RegulatingControl_enabled
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/RegulatingControl_enabled_must_be_set;'
+          + '0;'
+          + 'enabled must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.enabled <> null
+
+-- targetValue must be set.
+    inv SSH_RegulatingControl_targetValue
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/RegulatingControl_targetValue_must_be_set;'
+          + '0;'
+          + 'targetValue must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.targetValue <> null
+
+-- targetValueUnitMultiplier must be set.
+    inv SSH_RegulatingControl_targetValueUnitMultiplier
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/RegulatingControl_targetValueUnitMultiplier_must_be_set;'
+          + '0;'
+          + 'targetValueUnitMultiplier must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.targetValueUnitMultiplier <> null
+
+
+context RotatingMachine
+-- p must be set.
+    inv SSH_RotatingMachine_p
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/RotatingMachine_p_must_be_set;'
+          + '0;'
+          + 'p must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.p <> null
+
+-- q must be set.
+    inv SSH_RotatingMachine_q
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/RotatingMachine_q_must_be_set;'
+          + '0;'
+          + 'q must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.q <> null
+
+
+context EquivalentInjection
+-- p must be set.
+    inv SSH_EquivalentInjection_p
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/EquivalentInjection_p_must_be_set;'
+          + '0;'
+          + 'p must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.p <> null
+
+-- q must be set.
+    inv SSH_EquivalentInjection_q
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/EquivalentInjection_q_must_be_set;'
+          + '0;'
+          + 'q must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.q <> null
+
+
+context EnergyConsumer
+-- p must be set.
+    inv SSH_EnergyConsumer_p
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/EnergyConsumer_p_must_be_set;'
+          + '0;'
+          + 'p must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.p <> null
+
+-- q must be set.
+    inv SSH_EnergyConsumer_q
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SSH/EnergyConsumer_q_must_be_set;'
+          + '0;'
+          + 'q must be set in ' + self.ID
+        )
+    :
+        self.isInSteadyStateHypothesisProfile() implies self.q <> null
+
+
+
+endpackage

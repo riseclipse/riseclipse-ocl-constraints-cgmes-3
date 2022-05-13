@@ -1,0 +1,397 @@
+/*
+*************************************************************************
+**  This file is part of the RiseClipse tool
+**
+**  The content of this file is based on data available on the ENTSO-E
+**  web site (https://www.entsoe.eu/digital/cim/cim-conformity-and-interoperability/)
+**
+**  This file is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
+**  
+**  Contributors:
+**      Computer Science Department, CentraleSupélec
+**      EDF R&D
+**  Contacts:
+**      dominique.marcadet@centralesupelec.fr
+**      aurelie.dehouck-neveu@edf.fr
+**  Web site:
+**      https://riseclipse.github.io/
+*************************************************************************
+*/
+
+import cim : 'http://iec.ch/TC57/CIM100'
+import md : 'http://iec.ch/TC57/61970-552/ModelDescription/1'
+
+import '../Helpers/CheckProfile.ocl'
+
+
+package cim
+
+
+context ACDCConverter
+--docReference non-QoCDC Key=9b5ab464-b4d3-4155-80a9-906924c096e9 Profile=SV
+--message The attribute shall be a positive value.
+    inv SV_ACDCConverter_poleLossP_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/ACDCConverter_poleLossP_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.poleLossP <> null implies self.poleLossP > 0.0
+        )
+
+--docReference non-QoCDC Key=28b763a3-74e2-46df-b3b4-d489ec53c802 Profile=SV
+--message The attribute shall be a positive value.
+    inv SV_ACDCConverter_uc_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/ACDCConverter_uc_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.uc <> null implies self.uc > 0.0
+        )
+
+--docReference non-QoCDC Key=477da6ba-07bd-4bf3-b78e-048b45ba831e Profile=SV
+--message The attribute shall be a positive value.
+    inv SV_ACDCConverter_udc_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/ACDCConverter_udc_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.udc <> null implies self.udc > 0.0
+        )
+
+context ConductingEquipment
+--docReference non-QoCDC Key=2f0a11e9-c520-4471-9532-706ffac223b7 Profile=SV
+--message All state variables shall be instantiated in the SV instance file for all energized elements part of a TopologicalIsland independently of the regulating status of the elements (e.g. for a shunt compensator that is not regulating the SvShuntCompensatorSections.sections shall be the same as ShuntCompensator.sections). All instances shall be representing computed values obtained from a power flow calculation.  For SvPowerFlow instances refer to profile constraint on the SvPowerFlow class.
+    inv SV_ConductingEquipment_SV4
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/ConductingEquipment_SV4;'
+          + '0;'
+          + self.ID + ': All state variables shall be instantiated in the SV instance file for all energized elements part of a TopologicalIsland independently of the regulating status of the elements (e.g. for a shunt compensator that is not regulating the SvShuntCompensatorSections.sections shall be the same as ShuntCompensator.sections). All instances shall be representing computed values obtained from a power flow calculation.  For SvPowerFlow instances refer to profile constraint on the SvPowerFlow class.'
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.Terminals->select( TopologicalNode <> null )->select( TopologicalNode.AngleRefTopologicalIsland <> null )->notEmpty() implies
+                self.SvStatus = null
+        )
+
+context CsConverter
+--docReference non-QoCDC Key=8e1fb1b8-3bc1-483d-93f3-80dd38902cbe Profile=SV
+--message The attribute shall be a positive value.
+    inv SV_CsConverter_alpha_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/CsConverter_alpha_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.alpha <> null implies self.alpha > 0.0
+        )
+
+--docReference non-QoCDC Key=50e37dcd-f22d-415f-a33c-e2185c6d3b3d Profile=SV
+--message Typical value between 10 degrees and 18 degrees for a rectifier. 
+    inv SV_CsConverter_alpha_valueRangeTypical
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/CsConverter_alpha_valueRangeTypical;'
+          + '0;'
+          + self.ID + ': Typical value between 10 degrees and 18 degrees for a rectifier. '
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.alpha <> null implies self.alpha >= 10.0 and self.alpha <=  18.0
+        )
+
+--docReference non-QoCDC Key=95c61d90-97cc-46ee-881b-0d175dac006d Profile=SV
+--message The attribute shall be a positive value.
+    inv SV_CsConverter_gamma_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/CsConverter_gamma_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.gamma <> null implies self.gamma > 0.0
+        )
+
+--docReference non-QoCDC Key=f77e8b25-4f06-4ed6-9e94-f9ff78983ef6 Profile=SV
+--message Typical value between 17 degrees and 20 degrees for an inverter. 
+    inv SV_CsConverter_gamma_valueRangeTypical
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/CsConverter_gamma_valueRangeTypical;'
+          + '0;'
+          + self.ID + ': Typical value between 17 degrees and 20 degrees for an inverter. '
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.gamma <> null implies self.gamma >= 17.0 and self.gamma <=  20.0
+        )
+
+context IdentifiedObject
+--docReference non-QoCDC Key=a93e8322-26e2-42a7-b963-619ddaab80a4 Profile=SV
+--message The string IdentifiedObject.name has a maximum of 128 characters.
+    inv SV_IdentifiedObject_name_stringLength
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/IdentifiedObject_name_stringLength;'
+          + '0;'
+          + self.ID + ': The string IdentifiedObject.name has a maximum of 128 characters.'
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.name <> null implies self.name.size() <= 128
+        )
+
+/*
+ * SynchronousMachine.ReactiveCapabilityCurves is unknown
+ * 
+context SvPowerFlow
+--docReference non-QoCDC Key=ccdd7d0e-450e-4da9-82ef-d12c3b7dd00b Profile=SV
+--message The SvPowerFlow.p that is given by the steady state power flow solution for a SynchronousMachine shall normally be within the capability of the machine defined in the ReactiveCapabilityCurve or GeneratingUnit.maxOperatingP and GeneratingUnit.minOperatingP when ReactiveCapabilityCurve is not present. Active power can be outside the capability as part of start-up or shutdown of the generator. CIM cannot represent different operation mode so this constraint will only give a warning. Note that different data exchange processes can assign more restrictive severity depending on the business needs and power flow algorithm applied by the business process.
+    inv SV_SvPowerFlow_synchronousMachine
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/SvPowerFlow_synchronousMachine;'
+          + '0;'
+          + self.ID + ': The SvPowerFlow.p that is given by the steady state power flow solution for a SynchronousMachine shall normally be within the capability of the machine defined in the ReactiveCapabilityCurve or GeneratingUnit.maxOperatingP and GeneratingUnit.minOperatingP when ReactiveCapabilityCurve is not present. Active power can be outside the capability as part of start-up or shutdown of the generator. CIM cannot represent different operation mode so this constraint will only give a warning. Note that different data exchange processes can assign more restrictive severity depending on the business needs and power flow algorithm applied by the business process.'
+        )
+    :
+        self.isInStateVariablesProfile() implies (      if self.Terminal.ConductingEquipment.oclIsKindOf(SynchronousMachine) then
+            let sm : SynchronousMachine = self.Terminal.ConductingEquipment.oclAsType(SynchronousMachine) in
+            if sm.ReactiveCapabilityCurves->notEmpty() then
+                let curvePoints : Sequence(CurveData) = sm.ReactiveCapabilityCurves.CurveDatas->sortedBy(xvalue)->asSequence() in
+                self.p >= curvePoints->first().xvalue and self.p <= curvePoints->last().xvalue
+            else
+                self.p >= sm.GeneratingUnit.minOperatingP and self.p <= sm.GeneratingUnit.maxOperatingP
+            endif
+        else true endif)
+
+--docReference non-QoCDC Key=43c47237-a3c6-47a2-a5c1-ab562cbd5391 Profile=SV
+--message The SvPowerFlow.q that is given by the steady state power flow solution for a SynchronousMachine shall normally be within the capability of the machine defined in the ReactiveCapabilityCurve or SynchronousMachine.maxQ, SynchronousMachine.minQ when ReactiveCapabilityCurve is not present. Reactive power can be outside the capability if powerflow excludes reactive restriction. CIM cannot represent this so this contains will also give a warning.  Note that different data exchange processes can assign  more restrictive severity depending on the business needs and power flow algorithm applied by the business process.
+    inv SV_SvPowerFlow_synchronousMachine
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/SvPowerFlow_synchronousMachine;'
+          + '0;'
+          + self.ID + ': The SvPowerFlow.q that is given by the steady state power flow solution for a SynchronousMachine shall normally be within the capability of the machine defined in the ReactiveCapabilityCurve or SynchronousMachine.maxQ, SynchronousMachine.minQ when ReactiveCapabilityCurve is not present. Reactive power can be outside the capability if powerflow excludes reactive restriction. CIM cannot represent this so this contains will also give a warning.  Note that different data exchange processes can assign  more restrictive severity depending on the business needs and power flow algorithm applied by the business process.'
+        )
+    :
+        self.isInStateVariablesProfile() implies (      if self.Terminal.ConductingEquipment.oclIsKindOf(SynchronousMachine) then
+            let sm : SynchronousMachine = self.Terminal.ConductingEquipment.oclAsType(SynchronousMachine) in
+            if sm.ReactiveCapabilityCurves->notEmpty() then
+                let curvePointsMin : Sequence(CurveData) = sm.ReactiveCapabilityCurves.CurveDatas->sortedBy(y1value)->asSequence() in
+                let curvePointsMax : Sequence(CurveData) = sm.ReactiveCapabilityCurves.CurveDatas->sortedBy(y2value)->asSequence() in
+                self.q >= curvePointsMin->first().y1value and self.q <= curvePointsMax->last().y2value
+            else
+                self.q >= sm.minQ and self.p <= sm.maxQ
+            endif
+        else true endif)
+ */
+
+context SvShuntCompensatorSections
+--docReference non-QoCDC Key=ffe1ba71-012e-4e6b-b4c4-aef2f2031d34 Profile=SV
+--message The attribute shall be a positive value or zero.
+    inv SV_SvShuntCompensatorSections_sections_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/SvShuntCompensatorSections_sections_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value or zero.'
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.sections <> null implies self.sections >= 0.0
+        )
+
+--docReference non-QoCDC Key=dcbfda5c-87b5-45ba-93a8-b750009ad662 Profile=SV
+--message In cases where RegulatingControl.discrete is true and RegulatingControl.enabled is true, SvShuntCompensatorSections.sections shall be integer.  
+    inv SV_SvShuntCompensatorSections_value
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/SvShuntCompensatorSections_value;'
+          + '0;'
+          + self.ID + ': In cases where RegulatingControl.discrete is true and RegulatingControl.enabled is true, SvShuntCompensatorSections.sections shall be integer.  '
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.ShuntCompensator <> null implies (
+                self.ShuntCompensator.RegulatingControl <> null implies
+                    self.ShuntCompensator.RegulatingControl.discrete = true and self.ShuntCompensator.RegulatingControl.enabled = true implies
+                        self.sections = self.sections.round()
+            )
+        )
+
+--docReference non-QoCDC Key=cf6934ab-b5b2-47bd-b0ae-e04462f05f86 Profile=SV
+--message All state variables shall be instantiated in the SV instance file for all energized elements part of a TopologicalIsland independently of the regulating status of the elements (e.g. for a shunt compensator that is not regulating the SvShuntCompensatorSections.sections shall be the same as ShuntCompensator.sections). All instances shall be representing computed values obtained from a power flow calculation.  For SvPowerFlow instances refer to profile constraint on the SvPowerFlow class.
+    inv SV_SvShuntCompensatorSections_SV4
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/SvShuntCompensatorSections_SV4;'
+          + '0;'
+          + self.ID + ': All state variables shall be instantiated in the SV instance file for all energized elements part of a TopologicalIsland independently of the regulating status of the elements (e.g. for a shunt compensator that is not regulating the SvShuntCompensatorSections.sections shall be the same as ShuntCompensator.sections). All instances shall be representing computed values obtained from a power flow calculation.  For SvPowerFlow instances refer to profile constraint on the SvPowerFlow class.'
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.ShuntCompensator <> null implies (
+                if self.ShuntCompensator.RegulatingControl = null then
+                    self.sections = self.ShuntCompensator.sections
+                else if self.ShuntCompensator.RegulatingControl.enabled = false then
+                    self.sections = self.ShuntCompensator.sections
+                else true endif endif
+            )
+        )
+
+context SvTapStep
+--docReference non-QoCDC Key=51dff80d-9cfa-4514-9008-8ffd5ab0016c Profile=SV
+--message This is not the tap ratio, but rather the tap step position as defined by the related tap changer model and normally is constrained to be within the range of minimum and maximum tap positions.
+    inv SV_SvTapStep_position_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/SvTapStep_position_valueRange;'
+          + '0;'
+          + self.ID + ': This is not the tap ratio, but rather the tap step position as defined by the related tap changer model and normally is constrained to be within the range of minimum and maximum tap positions.'
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.position <> null and self.TapChanger <> null and self.TapChanger.lowStep <> null and self.TapChanger.highStep <> null implies (
+                self.position >= self.TapChanger.lowStep and self.position <=  self.TapChanger.highStep
+            )
+        )
+
+--docReference non-QoCDC Key=5ac680f2-4815-4a63-96a9-03570dcad1cf Profile=SV
+--message In cases where RegulatingControl.discrete is true and RegulatingControl.enabled is true, SvTapStep.position shall be integer.  
+    inv SV_SvTapStep_value
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/SvTapStep_value;'
+          + '0;'
+          + self.ID + ': In cases where RegulatingControl.discrete is true and RegulatingControl.enabled is true, SvTapStep.position shall be integer.  '
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.TapChanger <> null implies (
+                if self.TapChanger.TapChangerControl = null then
+                    true
+                else if self.TapChanger.TapChangerControl.discrete = true and self.TapChanger.TapChangerControl.enabled = true then
+                    self.position = self.position.round()
+                else true endif endif
+            )
+        )
+
+--docReference non-QoCDC Key=639a7ddd-074f-450c-8b61-2c2f83c77e4a Profile=SV
+--message All state variables shall be instantiated in the SV instance file for all energized elements part of a TopologicalIsland independently of the regulating status of the elements (e.g. for a shunt compensator that is not regulating the SvShuntCompensatorSections.sections shall be the same as ShuntCompensator.sections). All instances shall be representing computed values obtained from a power flow calculation.  For SvPowerFlow instances refer to profile constraint on the SvPowerFlow class.
+    inv SV_SvTapStep_SV4
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/SvTapStep_SV4;'
+          + '0;'
+          + self.ID + ': All state variables shall be instantiated in the SV instance file for all energized elements part of a TopologicalIsland independently of the regulating status of the elements (e.g. for a shunt compensator that is not regulating the SvShuntCompensatorSections.sections shall be the same as ShuntCompensator.sections). All instances shall be representing computed values obtained from a power flow calculation.  For SvPowerFlow instances refer to profile constraint on the SvPowerFlow class.'
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.TapChanger <> null implies (
+                if self.TapChanger.TapChangerControl = null then
+                    self.position = self.TapChanger.step
+                else if self.TapChanger.TapChangerControl.enabled = false then
+                    self.position = self.TapChanger.step
+                else true endif endif
+            )
+        )
+
+context SvVoltage
+--docReference non-QoCDC Key=e37a4203-0b40-4675-a187-fb0bccbbdcd5 Profile=SV
+--message The attribute shall be a positive value.
+    inv SV_SvVoltage_v_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/SvVoltage_v_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.v <> null implies self.v > 0.0
+        )
+
+context Switch
+--docReference non-QoCDC Key=4c29fb3e-b4d1-4126-8f90-44c4f788fe33 Profile=SV
+--message SvSwitch shall be exchanged for all switching devices. It is expected that in most cases the SvSwitch.open in SV instance data will be identical with Switch.open in SSH instance data. However, in cases where a regulating control is modifying the connection state of the controlled device a difference between SvSwitch.open and Switch.open can occur.
+    inv SV_Switch_SvSwitch_instance
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/Switch_SvSwitch_instance;'
+          + '0;'
+          + self.ID + ': SvSwitch shall be exchanged for all switching devices. It is expected that in most cases the SvSwitch.open in SV instance data will be identical with Switch.open in SSH instance data. However, in cases where a regulating control is modifying the connection state of the controlled device a difference between SvSwitch.open and Switch.open can occur.'
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.SvSwitch <> null
+        )
+
+--docReference non-QoCDC Key=d9102906-306e-42f4-a48b-fca47d27c1ee Profile=SV
+--message All state variables shall be instantiated in the SV instance file for all energized elements part of a TopologicalIsland independently of the regulating status of the elements (e.g. for a shunt compensator that is not regulating the SvShuntCompensatorSections.sections shall be the same as ShuntCompensator.sections). All instances shall be representing computed values obtained from a power flow calculation.  For SvPowerFlow instances refer to profile constraint on the SvPowerFlow class.
+    inv SV_Switch_SV4
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/Switch_SV4;'
+          + '0;'
+          + self.ID + ': All state variables shall be instantiated in the SV instance file for all energized elements part of a TopologicalIsland independently of the regulating status of the elements (e.g. for a shunt compensator that is not regulating the SvShuntCompensatorSections.sections shall be the same as ShuntCompensator.sections). All instances shall be representing computed values obtained from a power flow calculation.  For SvPowerFlow instances refer to profile constraint on the SvPowerFlow class.'
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.Terminals->select( TopologicalNode <> null )->select( TopologicalNode.AngleRefTopologicalIsland <> null )->notEmpty() implies
+                self.SvSwitch = null
+        )
+
+context TopologicalIsland
+--docReference non-QoCDC Key=4685cd8e-dae9-4167-97e5-caa4b84f1d2f Profile=SV
+--message Normally there is one TopologicalNode that is selected as the angle reference for each island.  
+    inv SV_TopologicalIsland_AngleRefTopologicalNode_referencedNode
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/TopologicalIsland_AngleRefTopologicalNode_referencedNode;'
+          + '0;'
+          + self.ID + ': Normally there is one TopologicalNode that is selected as the angle reference for each island.  '
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.AngleRefTopologicalNode <> null
+        )
+
+context TopologicalNode
+--docReference non-QoCDC Key=ee148b93-9ff0-445c-a82f-41b40a4ee415 Profile=SV
+--message Normally there is one angle reference node for each island.
+    inv SV_TopologicalNode_AngleRefTopologicalIsland_referencedIsland
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/TopologicalNode_AngleRefTopologicalIsland_referencedIsland;'
+          + '0;'
+          + self.ID + ': Normally there is one angle reference node for each island.'
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.AngleRefTopologicalIsland <> null
+        )
+
+context VsConverter
+--docReference non-QoCDC Key=412af101-bab8-4802-ae81-c06934785065 Profile=SV
+--message The attribute shall be a positive value or zero.
+    inv SV_VsConverter_delta_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/VsConverter_delta_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value or zero.'
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.delta <> null implies self.delta >= 0.0
+        )
+
+--docReference non-QoCDC Key=953d10f3-6cda-474b-9640-41dcfc1db173 Profile=SV
+--message The attribute shall be a positive value.
+    inv SV_VsConverter_uv_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/SV/VsConverter_uv_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInStateVariablesProfile() implies (
+            self.uv <> null implies self.uv > 0.0
+        )
+
+endpackage

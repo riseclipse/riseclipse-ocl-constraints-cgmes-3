@@ -1,0 +1,389 @@
+/*
+*************************************************************************
+**  This file is part of the RiseClipse tool
+**
+**  The content of this file is based on data available on the ENTSO-E
+**  web site (https://www.entsoe.eu/digital/cim/cim-conformity-and-interoperability/)
+**
+**  This file is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
+**  
+**  Contributors:
+**      Computer Science Department, CentraleSupélec
+**      EDF R&D
+**  Contacts:
+**      dominique.marcadet@centralesupelec.fr
+**      aurelie.dehouck-neveu@edf.fr
+**  Web site:
+**      https://riseclipse.github.io/
+*************************************************************************
+*/
+
+import cim : 'http://iec.ch/TC57/CIM100'
+import md : 'http://iec.ch/TC57/61970-552/ModelDescription/1'
+
+import '../Helpers/CheckProfile.ocl'
+
+
+package cim
+
+
+context MeasurementValueQuality
+-- MeasurementValue must be set.
+    inv OP_MeasurementValueQuality_MeasurementValue
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/MeasurementValueQuality_MeasurementValue_must_be_set;'
+          + '0;'
+          + 'MeasurementValue must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.MeasurementValue <> null
+
+
+context AccumulatorValue
+-- Accumulator must be set.
+    inv OP_AccumulatorValue_Accumulator
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/AccumulatorValue_Accumulator_must_be_set;'
+          + '0;'
+          + 'Accumulator must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.Accumulator <> null
+
+
+context StringMeasurementValue
+-- StringMeasurement must be set.
+    inv OP_StringMeasurementValue_StringMeasurement
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/StringMeasurementValue_StringMeasurement_must_be_set;'
+          + '0;'
+          + 'StringMeasurement must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.StringMeasurement <> null
+
+
+context AccumulatorLimitSet
+-- Measurements must be set.
+    inv OP_AccumulatorLimitSet_Measurements
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/AccumulatorLimitSet_Measurements_must_be_set;'
+          + '0;'
+          + 'Measurements must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.Measurements->size() > 0
+
+-- Limits must be set.
+    inv OP_AccumulatorLimitSet_Limits
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/AccumulatorLimitSet_Limits_must_be_set;'
+          + '0;'
+          + 'Limits must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.Limits->size() > 0
+
+
+context ValueAliasSet
+-- Values must be set.
+    inv OP_ValueAliasSet_Values
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/ValueAliasSet_Values_must_be_set;'
+          + '0;'
+          + 'Values must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.Values->size() > 0
+
+
+context AnalogControl
+-- maxValue must be set.
+    inv OP_AnalogControl_maxValue
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/AnalogControl_maxValue_must_be_set;'
+          + '0;'
+          + 'maxValue must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.maxValue <> null
+
+-- minValue must be set.
+    inv OP_AnalogControl_minValue
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/AnalogControl_minValue_must_be_set;'
+          + '0;'
+          + 'minValue must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.minValue <> null
+
+-- AnalogValue must be set.
+    inv OP_AnalogControl_AnalogValue
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/AnalogControl_AnalogValue_must_be_set;'
+          + '0;'
+          + 'AnalogValue must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.AnalogValue <> null
+
+
+context AnalogLimitSet
+-- Measurements must be set.
+    inv OP_AnalogLimitSet_Measurements
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/AnalogLimitSet_Measurements_must_be_set;'
+          + '0;'
+          + 'Measurements must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.Measurements->size() > 0
+
+
+context AccumulatorReset
+-- AccumulatorValue must be set.
+    inv OP_AccumulatorReset_AccumulatorValue
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/AccumulatorReset_AccumulatorValue_must_be_set;'
+          + '0;'
+          + 'AccumulatorValue must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.AccumulatorValue <> null
+
+
+context Command
+-- normalValue must be set.
+    inv OP_Command_normalValue
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/Command_normalValue_must_be_set;'
+          + '0;'
+          + 'normalValue must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.normalValue <> null
+
+-- value must be set.
+    inv OP_Command_value
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/Command_value_must_be_set;'
+          + '0;'
+          + 'value must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.value <> null
+
+-- DiscreteValue must be set.
+    inv OP_Command_DiscreteValue
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/Command_DiscreteValue_must_be_set;'
+          + '0;'
+          + 'DiscreteValue must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.DiscreteValue <> null
+
+
+context MeasurementValue
+-- MeasurementValueSource must be set.
+    inv OP_MeasurementValue_MeasurementValueSource
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/MeasurementValue_MeasurementValueSource_must_be_set;'
+          + '0;'
+          + 'MeasurementValueSource must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.MeasurementValueSource <> null
+
+
+context DiscreteValue
+-- Discrete must be set.
+    inv OP_DiscreteValue_Discrete
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/DiscreteValue_Discrete_must_be_set;'
+          + '0;'
+          + 'Discrete must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.Discrete <> null
+
+
+context AccumulatorLimit
+-- value must be set.
+    inv OP_AccumulatorLimit_value
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/AccumulatorLimit_value_must_be_set;'
+          + '0;'
+          + 'value must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.value <> null
+
+-- LimitSet must be set.
+    inv OP_AccumulatorLimit_LimitSet
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/AccumulatorLimit_LimitSet_must_be_set;'
+          + '0;'
+          + 'LimitSet must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.LimitSet <> null
+
+
+context ValueToAlias
+-- ValueAliasSet must be set.
+    inv OP_ValueToAlias_ValueAliasSet
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/ValueToAlias_ValueAliasSet_must_be_set;'
+          + '0;'
+          + 'ValueAliasSet must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.ValueAliasSet <> null
+
+-- value must be set.
+    inv OP_ValueToAlias_value
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/ValueToAlias_value_must_be_set;'
+          + '0;'
+          + 'value must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.value <> null
+
+
+context AnalogValue
+-- Analog must be set.
+    inv OP_AnalogValue_Analog
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/AnalogValue_Analog_must_be_set;'
+          + '0;'
+          + 'Analog must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.Analog <> null
+
+
+context Control
+-- controlType must be set.
+    inv OP_Control_controlType
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/Control_controlType_must_be_set;'
+          + '0;'
+          + 'controlType must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.controlType <> null
+
+
+context Measurement
+-- measurementType must be set.
+    inv OP_Measurement_measurementType
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/Measurement_measurementType_must_be_set;'
+          + '0;'
+          + 'measurementType must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.measurementType <> null
+
+-- unitMultiplier must be set.
+    inv OP_Measurement_unitMultiplier
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/Measurement_unitMultiplier_must_be_set;'
+          + '0;'
+          + 'unitMultiplier must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.unitMultiplier <> null
+
+-- unitSymbol must be set.
+    inv OP_Measurement_unitSymbol
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/Measurement_unitSymbol_must_be_set;'
+          + '0;'
+          + 'unitSymbol must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.unitSymbol <> null
+
+-- PowerSystemResource must be set.
+    inv OP_Measurement_PowerSystemResource
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/Measurement_PowerSystemResource_must_be_set;'
+          + '0;'
+          + 'PowerSystemResource must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.PowerSystemResource <> null
+
+
+context AnalogLimit
+-- value must be set.
+    inv OP_AnalogLimit_value
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/AnalogLimit_value_must_be_set;'
+          + '0;'
+          + 'value must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.value <> null
+
+-- LimitSet must be set.
+    inv OP_AnalogLimit_LimitSet
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/AnalogLimit_LimitSet_must_be_set;'
+          + '0;'
+          + 'LimitSet must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.LimitSet <> null
+
+
+context SetPoint
+-- normalValue must be set.
+    inv OP_SetPoint_normalValue
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/SetPoint_normalValue_must_be_set;'
+          + '0;'
+          + 'normalValue must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.normalValue <> null
+
+-- value must be set.
+    inv OP_SetPoint_value
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/SetPoint_value_must_be_set;'
+          + '0;'
+          + 'value must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.value <> null
+
+
+context IdentifiedObject
+-- mRID must be set.
+    inv OP_IdentifiedObject_mRID
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/IdentifiedObject_mRID_must_be_set;'
+          + '0;'
+          + 'mRID must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.mRID <> null
+
+-- name must be set.
+    inv OP_IdentifiedObject_name
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/OP/IdentifiedObject_name_must_be_set;'
+          + '0;'
+          + 'name must be set in ' + self.ID
+        )
+    :
+        self.isInOperationProfile() implies self.name <> null
+
+
+
+endpackage

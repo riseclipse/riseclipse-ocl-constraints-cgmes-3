@@ -1,0 +1,146 @@
+/*
+*************************************************************************
+**  This file is part of the RiseClipse tool
+**
+**  The content of this file is based on data available on the ENTSO-E
+**  web site (https://www.entsoe.eu/digital/cim/cim-conformity-and-interoperability/)
+**
+**  This file is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
+**  
+**  Contributors:
+**      Computer Science Department, CentraleSupélec
+**      EDF R&D
+**  Contacts:
+**      dominique.marcadet@centralesupelec.fr
+**      aurelie.dehouck-neveu@edf.fr
+**  Web site:
+**      https://riseclipse.github.io/
+*************************************************************************
+*/
+
+import cim : 'http://iec.ch/TC57/CIM100'
+import md : 'http://iec.ch/TC57/61970-552/ModelDescription/1'
+
+import '../Helpers/CheckProfile.ocl'
+
+
+package cim
+
+
+context Substation
+-- Region must be set.
+    inv EQBD_Substation_Region
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQBD/Substation_Region_must_be_set;'
+          + '0;'
+          + 'Region must be set in ' + self.ID
+        )
+    :
+        self.isInEquipmentBoundaryProfile() implies self.Region <> null
+
+
+context ConnectivityNode
+-- ConnectivityNodeContainer must be set.
+    inv EQBD_ConnectivityNode_ConnectivityNodeContainer
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQBD/ConnectivityNode_ConnectivityNodeContainer_must_be_set;'
+          + '0;'
+          + 'ConnectivityNodeContainer must be set in ' + self.ID
+        )
+    :
+        self.isInEquipmentBoundaryProfile() implies self.ConnectivityNodeContainer <> null
+
+
+context SubGeographicalRegion
+-- Region must be set.
+    inv EQBD_SubGeographicalRegion_Region
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQBD/SubGeographicalRegion_Region_must_be_set;'
+          + '0;'
+          + 'Region must be set in ' + self.ID
+        )
+    :
+        self.isInEquipmentBoundaryProfile() implies self.Region <> null
+
+
+context VoltageLevel
+-- BaseVoltage must be set.
+    inv EQBD_VoltageLevel_BaseVoltage
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQBD/VoltageLevel_BaseVoltage_must_be_set;'
+          + '0;'
+          + 'BaseVoltage must be set in ' + self.ID
+        )
+    :
+        self.isInEquipmentBoundaryProfile() implies self.BaseVoltage <> null
+
+-- Substation must be set.
+    inv EQBD_VoltageLevel_Substation
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQBD/VoltageLevel_Substation_must_be_set;'
+          + '0;'
+          + 'Substation must be set in ' + self.ID
+        )
+    :
+        self.isInEquipmentBoundaryProfile() implies self.Substation <> null
+
+
+context BaseVoltage
+-- nominalVoltage must be set.
+    inv EQBD_BaseVoltage_nominalVoltage
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQBD/BaseVoltage_nominalVoltage_must_be_set;'
+          + '0;'
+          + 'nominalVoltage must be set in ' + self.ID
+        )
+    :
+        self.isInEquipmentBoundaryProfile() implies self.nominalVoltage <> null
+
+context Terminal
+-- ConductingEquipment must be set.
+    inv EQBD_Terminal_ConductingEquipment
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQBD/Terminal_ConductingEquipment_must_be_set;'
+          + '0;'
+          + 'ConductingEquipment must be set in ' + self.ID
+        )
+    :
+        self.isInEquipmentBoundaryProfile() implies self.ConductingEquipment <> null
+
+
+context Bay
+-- VoltageLevel must be set.
+    inv EQBD_Bay_VoltageLevel
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQBD/Bay_VoltageLevel_must_be_set;'
+          + '0;'
+          + 'VoltageLevel must be set in ' + self.ID
+        )
+    :
+        self.isInEquipmentBoundaryProfile() implies self.VoltageLevel <> null
+
+
+context IdentifiedObject
+-- mRID must be set.
+    inv EQBD_IdentifiedObject_mRID
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQBD/IdentifiedObject_mRID_must_be_set;'
+          + '0;'
+          + 'mRID must be set in ' + self.ID
+        )
+    :
+        self.isInEquipmentBoundaryProfile() implies self.mRID <> null
+
+-- name must be set.
+    inv EQBD_IdentifiedObject_name
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EQBD/IdentifiedObject_name_must_be_set;'
+          + '0;'
+          + 'name must be set in ' + self.ID
+        )
+    :
+        self.isInEquipmentBoundaryProfile() implies self.name <> null
+
+
+
+endpackage

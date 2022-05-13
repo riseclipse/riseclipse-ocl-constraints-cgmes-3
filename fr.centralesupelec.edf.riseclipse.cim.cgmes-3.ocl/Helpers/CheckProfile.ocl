@@ -1,0 +1,64 @@
+/*
+*************************************************************************
+**  Copyright (c) 2022 CentraleSupélec & EDF.
+**  All rights reserved. This program and the accompanying materials
+**  are made available under the terms of the Eclipse Public License v2.0
+**  which accompanies this distribution, and is available at
+**  https://www.eclipse.org/legal/epl-v20.html
+** 
+**  This file is part of the RiseClipse tool
+**  
+**  Contributors:
+**      Computer Science Department, CentraleSupélec
+**      EDF R&D
+**  Contacts:
+**      dominique.marcadet@centralesupelec.fr
+**      aurelie.dehouck-neveu@edf.fr
+**  Web site:
+**      https://riseclipse.github.io/
+*************************************************************************
+*/
+
+import cim : 'http://iec.ch/TC57/CIM100'
+import md : 'http://iec.ch/TC57/61970-552/ModelDescription/1'
+
+package cim
+
+context CimObjectWithID
+
+def: isInCoreEquipmentProfile() : Boolean =
+    md::FullModel.allInstances()->collect( m : md::FullModel | m.profile )->flatten()->includes( 'http://iec.ch/TC57/ns/CIM/CoreEquipment-EU/3.0' )
+
+def: isInDiagramLayoutProfile() : Boolean =
+    md::FullModel.allInstances()->collect( m : md::FullModel | m.profile )->flatten()->includes( 'http://iec.ch/TC57/ns/CIM/DiagramLayout-EU/3.0' )
+
+def: isInDynamicsProfile() : Boolean =
+    md::FullModel.allInstances()->collect( m : md::FullModel | m.profile )->flatten()->includes( 'http://iec.ch/TC57/ns/CIM/Dynamics-EU/1.0' )
+
+def: isInEquipmentBoundaryProfile() : Boolean =
+    md::FullModel.allInstances()->collect( m : md::FullModel | m.profile )->flatten()->includes( 'http://iec.ch/TC57/ns/CIM/EquipmentBoundary-EU/3.0' )
+
+def: isInOperationProfile() : Boolean =
+    md::FullModel.allInstances()->collect( m : md::FullModel | m.profile )->flatten()->includes( 'http://iec.ch/TC57/ns/CIM/Operation-EU/3.0' )
+
+def: isInGeographicalLocationProfile() : Boolean =
+    md::FullModel.allInstances()->collect( m : md::FullModel | m.profile )->flatten()->includes( 'http://iec.ch/TC57/ns/CIM/GeographicalLocation-EU/3.0' )
+
+def: isInShortCircuitProfile() : Boolean =
+    md::FullModel.allInstances()->collect( m : md::FullModel | m.profile )->flatten()->includes( 'http://iec.ch/TC57/ns/CIM/ShortCircuit-EU/3.0' )
+
+def: isInStateVariablesProfile() : Boolean =
+    md::FullModel.allInstances()->collect( m : md::FullModel | m.profile )->flatten()->includes( 'http://iec.ch/TC57/ns/CIM/StateVariables-EU/3.0' )
+
+def: isInSteadyStateHypothesisProfile() : Boolean =
+    md::FullModel.allInstances()->collect( m : md::FullModel | m.profile )->flatten()->includes( 'http://iec.ch/TC57/ns/CIM/SteadyStateHypothesis-EU/3.0' )
+
+def: isInTopologyBoundaryProfile() : Boolean =
+    md::FullModel.allInstances()->collect( m : md::FullModel | m.profile )->flatten()->includes( 'http://entsoe.eu/CIM/TopologyBoundary/3/1' )
+
+def: isInTopologyProfile() : Boolean =
+    md::FullModel.allInstances()->collect( m : md::FullModel | m.profile )->flatten()->includes( 'http://iec.ch/TC57/ns/CIM/Topology-EU/3.0' )
+
+
+endpackage
+

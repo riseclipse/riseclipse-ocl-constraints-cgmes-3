@@ -1,0 +1,125 @@
+/*
+*************************************************************************
+**  This file is part of the RiseClipse tool
+**
+**  The content of this file is based on data available on the ENTSO-E
+**  web site (https://www.entsoe.eu/digital/cim/cim-conformity-and-interoperability/)
+**
+**  This file is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
+**  
+**  Contributors:
+**      Computer Science Department, CentraleSupélec
+**      EDF R&D
+**  Contacts:
+**      dominique.marcadet@centralesupelec.fr
+**      aurelie.dehouck-neveu@edf.fr
+**  Web site:
+**      https://riseclipse.github.io/
+*************************************************************************
+*/
+
+import cim : 'http://iec.ch/TC57/CIM100'
+import md : 'http://iec.ch/TC57/61970-552/ModelDescription/1'
+
+import '../Helpers/CheckProfile.ocl'
+
+
+package cim
+
+context DiagramObject
+-- Diagram must be set.
+    inv DL_DiagramObject_Diagram
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/DL/DiagramObject_Diagram_must_be_set;'
+          + '0;'
+          + 'Diagram must be set in ' + self.ID
+        )
+    :
+        self.isInDiagramLayoutProfile() implies self.Diagram <> null
+
+context TextDiagramObject
+-- text must be set.
+    inv DL_TextDiagramObject_text
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/DL/TextDiagramObject_text_must_be_set;'
+          + '0;'
+          + 'text must be set in ' + self.ID
+        )
+    :
+        self.isInDiagramLayoutProfile() implies self.text <> null
+
+context VisibilityLayer
+-- VisibleObjects must be set.
+    inv DL_VisibilityLayer_VisibleObjects
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/DL/VisibilityLayer_VisibleObjects_must_be_set;'
+          + '0;'
+          + 'VisibleObjects must be set in ' + self.ID
+        )
+    :
+        self.isInDiagramLayoutProfile() implies self.VisibleObjects->size() > 0
+
+context Diagram
+-- orientation must be set.
+    inv DL_Diagram_orientation
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/DL/Diagram_orientation_must_be_set;'
+          + '0;'
+          + 'orientation must be set in ' + self.ID
+        )
+    :
+        self.isInDiagramLayoutProfile() implies self.orientation <> null
+
+context IdentifiedObject
+-- mRID must be set.
+    inv DL_IdentifiedObject_mRID
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/DL/IdentifiedObject_mRID_must_be_set;'
+          + '0;'
+          + 'mRID must be set in ' + self.ID
+        )
+    :
+        self.isInDiagramLayoutProfile() implies self.mRID <> null
+
+-- name must be set.
+    inv DL_IdentifiedObject_name
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/DL/IdentifiedObject_name_must_be_set;'
+          + '0;'
+          + 'name must be set in ' + self.ID
+        )
+    :
+        self.isInDiagramLayoutProfile() implies self.name <> null
+
+context DiagramObjectPoint
+-- DiagramObject must be set.
+    inv DL_DiagramObjectPoint_DiagramObject
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/DL/DiagramObjectPoint_DiagramObject_must_be_set;'
+          + '0;'
+          + 'DiagramObject must be set in ' + self.ID
+        )
+    :
+        self.isInDiagramLayoutProfile() implies self.DiagramObject <> null
+
+-- xPosition must be set.
+    inv DL_DiagramObjectPoint_xPosition
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/DL/DiagramObjectPoint_xPosition_must_be_set;'
+          + '0;'
+          + 'xPosition must be set in ' + self.ID
+        )
+    :
+        self.isInDiagramLayoutProfile() implies self.xPosition <> null
+-- yPosition must be set.
+    inv DL_DiagramObjectPoint_yPosition
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/DL/DiagramObjectPoint_yPosition_must_be_set;'
+          + '0;'
+          + 'yPosition must be set in ' + self.ID
+        )
+    :
+        self.isInDiagramLayoutProfile() implies self.yPosition <> null
+
+
+endpackage

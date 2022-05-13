@@ -1,0 +1,109 @@
+/*
+*************************************************************************
+**  This file is part of the RiseClipse tool
+**
+**  The content of this file is based on data available on the ENTSO-E
+**  web site (https://www.entsoe.eu/digital/cim/cim-conformity-and-interoperability/)
+**
+**  This file is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
+**  
+**  Contributors:
+**      Computer Science Department, CentraleSupélec
+**      EDF R&D
+**  Contacts:
+**      dominique.marcadet@centralesupelec.fr
+**      aurelie.dehouck-neveu@edf.fr
+**  Web site:
+**      https://riseclipse.github.io/
+*************************************************************************
+*/
+
+import cim : 'http://iec.ch/TC57/CIM100'
+import md : 'http://iec.ch/TC57/61970-552/ModelDescription/1'
+
+import '../Helpers/CheckProfile.ocl'
+
+
+package cim
+
+
+context PositionPoint
+-- Location must be set.
+    inv GL_PositionPoint_Location
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/GL/PositionPoint_Location_must_be_set;'
+          + '0;'
+          + 'Location must be set in ' + self.ID
+        )
+    :
+        self.isInGeographicalLocationProfile() implies self.Location <> null
+
+-- xPosition must be set.
+    inv GL_PositionPoint_xPosition
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/GL/PositionPoint_xPosition_must_be_set;'
+          + '0;'
+          + 'xPosition must be set in ' + self.ID
+        )
+    :
+        self.isInGeographicalLocationProfile() implies self.xPosition <> null
+
+-- yPosition must be set.
+    inv GL_PositionPoint_yPosition
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/GL/PositionPoint_yPosition_must_be_set;'
+          + '0;'
+          + 'yPosition must be set in ' + self.ID
+        )
+    :
+        self.isInGeographicalLocationProfile() implies self.yPosition <> null
+
+
+context Location
+-- CoordinateSystem must be set.
+    inv GL_Location_CoordinateSystem
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/GL/Location_CoordinateSystem_must_be_set;'
+          + '0;'
+          + 'CoordinateSystem must be set in ' + self.ID
+        )
+    :
+        self.isInGeographicalLocationProfile() implies self.CoordinateSystem <> null
+
+-- PowerSystemResources must be set.
+    inv GL_Location_PowerSystemResources
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/GL/Location_PowerSystemResources_must_be_set;'
+          + '0;'
+          + 'PowerSystemResources must be set in ' + self.ID
+        )
+    :
+        self.isInGeographicalLocationProfile() implies self.PowerSystemResources->size() > 0
+
+
+context CoordinateSystem
+-- crsUrn must be set.
+    inv GL_CoordinateSystem_crsUrn
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/GL/CoordinateSystem_crsUrn_must_be_set;'
+          + '0;'
+          + 'crsUrn must be set in ' + self.ID
+        )
+    :
+        self.isInGeographicalLocationProfile() implies self.crsUrn <> null
+
+
+context IdentifiedObject
+-- mRID must be set.
+    inv GL_IdentifiedObject_mRID
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/GL/IdentifiedObject_mRID_must_be_set;'
+          + '0;'
+          + 'mRID must be set in ' + self.ID
+        )
+    :
+        self.isInGeographicalLocationProfile() implies self.mRID <> null
+
+
+
+endpackage

@@ -1,0 +1,1574 @@
+/*
+*************************************************************************
+**  This file is part of the RiseClipse tool
+**
+**  The content of this file is based on data available on the ENTSO-E
+**  web site (https://www.entsoe.eu/digital/cim/cim-conformity-and-interoperability/)
+**
+**  This file is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
+**  
+**  Contributors:
+**      Computer Science Department, CentraleSupélec
+**      EDF R&D
+**  Contacts:
+**      dominique.marcadet@centralesupelec.fr
+**      aurelie.dehouck-neveu@edf.fr
+**  Web site:
+**      https://riseclipse.github.io/
+*************************************************************************
+*/
+
+
+import cim : 'http://iec.ch/TC57/CIM100'
+import md : 'http://iec.ch/TC57/61970-552/ModelDescription/1'
+
+import '../Helpers/CheckProfile.ocl'
+
+
+package cim
+
+
+context ACDCConverter
+--docReference non-QoCDC Key=e9faeb16-bde5-45cd-8895-049189d60b9e Profile=EQ
+--message A converter has two DC converter terminals.
+    inv EQ_ACDCConverter_DCTerminals_numberOfTerminals
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/ACDCConverter_DCTerminals_numberOfTerminals;'
+          + '0;'
+          + self.ID + ': A converter has two DC converter terminals.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.DCTerminals->size() = 2
+        )
+
+--docReference non-QoCDC Key=6f60615a-2fd1-445e-9234-4c8a2666b6be Profile=EQ
+--message It is typically the terminal on the power transformer (or switch) closest to the AC network.
+    inv EQ_ACDCConverter_valueType
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/ACDCConverter_valueType;'
+          + '0;'
+          + self.ID + ': It is typically the terminal on the power transformer (or switch) closest to the AC network.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.PccTerminal <> null and
+            self.PccTerminal <> null implies (
+                   self.PccTerminal.ConductingEquipment.oclIsKindOf( Switch )
+                or self.PccTerminal.ConductingEquipment.oclIsKindOf( PowerTransformer )
+            )
+        )
+
+--docReference non-QoCDC Key=09a42a54-cc17-48e3-bc96-296c740fa066 Profile=EQ
+--message The attribute shall be a positive value.
+    inv EQ_ACDCConverter_baseS_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/ACDCConverter_baseS_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.baseS <> null implies self.baseS >  0.0
+        )
+
+--docReference non-QoCDC Key=ac403681-1e5c-48de-844d-8ffcef5ea599 Profile=EQ
+--message The attribute shall be a positive value.
+    inv EQ_ACDCConverter_maxUdc_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/ACDCConverter_maxUdc_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.maxUdc <> null implies self.maxUdc >  0.0
+        )
+
+--docReference non-QoCDC Key=19a18714-aec7-42d1-a7c6-04a16fd79f7c Profile=EQ
+--message The attribute shall be a positive value.
+    inv EQ_ACDCConverter_minUdc_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/ACDCConverter_minUdc_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.minUdc <> null implies self.minUdc >  0.0
+        )
+
+--docReference non-QoCDC Key=8657c5a1-96cd-46de-baff-fd1208309f2f Profile=EQ
+--message The attribute shall be a positive value.
+    inv EQ_ACDCConverter_ratedUdc_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/ACDCConverter_ratedUdc_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.ratedUdc <> null implies self.ratedUdc >  0.0
+        )
+
+--docReference non-QoCDC Key=d387d542-ceb9-4ec5-999f-76af517468df Profile=EQ
+--message The attribute shall be a positive value.
+    inv EQ_ACDCConverter_resistiveLoss_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/ACDCConverter_resistiveLoss_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.resistiveLoss <> null implies self.resistiveLoss >  0.0
+        )
+
+--docReference non-QoCDC Key=f6b1892e-f0ca-45dd-a947-b7662cce0f14 Profile=EQ
+--message The attribute shall be a positive value.
+    inv EQ_ACDCConverter_switchingLoss_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/ACDCConverter_switchingLoss_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.switchingLoss <> null implies self.switchingLoss >  0.0
+        )
+
+context ApparentPowerLimit
+--docReference non-QoCDC Key=49e3b80d-d5b8-4143-a932-48bafe92523c Profile=EQ
+--message The attribute shall be a positive value or zero.
+    inv EQ_ApparentPowerLimit_normalValue_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/ApparentPowerLimit_normalValue_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value or zero.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.normalValue <> null implies self.normalValue >= 0.0
+        )
+
+context AsynchronousMachine
+--docReference non-QoCDC Key=fa0eb6bd-fd55-404d-9ca4-7ff4abd4cf3d Profile=EQ
+--message If one AsynchronousMachine is associated with one GeneratingUnit the flag Equipment.aggregate shall be consistent in case it is provided at both AsynchronousMachine and GeneratingUnit.
+    inv EQ_AsynchronousMachine_aggregate
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/AsynchronousMachine_aggregate;'
+          + '0;'
+          + self.ID + ': If one AsynchronousMachine is associated with one GeneratingUnit the flag Equipment.aggregate shall be consistent in case it is provided at both AsynchronousMachine and GeneratingUnit.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.GeneratingUnit <> null implies
+        		self.GeneratingUnit.RotatingMachine <> null implies
+        			self.GeneratingUnit.RotatingMachine->size() = 1 implies
+        				self.GeneratingUnit.aggregate = self.aggregate
+    	)
+
+context AuxiliaryEquipment
+--docReference non-QoCDC Key=cff91990-4309-471e-b3f0-564525569bff Profile=EQ
+--message For AuxilaryEquipment (CurrentTransformer, PotentialTransformer, PostLineSensor, SurgeArrester, WaveTrap, FaultIndicator) the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type Bay or Line.
+    inv EQ_AuxiliaryEquipment_containment
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/AuxiliaryEquipment_containment;'
+          + '0;'
+          + self.ID + ': For AuxilaryEquipment (CurrentTransformer, PotentialTransformer, PostLineSensor, SurgeArrester, WaveTrap, FaultIndicator) the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type Bay or Line.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.EquipmentContainer <> null and
+        	self.EquipmentContainer <> null implies (
+		        self.EquipmentContainer.oclIsKindOf( Bay ) or
+        		self.EquipmentContainer.oclIsKindOf( Line )
+    		)
+    	)
+
+context BatteryUnit
+--docReference non-QoCDC Key=77443509-89c5-4236-ae67-0f6ee4ec061b Profile=EQ
+--message The attribute shall be a positive value.
+    inv EQ_BatteryUnit_ratedE_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/BatteryUnit_ratedE_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.ratedE <> null implies self.ratedE >  0.0
+        )
+
+context BusbarSection
+--docReference non-QoCDC Key=da94e370-d62e-4221-a7bd-22cc2d1f07ef Profile=EQ
+--message A bus bar section may have many physical terminals but for analysis is modelled with exactly one logical terminal.
+    inv EQ_BusbarSection_Terminals_numberOfTerminals
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/BusbarSection_Terminals_numberOfTerminals;'
+          + '0;'
+          + self.ID + ': A bus bar section may have many physical terminals but for analysis is modelled with exactly one logical terminal.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.Terminals->size() = 1
+        )
+
+context Clamp
+--docReference non-QoCDC Key=520a05a8-84e1-4380-9b06-475087f8ff46 Profile=EQ
+--message For Clamp the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type Bay or Line when outside substation.
+    inv EQ_Clamp_containment
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/Clamp_containment;'
+          + '0;'
+          + self.ID + ': For Clamp the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type Bay or Line when outside substation.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.EquipmentContainer <> null and
+        	self.EquipmentContainer <> null implies (
+		        self.EquipmentContainer.oclIsKindOf( Bay ) or
+        		self.EquipmentContainer.oclIsKindOf( Line )
+    		)
+    	)
+
+--docReference non-QoCDC Key=b7416738-1110-4220-8382-da41ee62043d Profile=EQ
+--message A Clamp is ConductingEquipment and has one Terminal with an associated ConnectivityNode.
+    inv EQ_Clamp_numberOfTerminals
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/Clamp_numberOfTerminals;'
+          + '0;'
+          + self.ID + ': A Clamp is ConductingEquipment and has one Terminal with an associated ConnectivityNode.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.Terminals->size() = 1 and self.Terminals->any( true ).ConnectivityNode <> null
+        )
+
+context ConductingEquipment
+--docReference non-QoCDC Key=db6ccd5a-ac88-4a96-ad15-94c71413064a Profile=EQ
+--message Use only when there is no voltage level container used and only one base voltage applies.  For example, not used for transformers.
+    inv EQ_ConductingEquipment_usage
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/ConductingEquipment_usage;'
+          + '0;'
+          + self.ID + ': Use only when there is no voltage level container used and only one base voltage applies.  For example, not used for transformers.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.EquipmentContainer <> null implies (
+        		self.EquipmentContainer.oclIsKindOf( VoltageLevel ) implies self.BaseVoltage = null
+        	)
+        )
+
+context ControlAreaGeneratingUnit
+--docReference non-QoCDC Key=0046e1aa-9f4c-4327-a048-fb82a17efd38 Profile=EQ
+--message Note that a control area should include a GeneratingUnit only once.
+    inv EQ_ControlAreaGeneratingUnit_instance
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/ControlAreaGeneratingUnit_instance;'
+          + '0;'
+          + self.ID + ': Note that a control area should include a GeneratingUnit only once.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.ControlArea <> null implies (
+        		self.ControlArea.ControlAreaGeneratingUnit->select( c : ControlAreaGeneratingUnit | c.GeneratingUnit = self.GeneratingUnit )->size() = 1
+        	)
+        )
+
+context CsConverter
+--docReference non-QoCDC Key=1b1fd172-4383-4987-8135-2ebb26f4618a Profile=EQ
+--message The attribute shall be a positive value.
+    inv EQ_CsConverter_maxAlpha_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/CsConverter_maxAlpha_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.maxAlpha <> null implies self.maxAlpha >  0.0
+        )
+
+--docReference non-QoCDC Key=c495bc83-5291-4641-9720-f7cc63b79d17 Profile=EQ
+--message The attribute shall be a positive value.
+    inv EQ_CsConverter_maxGamma_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/CsConverter_maxGamma_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.maxGamma <> null implies self.maxGamma >  0.0
+        )
+
+--docReference non-QoCDC Key=fb754cfb-b7c0-46c1-8831-74265a8f1d53 Profile=EQ
+--message The attribute shall be a positive value.
+    inv EQ_CsConverter_maxIdc_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/CsConverter_maxIdc_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.maxIdc <> null implies self.maxIdc >  0.0
+        )
+
+--docReference non-QoCDC Key=4507511b-0767-4816-9508-e943c9758f3b Profile=EQ
+--message The attribute shall be a positive value.
+    inv EQ_CsConverter_minAlpha_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/CsConverter_minAlpha_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.minAlpha <> null implies self.minAlpha >  0.0
+        )
+
+--docReference non-QoCDC Key=0357b5c4-7582-4674-b89b-e40593f6bde6 Profile=EQ
+--message The attribute shall be a positive value.
+    inv EQ_CsConverter_minGamma_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/CsConverter_minGamma_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.minGamma <> null implies self.minGamma >  0.0
+        )
+
+--docReference non-QoCDC Key=a333257c-00a6-46ca-bb71-c1acb0240ee0 Profile=EQ
+--message The attribute shall be a positive value.
+    inv EQ_CsConverter_minIdc_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/CsConverter_minIdc_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.minIdc <> null implies self.minIdc >  0.0
+        )
+
+--docReference non-QoCDC Key=b57745f0-c602-4fb1-b995-3c4e6a5f2e1f Profile=EQ
+--message The attribute shall be a positive value.
+    inv EQ_CsConverter_ratedIdc_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/CsConverter_ratedIdc_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.ratedIdc <> null implies self.ratedIdc >  0.0
+        )
+
+--docReference non-QoCDC Key=ae4d7d03-b161-4f5b-bf79-296c348f7844 Profile=EQ
+--message The attributes minGamma and maxGamma define the range of extinction angles for inverter operation between which no discrete tap changer action takes place. The range is typically 17-20 degrees.
+    inv EQ_CsConverter_maxGamma_valueRangeTypical
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/CsConverter_maxGamma_valueRangeTypical;'
+          + '0;'
+          + self.ID + ': The attributes minGamma and maxGamma define the range of extinction angles for inverter operation between which no discrete tap changer action takes place. The range is typically 17-20 degrees.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.maxGamma <> null implies self.maxGamma <=  20.0
+        )
+
+--docReference non-QoCDC Key=b707bb0c-e313-436e-a895-502c063d748e Profile=EQ
+--message The attributes minAlpha and maxAlpha define the range of firing angles for rectifier operation between which no discrete tap changer action takes place. The range is typically 10-18 degrees.
+    inv EQ_CsConverter_maxAlpha_valueRangeTypical
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/CsConverter_maxAlpha_valueRangeTypical;'
+          + '0;'
+          + self.ID + ': The attributes minAlpha and maxAlpha define the range of firing angles for rectifier operation between which no discrete tap changer action takes place. The range is typically 10-18 degrees.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.maxAlpha <> null implies self.maxAlpha <=  18.0
+        )
+
+--docReference non-QoCDC Key=6a276591-b369-48d4-912f-9ef0718f2fe2 Profile=EQ
+--message The attributes minGamma and maxGamma define the range of extinction angles for inverter operation between which no discrete tap changer action takes place. The range is typically 17-20 degrees.
+    inv EQ_CsConverter_minGamma_valueRangeTypical
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/CsConverter_minGamma_valueRangeTypical;'
+          + '0;'
+          + self.ID + ': The attributes minGamma and maxGamma define the range of extinction angles for inverter operation between which no discrete tap changer action takes place. The range is typically 17-20 degrees.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	( self.minGamma <> null implies self.minGamma >= 17.0 ) and
+			( self.minGamma <> null and self.maxGamma <> null implies self.minGamma <= self.maxGamma )
+		)
+
+--docReference non-QoCDC Key=0db73ac8-e406-4680-94a3-7869e48941f2 Profile=EQ
+--message The attributes minAlpha and maxAlpha define the range of firing angles for rectifier operation between which no discrete tap changer action takes place. The range is typically 10-18 degrees.
+    inv EQ_CsConverter_minAlpha_valueRangeTypical
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/CsConverter_minAlpha_valueRangeTypical;'
+          + '0;'
+          + self.ID + ': The attributes minAlpha and maxAlpha define the range of firing angles for rectifier operation between which no discrete tap changer action takes place. The range is typically 10-18 degrees.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	( self.minAlpha <> null implies self.minAlpha >= 17.0 ) and
+			( self.minAlpha <> null and self.maxAlpha <> null implies self.minAlpha <= self.maxAlpha )
+		)
+
+context CurrentLimit
+--docReference non-QoCDC Key=17b7340e-6e05-4f62-bd42-b0f932ca40b6 Profile=EQ
+--message The attribute shall be a positive value or zero.
+    inv EQ_CurrentLimit_normalValue_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/CurrentLimit_normalValue_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value or zero.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.normalValue <> null implies self.normalValue >= 0.0
+        )
+
+context CurveData
+--docReference non-QoCDC Key=93eca843-40f4-4db5-8293-8defa3722a1a Profile=EQ
+--message For each active power value there is a corresponding high and low reactive power limit  value. Typically there will be a separate curve for each coolant condition, such as hydrogen pressure.  
+    inv EQ_CurveData_curveYvalues
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/CurveData_curveYvalues;'
+          + '0;'
+          + self.ID + ': For each active power value there is a corresponding high and low reactive power limit  value. Typically there will be a separate curve for each coolant condition, such as hydrogen pressure.  '
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.Curve <> null implies
+        	   self.Curve.oclIsKindOf( ReactiveCapabilityCurve ) implies
+        			self.xvalue <> null and self.y1value <> null and self.y2value <> null
+		)
+/*
+ * ReactiveCapabilityCurve.SynchronousMachines is unknown
+ * 
+--docReference non-QoCDC Key=843aad71-5f84-41ee-8cea-5cca119d7da6 Profile=EQ
+--message If CurveData.Curve is a ReactiveCapabilityCurve, each CurveData shall satisfy the following relation: • CurveData.xvalue^2+CurveData.y1value^2 shall be less than or equal to RotatingMachine.ratedS^2.  
+    inv EQ_CurveData_equationY1
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/CurveData_equationY1;'
+          + '0;'
+          + self.ID + ': If CurveData.Curve is a ReactiveCapabilityCurve, each CurveData shall satisfy the following relation: • CurveData.xvalue^2+CurveData.y1value^2 shall be less than or equal to RotatingMachine.ratedS^2.  '
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (if self.Curve.oclIsKindOf(ReactiveCapabilityCurve) then
+        let rcc : ReactiveCapabilityCurve = self.Curve.oclAsType(ReactiveCapabilityCurve) in
+        if rcc.SynchronousMachines->notEmpty() then
+            let sm : SynchronousMachine = rcc.SynchronousMachines->first() in
+            ((self.xvalue * self.xvalue) + (self.y1value*self.y1value)) <= sm.ratedS * sm.ratedS
+        else true endif
+    else true endif )
+ */
+context Cut
+--docReference non-QoCDC Key=3e3e807d-68cd-4d56-aed2-a1ddaf76099e Profile=EQ
+--message For Cut the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type Bay, VoltageLevel or DCConverterUnit or Line when outside substation.
+    inv EQ_Cut_containment
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/Cut_containment;'
+          + '0;'
+          + self.ID + ': For Cut the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type Bay, VoltageLevel or DCConverterUnit or Line when outside substation.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.EquipmentContainer <> null and
+        	self.EquipmentContainer <> null implies (
+        		self.EquipmentContainer.oclIsKindOf( VoltageLevel    ) or
+        		self.EquipmentContainer.oclIsKindOf( Bay             ) or
+        		self.EquipmentContainer.oclIsKindOf( DCConverterUnit ) or 
+        		self.EquipmentContainer.oclIsKindOf( Line            )
+    		)
+    	)
+
+context DCBusbar
+--docReference non-QoCDC Key=8256a9a9-3318-4b84-8699-9a16e698f86b Profile=EQ
+--message For DCBusbar the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type DCConverterUnit.
+    inv EQ_DCBusbar_containment
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/DCBusbar_containment;'
+          + '0;'
+          + self.ID + ': For DCBusbar the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type DCConverterUnit.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.EquipmentContainer <> null and
+        	self.EquipmentContainer <> null implies self.EquipmentContainer.oclIsKindOf( DCConverterUnit )
+        )
+
+context DCChopper
+--docReference non-QoCDC Key=7d30c05d-0ed8-4e9d-96b9-364c80957c6a Profile=EQ
+--message For DCChopper the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type DCConverterUnit.
+    inv EQ_DCChopper_containment
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/DCChopper_containment;'
+          + '0;'
+          + self.ID + ': For DCChopper the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type DCConverterUnit.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.EquipmentContainer <> null and
+        	self.EquipmentContainer <> null implies self.EquipmentContainer.oclIsKindOf( DCConverterUnit )
+        )
+
+context DCConductingEquipment
+--docReference non-QoCDC Key=29a2b828-ae7c-4eef-b5e8-e0f4ddd8a95d Profile=EQ
+--message The attribute shall be a positive value.
+    inv EQ_DCConductingEquipment_ratedUdc_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/DCConductingEquipment_ratedUdc_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.ratedUdc <> null implies self.ratedUdc >  0.0
+        )
+
+context DCConverterUnit
+--docReference non-QoCDC Key=c9db2e5f-567c-4e58-bd2c-e2153df8ea0e Profile=EQ
+--message For a CSC HVDC, the transformer shall be modelled explicitly.
+    inv EQ_DCConverterUnit_cscPowerTransformer
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/DCConverterUnit_cscPowerTransformer;'
+          + '0;'
+          + self.ID + ': For a CSC HVDC, the transformer shall be modelled explicitly.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.Equipments->exists( e : Equipment | e.oclIsKindOf( CsConverter )) implies
+        		self.Equipments->exists( e : Equipment | e.oclIsKindOf( PowerTransformer ))
+    	)
+
+--docReference non-QoCDC Key=3c4e9f9d-ba6d-4476-baa7-27758c543da3 Profile=EQ
+--message For each cim:DCConverterUnit and cim:DCLine instance an  IdentifiedObject.energyIdentCodeEic attribute has been defined,  for which the third character is 'T'.
+    inv EQ_DCConverterUnit_DCEquipmentContainerMapping
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/DCConverterUnit_DCEquipmentContainerMapping;'
+          + '0;'
+          + self.ID + ': For each cim:DCConverterUnit and cim:DCLine instance an  IdentifiedObject.energyIdentCodeEic attribute has been defined,  for which the third character is \'T\'.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.energyIdentCodeEic <> null and (
+        		self.energyIdentCodeEic <> null implies self.energyIdentCodeEic.substring( 3, 3 ) = 'T'
+        	)
+        )
+
+context DCGround
+--docReference non-QoCDC Key=c60f86cb-9baa-4a42-9f29-a9fd2767b300 Profile=EQ
+--message For DCGround the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type DCConverterUnit.
+    inv EQ_DCGround_containment
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/DCGround_containment;'
+          + '0;'
+          + self.ID + ': For DCGround the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type DCConverterUnit.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.EquipmentContainer <> null and
+            self.EquipmentContainer <> null implies self.EquipmentContainer.oclIsKindOf( DCConverterUnit )
+        )
+
+context DCSeriesDevice
+--docReference non-QoCDC Key=8c78a915-1abd-4950-b11f-1d2a4305fe04 Profile=EQ
+--message For DCSeriesDevice the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type DCConverterUnit.
+    inv EQ_DCSeriesDevice_containment
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/DCSeriesDevice_containment;'
+          + '0;'
+          + self.ID + ': For DCSeriesDevice the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type DCConverterUnit.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.EquipmentContainer <> null and
+            self.EquipmentContainer <> null implies self.EquipmentContainer.oclIsKindOf( DCConverterUnit )
+        )
+
+context DCShunt
+--docReference non-QoCDC Key=a5f75474-b7f2-4785-8590-7f2a44c4d823 Profile=EQ
+--message For DCShunt the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type DCConverterUnit.
+    inv EQ_DCShunt_containment
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/DCShunt_containment;'
+          + '0;'
+          + self.ID + ': For DCShunt the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type DCConverterUnit.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.EquipmentContainer <> null and
+            self.EquipmentContainer <> null implies self.EquipmentContainer.oclIsKindOf( DCConverterUnit )
+        )
+
+context DayType
+--docReference non-QoCDC Key=126cdfed-6218-483e-81a8-ed69152f2327 Profile=EQ
+--message For DayType the name attribute indicates the days of the week that a given DayType represents. The name attribute is restricted to the following names: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday, Weekday, Weekend, All. If the name attribute is All, it represents all seven days of the week. If the name attribute is Weekday, it represents Monday through Friday. If the name attribute is Weekend, it represents Saturday and Sunday.
+    inv EQ_DayType_name_validValues
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/DayType_name_validValues;'
+          + '0;'
+          + self.ID + ': For DayType the name attribute indicates the days of the week that a given DayType represents. The name attribute is restricted to the following names: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday, Weekday, Weekend, All. If the name attribute is All, it represents all seven days of the week. If the name attribute is Weekday, it represents Monday through Friday. If the name attribute is Weekend, it represents Saturday and Sunday.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.name <> null implies (
+        		self.name = 'Monday'    or
+				self.name = 'Tuesday'   or
+				self.name = 'Wednesday' or
+				self.name = 'Thursday'  or
+				self.name = 'Friday'    or
+				self.name = 'Saturday'  or
+				self.name = 'Sunday'    or
+				self.name = 'Weekday'   or
+				self.name = 'Weekend'  or
+				self.name = 'All'
+			)
+		)
+
+context Disconnector
+--docReference non-QoCDC Key=f94533b9-43c3-407a-88e2-0d9300d9d7a5 Profile=EQ
+--message For Disconnector the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type Bay, VoltageLevel, DCConverterUnit or Line when outside substation.
+    inv EQ_Disconnector_containment
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/Disconnector_containment;'
+          + '0;'
+          + self.ID + ': For Disconnector the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type Bay, VoltageLevel, DCConverterUnit or Line when outside substation.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.EquipmentContainer <> null and (
+        		self.EquipmentContainer <> null implies (
+			        self.EquipmentContainer.oclIsKindOf( VoltageLevel    ) or
+			        self.EquipmentContainer.oclIsKindOf( Bay             ) or
+        			self.EquipmentContainer.oclIsKindOf( DCConverterUnit ) or 
+        			self.EquipmentContainer.oclIsKindOf( Line            )
+        		)
+    		)
+    	)
+
+context EarthFaultCompensator
+--docReference non-QoCDC Key=84bb8e97-bee5-4a07-9d04-e3c550b70dfc Profile=EQ
+--message The EarthFaultCompensator can have either one or two terminals modelled. If the second terminal of an EarthFaultCompensator is omitted, it is assumed the terminal solidly connects to ground. If there is some kind of topology or local earth resistivity that is important to model on the ground side of the device, then a second terminal is added.
+    inv EQ_EarthFaultCompensator_Terminals_numberOfTerminals
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/EarthFaultCompensator_Terminals_numberOfTerminals;'
+          + '0;'
+          + self.ID + ': The EarthFaultCompensator can have either one or two terminals modelled. If the second terminal of an EarthFaultCompensator is omitted, it is assumed the terminal solidly connects to ground. If there is some kind of topology or local earth resistivity that is important to model on the ground side of the device, then a second terminal is added.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.Terminals->size() >= 1 and self.Terminals->size() <= 2
+        )
+
+--docReference non-QoCDC Key=8bf7e896-902d-475e-b5bb-d921412f4698 Profile=EQ
+--message For EarthFaultCompensator (GroundingImpedance, PetersenCoil) the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type VoltageLevel.
+    inv EQ_EarthFaultCompensator_containment
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/EarthFaultCompensator_containment;'
+          + '0;'
+          + self.ID + ': For EarthFaultCompensator (GroundingImpedance, PetersenCoil) the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type VoltageLevel.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.EquipmentContainer <> null and
+        	self.EquipmentContainer <> null implies self.EquipmentContainer.oclIsKindOf( VoltageLevel )
+        )
+
+context Equipment
+--docReference non-QoCDC Key=c4c4a411-1370-4123-85ff-ebebcb2faf9a Profile=EQ
+--message The attribute is not used for EquivalentBranch, EquivalentShunt and EquivalentInjection.
+    inv EQ_Equipment_notUsed
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/Equipment_notUsed;'
+          + '0;'
+          + self.ID + ': The attribute is not used for EquivalentBranch, EquivalentShunt and EquivalentInjection.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies ((
+        	self.oclIsKindOf( EquivalentInjection) or
+        	self.oclIsKindOf( EquivalentBranch   ) or
+         	self.oclIsKindOf( EquivalentShunt    )) implies self.aggregate = null
+		)
+
+context EquivalentBranch
+--docReference non-QoCDC Key=5d65ace8-f205-40c1-8a29-18d72afd5e72 Profile=EQ
+--message This attribute is optional and represent unbalanced network such as off-nominal phase shifter. If only EquivalentBranch.r is given, then EquivalentBranch.r21 is assumed equal to EquivalentBranch.r.
+    inv EQ_EquivalentBranch_r21_usage
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/EquivalentBranch_r21_usage;'
+          + '0;'
+          + self.ID + ': This attribute is optional and represent unbalanced network such as off-nominal phase shifter. If only EquivalentBranch.r is given, then EquivalentBranch.r21 is assumed equal to EquivalentBranch.r.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.r <> null and self.r21 <> null implies self.r = self.r21
+        )
+
+--docReference non-QoCDC Key=4512dca5-2249-4eb7-af73-64b85ec9d35a Profile=EQ
+--message This attribute is optional and represent unbalanced network such as off-nominal phase shifter. If only EquivalentBranch.x is given, then EquivalentBranch.x21 is assumed equal to EquivalentBranch.x.
+    inv EQ_EquivalentBranch_x21_usage
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/EquivalentBranch_x21_usage;'
+          + '0;'
+          + self.ID + ': This attribute is optional and represent unbalanced network such as off-nominal phase shifter. If only EquivalentBranch.x is given, then EquivalentBranch.x21 is assumed equal to EquivalentBranch.x.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.x <> null and self.x21 <> null implies self.x = self.x21
+        )
+
+--docReference non-QoCDC Key=c7f60d74-af19-4b39-8a6b-dcc989406271 Profile=EQ
+--message For EquivalentBranch the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type VoltageLevel, Line or Substation.
+    inv EQ_EquivalentBranch_containment
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/EquivalentBranch_containment;'
+          + '0;'
+          + self.ID + ': For EquivalentBranch the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type VoltageLevel, Line or Substation.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.EquipmentContainer <> null and
+        	self.EquipmentContainer <> null implies (
+		        self.EquipmentContainer.oclIsKindOf( VoltageLevel ) or
+        		self.EquipmentContainer.oclIsKindOf( Substation   ) or
+        		self.EquipmentContainer.oclIsKindOf( Line         )
+    		)
+    	)
+
+--docReference non-QoCDC Key=e5bbe59c-15a8-4e78-8970-9c743a8e7a17 Profile=EQ
+--message cim:EquivalentBranch with EquivalentBranch.r not equal to EquivalentBranch.r21 or  EquivalentBranch.x not equal to EquivalentBranch.x21 shouldn't be used.
+    inv EQ_EquivalentBranch_AsymmetricalEquivalent
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/EquivalentBranch_AsymmetricalEquivalent;'
+          + '0;'
+          + self.ID + ': cim:EquivalentBranch with EquivalentBranch.r not equal to EquivalentBranch.r21 or  EquivalentBranch.x not equal to EquivalentBranch.x21 shouldn\'t be used.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.r = self.r21 and self.x = self.x21
+        )
+
+context EquivalentInjection
+--docReference non-QoCDC Key=fba3aea7-8d53-4de5-b505-6ec666ad8b31 Profile=EQ
+--message ReactiveCapabilityCurve can only be associated with EquivalentInjection  if the flag is true.
+    inv EQ_EquivalentInjection_associatedCurve
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/EquivalentInjection_associatedCurve;'
+          + '0;'
+          + self.ID + ': ReactiveCapabilityCurve can only be associated with EquivalentInjection  if the flag is true.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.ReactiveCapabilityCurve <> null implies self.regulationCapability = true
+    	)
+
+--docReference non-QoCDC Key=7eebb5f2-d43c-4324-a76b-dd8490210966 Profile=EQ
+--message If EquivalentInjection connects to a BoundaryPoint with flag isDirectCurrent=false (meaning this is not HVDC), the EquivalentInjection.regulationCapability in EQ shall be set to false and there shall not be a ReactiveCapabilityCurve associated.
+    inv EQ_EquivalentInjection_notHVDC
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/EquivalentInjection_notHVDC;'
+          + '0;'
+          + self.ID + ': If EquivalentInjection connects to a BoundaryPoint with flag isDirectCurrent=false (meaning this is not HVDC), the EquivalentInjection.regulationCapability in EQ shall be set to false and there shall not be a ReactiveCapabilityCurve associated.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	let term : Terminal = self.Terminals->asSequence()->first() in
+    			term.ConnectivityNode <> null implies
+    				term.ConnectivityNode.BoundaryPoint <> null implies
+    					term.ConnectivityNode.BoundaryPoint.isDirectCurrent = false implies
+			        		self.regulationCapability = false and self.ReactiveCapabilityCurve = null
+    	)
+
+context EquivalentShunt
+--docReference non-QoCDC Key=a51684eb-fff3-4001-93b2-29a1ef441952 Profile=EQ
+--message For EquivalentShunt the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type VoltageLevel.
+    inv EQ_EquivalentShunt_containment
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/EquivalentShunt_containment;'
+          + '0;'
+          + self.ID + ': For EquivalentShunt the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type VoltageLevel.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.EquipmentContainer <> null and
+        	self.EquipmentContainer <> null implies self.EquipmentContainer.oclIsKindOf( VoltageLevel )
+        )
+
+context Fuse
+--docReference non-QoCDC Key=273bee78-74c7-43bf-9821-cbf820ff0d9f Profile=EQ
+--message For Fuse the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type Bay, VoltageLevel, DCConverterUnit or Line when outside substation.
+    inv EQ_Fuse_containment
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/Fuse_containment;'
+          + '0;'
+          + self.ID + ': For Fuse the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type Bay, VoltageLevel, DCConverterUnit or Line when outside substation.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.EquipmentContainer <> null and
+        	self.EquipmentContainer <> null implies (
+		        self.EquipmentContainer.oclIsKindOf( VoltageLevel	 ) or
+        		self.EquipmentContainer.oclIsKindOf( Bay             ) or
+	       	 	self.EquipmentContainer.oclIsKindOf( DCConverterUnit ) or 
+    	  	  	self.EquipmentContainer.oclIsKindOf( Line 		     )
+    ))
+
+context GeneratingUnit
+--docReference non-QoCDC Key=f46e7aa5-9df6-47ce-bcf2-56361cc3d2ff Profile=EQ
+--message The attribute shall be a positive value.
+    inv EQ_GeneratingUnit_ratedGrossMaxP_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/GeneratingUnit_ratedGrossMaxP_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.ratedGrossMaxP <> null implies self.ratedGrossMaxP > 0.0
+        )
+
+--docReference non-QoCDC Key=0fb1cc91-be35-48a4-b982-c9b93d701f34 Profile=EQ
+--message The attribute shall be a positive value.
+    inv EQ_GeneratingUnit_ratedGrossMinP_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/GeneratingUnit_ratedGrossMinP_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.ratedGrossMinP <> null implies self.ratedGrossMinP > 0.0
+        )
+
+--docReference non-QoCDC Key=56941c35-5575-4cee-a1f2-ab8478dca871 Profile=EQ
+--message The attribute shall be a positive value.
+    inv EQ_GeneratingUnit_ratedNetMaxP_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/GeneratingUnit_ratedNetMaxP_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.ratedNetMaxP <> null implies self.ratedNetMaxP >  0.0
+        )
+
+--docReference non-QoCDC Key=81eadebe-ceeb-49f0-b696-d88aea26b762 Profile=EQ
+--message For GeneratingUnit (SolarGeneratingInit, NuclearGeneratingUnit, ThermalGeneratingUnit, HydroGeneratingUnit, WindGeneratingUnit) the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type Substation.
+    inv EQ_GeneratingUnit_containment
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/GeneratingUnit_containment;'
+          + '0;'
+          + self.ID + ': For GeneratingUnit (SolarGeneratingInit, NuclearGeneratingUnit, ThermalGeneratingUnit, HydroGeneratingUnit, WindGeneratingUnit) the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type Substation.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.EquipmentContainer <> null and
+        	self.EquipmentContainer <> null implies self.EquipmentContainer.oclIsKindOf( Substation )
+        )
+
+--docReference non-QoCDC Key=c4d22beb-79ee-46c5-872b-f4e0dcd7680f Profile=EQ
+--message GeneratingUnit.maxOperatingP shall be less than or equal to the sum of RotatingMachine.ratedS for RotatingMachine-s associated to the GeneratingUnit.
+    inv EQ_GeneratingUnit_ratedS
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/GeneratingUnit_ratedS;'
+          + '0;'
+          + self.ID + ': GeneratingUnit.maxOperatingP shall be less than or equal to the sum of RotatingMachine.ratedS for RotatingMachine-s associated to the GeneratingUnit.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.RotatingMachine <> null implies (
+            	let sumS : Real = self.RotatingMachine.ratedS->sum() in
+                self.maxOperatingP <= sumS
+            )
+        )
+
+context GroundDisconnector
+--docReference non-QoCDC Key=bf52557d-bc57-4c2c-9c24-605ac81c3f45 Profile=EQ
+--message For GroundDisconnector the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type Bay, VoltageLevel, DCConverterUnit or Line when outside substation.
+    inv EQ_GroundDisconnector_containment
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/GroundDisconnector_containment;'
+          + '0;'
+          + self.ID + ': For GroundDisconnector the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type Bay, VoltageLevel, DCConverterUnit or Line when outside substation.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.EquipmentContainer <> null and
+        	self.EquipmentContainer <> null implies (
+                self.EquipmentContainer.oclIsKindOf( VoltageLevel   ) or
+                self.EquipmentContainer.oclIsKindOf( Bay            ) or
+                self.EquipmentContainer.oclIsKindOf( DCConverterUnit) or 
+                self.EquipmentContainer.oclIsKindOf( Line           )
+            )
+        )
+
+context Jumper
+--docReference non-QoCDC Key=d028d99b-c191-44a3-95a9-5214f6ffe81b Profile=EQ
+--message For Jumper the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type Bay, VoltageLevel, DCConverterUnit or Line when outside substation.
+    inv EQ_Jumper_containment
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/Jumper_containment;'
+          + '0;'
+          + self.ID + ': For Jumper the association Equipment.EquipmentContainer is required and shall point to EquipmentContainer of type Bay, VoltageLevel, DCConverterUnit or Line when outside substation.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.EquipmentContainer <> null and
+        	self.EquipmentContainer <> null implies (
+                self.EquipmentContainer.oclIsKindOf( VoltageLevel    ) or
+                self.EquipmentContainer.oclIsKindOf( Bay             ) or
+                self.EquipmentContainer.oclIsKindOf( DCConverterUnit ) or 
+                self.EquipmentContainer.oclIsKindOf( Line            )
+            )
+    )
+
+context NonlinearShuntCompensator
+--docReference non-QoCDC Key=7c1031de-0407-4819-8802-0dc3bcd047ca Profile=EQ
+--message The number of NonlinearShuntCompenstorPoint instances associated with a NonlinearShuntCompensator shall be equal to ShuntCompensator.maximumSections. 
+    inv EQ_NonlinearShuntCompensator_NonlinearShuntCompensatorPoints_numberOfInstances
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/NonlinearShuntCompensator_NonlinearShuntCompensatorPoints_numberOfInstances;'
+          + '0;'
+          + self.ID + ': The number of NonlinearShuntCompenstorPoint instances associated with a NonlinearShuntCompensator shall be equal to ShuntCompensator.maximumSections. '
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.maximumSections <> null implies self.NonlinearShuntCompensatorPoints->size() = self.maximumSections
+        )
+
+context NonlinearShuntCompensatorPoint
+--docReference non-QoCDC Key=6522fb13-e515-44b2-b883-d1b0f9429fb7 Profile=EQ
+--message NonlinearShuntCompensatorPoint.g shall be a positive value or zero.
+    inv EQ_NonlinearShuntCompensatorPoint_g_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/NonlinearShuntCompensatorPoint_g_valueRange;'
+          + '0;'
+          + self.ID + ': NonlinearShuntCompensatorPoint.g shall be a positive value or zero.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.g <> null implies self.g >= 0.0
+        )
+
+context OperationalLimitSet
+--docReference non-QoCDC Key=799b7f42-32d9-4c0b-b136-b1d39c4b5093 Profile=EQ
+--message OperationalLimitSet has associations with ACDCTerminal and Equipment. The association OperationalLimitSet.Terminal is preferred for Terminal-s associated with ConductingEquipment. At least one of the two references must be populated. If both are included, the Terminal must be related to the ConductingEquipment.
+    inv EQ_OperationalLimitSet_limits
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/OperationalLimitSet_limits;'
+          + '0;'
+          + self.ID + ': OperationalLimitSet has associations with ACDCTerminal and Equipment. The association OperationalLimitSet.Terminal is preferred for Terminal-s associated with ConductingEquipment. At least one of the two references must be populated. If both are included, the Terminal must be related to the ConductingEquipment.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.Terminal <> null or self.Equipment <> null and
+        	self.Terminal <> null implies (
+                self.Equipment <> null and self.Terminal.oclIsKindOf( Terminal ) implies
+                    self.Terminal.oclAsType( Terminal ).ConductingEquipment = self.Equipment
+        	)
+        )
+
+context PhaseTapChangerLinear
+--docReference non-QoCDC Key=cae6a64a-0110-48de-a315-1803bb8dff33 Profile=EQ
+--message PowerTransformerEnd.x shall be consistent with PhaseTapChangerLinear.xMin and PhaseTapChangerNonLinear.xMin. In case of inconsistency, PowerTransformerEnd.x shall be used.
+    inv EQ_PhaseTapChangerLinear_valueRangePair
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/PhaseTapChangerLinear_valueRangePair;'
+          + '0;'
+          + self.ID + ': PowerTransformerEnd.x shall be consistent with PhaseTapChangerLinear.xMin and PhaseTapChangerNonLinear.xMin. In case of inconsistency, PowerTransformerEnd.x shall be used.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.TransformerEnd <> null implies
+            	self.xMin = self.TransformerEnd.oclAsType( PowerTransformerEnd ).x
+        )
+
+context PhaseTapChangerNonLinear
+--docReference non-QoCDC Key=5f827841-91fa-425e-a8f8-940987dd4e23 Profile=EQ
+--message PowerTransformerEnd.x shall be consistent with PhaseTapChangerLinear.xMin and PhaseTapChangerNonLinear.xMin. In case of inconsistency, PowerTransformerEnd.x shall be used.
+    inv EQ_PhaseTapChangerNonLinear_valueRangePair
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/PhaseTapChangerNonLinear_valueRangePair;'
+          + '0;'
+          + self.ID + ': PowerTransformerEnd.x shall be consistent with PhaseTapChangerLinear.xMin and PhaseTapChangerNonLinear.xMin. In case of inconsistency, PowerTransformerEnd.x shall be used.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.TransformerEnd <> null implies
+        	self.xMin = self.TransformerEnd.oclAsType( PowerTransformerEnd ).x
+        )
+
+context PowerElectronicsConnection
+--docReference non-QoCDC Key=92edf369-ff9b-4516-a1bf-6fd7f8809ead Profile=EQ
+--message The attribute shall have a positive value.
+    inv EQ_PowerElectronicsConnection_ratedS_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/PowerElectronicsConnection_ratedS_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall have a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.ratedS <> null implies self.ratedS >  0.0
+        )
+
+--docReference non-QoCDC Key=f134f227-d873-468f-88a8-abbbac9c6eda Profile=EQ
+--message The attribute shall be a positive value.
+    inv EQ_PowerElectronicsConnection_ratedU_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/PowerElectronicsConnection_ratedU_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.ratedU <> null implies self.ratedU >  0.0
+        )
+
+context PowerTransformer
+--docReference non-QoCDC Key=cc8c27ba-935b-4e23-b824-0fa2d51b387a Profile=EQ
+--message The inherited association ConductingEquipment.BaseVoltage should not be used.  The association from TransformerEnd to BaseVoltage should be used instead.
+    inv EQ_PowerTransformer_BaseVoltage_associationNotUsed
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/PowerTransformer_BaseVoltage_associationNotUsed;'
+          + '0;'
+          + self.ID + ': The inherited association ConductingEquipment.BaseVoltage should not be used.  The association from TransformerEnd to BaseVoltage should be used instead.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.BaseVoltage = null
+        )
+
+context PowerTransformerEnd
+def : EQ_BRANCH_X_LIMIT : Real = 0.01
+--docReference non-QoCDC Key=c204ebd8-ec67-44a3-92bf-b1c199a3b781 Profile=EQ
+--message Highest voltage winding should be 1.  Each end within a power transformer should have a unique subsequent end number.  
+    inv EQ_PowerTransformerEnd_unique
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/PowerTransformerEnd_unique;'
+          + '0;'
+          + self.ID + ': Highest voltage winding should be 1.  Each end within a power transformer should have a unique subsequent end number.  '
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.PowerTransformer <> null implies
+        	    self.PowerTransformer.PowerTransformerEnd->select( pte : PowerTransformerEnd | pte.endNumber = self.endNumber )->size() = 1
+        )
+
+--docReference non-QoCDC Key=1d0df50e-0ea7-447b-b732-bfece6626fcb Profile=EQ
+--message The attribute shall be a positive value. 
+    inv EQ_PowerTransformerEnd_ratedS_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/PowerTransformerEnd_ratedS_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value. '
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.ratedS <> null implies self.ratedS >  0.0
+        )
+
+--docReference non-QoCDC Key=4aabd1e8-b2e7-4816-9607-8a2a9bd2fe66 Profile=EQ
+--message For a two-winding transformer the values for the high and low voltage sides shall be identical. 
+    inv EQ_PowerTransformerEnd_valueRange2winding
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/PowerTransformerEnd_valueRange2winding;'
+          + '0;'
+          + self.ID + ': For a two-winding transformer the values for the high and low voltage sides shall be identical. '
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.PowerTransformer <> null implies (
+            	self.PowerTransformer.PowerTransformerEnd->size() = 2 implies
+                    self.PowerTransformer.PowerTransformerEnd->select( pte : PowerTransformerEnd | pte.ratedS <> self.ratedS )->isEmpty()
+            )
+        )
+
+--docReference non-QoCDC Key=b978b27b-6d23-4a83-90c0-b8f56c912a3e Profile=EQ
+--message 1) for a two Terminal PowerTransformer the high voltage (TransformerEnd.endNumber=1) PowerTransformerEnd has non zero values on r, r0, x, and x0 while the low voltage (TransformerEnd.endNumber=2) PowerTransformerEnd has zero values for r, r0, x, and x0.  Parameters are always provided, even if the PowerTransformerEnds have the same rated voltage.  In this case, the parameters are provided at the PowerTransformerEnd which has TransformerEnd.endNumber equal to 1.
+    inv EQ_PowerTransformerEnd_secondWindingValues
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/PowerTransformerEnd_secondWindingValues;'
+          + '0;'
+          + self.ID + ': 1) for a two Terminal PowerTransformer the high voltage (TransformerEnd.endNumber=1) PowerTransformerEnd has non zero values on r, r0, x, and x0 while the low voltage (TransformerEnd.endNumber=2) PowerTransformerEnd has zero values for r, r0, x, and x0.  Parameters are always provided, even if the PowerTransformerEnds have the same rated voltage.  In this case, the parameters are provided at the PowerTransformerEnd which has TransformerEnd.endNumber equal to 1.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.PowerTransformer <> null implies
+        	    if self.PowerTransformer.PowerTransformerEnd->size() = 2 then
+                    if self.endNumber = 1 then
+                        self.r <> 0 and self.x <> 0 and self.r0 <> 0 and self.x0 <> 0 
+                    else if self.endNumber = 2 then
+                        self.r = 0 and self.x = 0 and self.r0 = 0 and self.x0 = 0
+                    else false endif endif
+                else true endif
+        )
+
+--docReference non-QoCDC Key=b35019af-7e54-4049-8240-4b5d01415f0f Profile=EQ
+--message PowerTransformerEnd.g shall be positive value or zero. Positive magnetising branch conductance (PowerTransformerEnd.g) means positive active power losses in no load.
+    inv EQ_PowerTransformerEnd_g_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/PowerTransformerEnd_g_valueRange;'
+          + '0;'
+          + self.ID + ': PowerTransformerEnd.g shall be positive value or zero. Positive magnetising branch conductance (PowerTransformerEnd.g) means positive active power losses in no load.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (self.g >= 0.0)
+
+--docReference non-QoCDC Key=cb42891d-c412-4200-939d-d3a513ccd057 Profile=EQ
+--message Transformers with zero series reactance do not exist. PowerTransformerEnd.x of high voltage end in case of a two winding transformer shall be a positive value. In case of a three winding transformer the PowerTransformerEnd.x shall not be zero.
+    inv EQ_PowerTransformerEnd_value
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/PowerTransformerEnd_value;'
+          + '0;'
+          + self.ID + ': Transformers with zero series reactance do not exist. PowerTransformerEnd.x of high voltage end in case of a two winding transformer shall be a positive value. In case of a three winding transformer the PowerTransformerEnd.x shall not be zero.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.PowerTransformer <> null implies (
+        	   if self.PowerTransformer.PowerTransformerEnd->size() = 2 then
+                    if self.endNumber = 1 then
+                        self.x > 0  
+                    else if self.endNumber = 2 then
+                        self.x = 0
+                    else false endif endif
+                else if self.PowerTransformer.PowerTransformerEnd->size() = 3 then
+                    self.x <> 0
+                else false endif endif
+            )
+        )
+
+context RatioTapChanger
+--docReference non-QoCDC Key=4b39f9cc-c2d1-4bdf-a997-9b8a142e8fcd Profile=EQ
+--message The association TapChanger.TapChangerControl for RatioTapChanger-s shall only point to a TapChangerControl the has the following control modes for RegulatingControl.mode: voltage, reactivePower and powerFactor.
+    inv EQ_RatioTapChanger_controlMode
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/RatioTapChanger_controlMode;'
+          + '0;'
+          + self.ID + ': The association TapChanger.TapChangerControl for RatioTapChanger-s shall only point to a TapChangerControl the has the following control modes for RegulatingControl.mode: voltage, reactivePower and powerFactor.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.TapChangerControl <> null implies
+                self.TapChangerControl.mode = RegulatingControlModeKind::voltage       or
+                self.TapChangerControl.mode = RegulatingControlModeKind::reactivePower or
+                self.TapChangerControl.mode = RegulatingControlModeKind::powerFactor
+        )
+
+context ReactiveCapabilityCurve
+--docReference non-QoCDC Key=fcb32b67-29c0-4840-91e3-4bec464f639d Profile=EQ
+--message For a ReactiveCapabilityCurve associated with SynchronousMachine, the Curve.xUnit shall be set to UnitSymbol.W and both Curve.y1Unit and Curve.y2Unit shall be set to UnitSymbol.VAr. As the multiplier is not included in the profile it is defined the same as the multiplier used for datatype ActivePower and ReactivePower, i.e. UnitMultiplier.M.
+    inv EQ_ReactiveCapabilityCurve_units
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/ReactiveCapabilityCurve_units;'
+          + '0;'
+          + self.ID + ': For a ReactiveCapabilityCurve associated with SynchronousMachine, the Curve.xUnit shall be set to UnitSymbol.W and both Curve.y1Unit and Curve.y2Unit shall be set to UnitSymbol.VAr. As the multiplier is not included in the profile it is defined the same as the multiplier used for datatype ActivePower and ReactivePower, i.e. UnitMultiplier.M.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.xUnit  = UnitSymbol::W   and
+            self.y1Unit = UnitSymbol::VAr and
+            self.y2Unit = UnitSymbol::VAr
+        )
+
+context RegularTimePoint
+--docReference non-QoCDC Key=e77210c8-afa4-49a7-bb36-c6aa549efbcd Profile=EQ
+--message The sequence number cannot be negative.
+    inv EQ_RegularTimePoint_sequenceNumber_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/RegularTimePoint_sequenceNumber_valueRange;'
+          + '0;'
+          + self.ID + ': The sequence number cannot be negative.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.sequenceNumber <> null implies self.sequenceNumber >= 0.0)
+
+context RegulatingControl
+def : EQ_DB_REASONABILITY_FACTOR : Real = 2
+--docReference non-QoCDC Key=b5eeb61f-ff85-44da-8ab4-79d24e8a550d Profile=EQ
+--message The following cim:RegulatingControl.modes are not at all allowed    - currentFlow    - admittance    - timeScheduled    - temperature   Flow type of controls (activePower, reactivePower, currentFlow) are not possible at cim:BusbarSection cim:Terminal.
+    inv EQ_RegulatingControl_allowedValues
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/RegulatingControl_allowedValues;'
+          + '0;'
+          + self.ID + ': The following cim:RegulatingControl.modes are not at all allowed    - currentFlow    - admittance    - timeScheduled    - temperature   Flow type of controls (activePower, reactivePower, currentFlow) are not possible at cim:BusbarSection cim:Terminal.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.mode <> RegulatingControlModeKind::currentFlow   and
+            self.mode <> RegulatingControlModeKind::admittance    and
+            self.mode <> RegulatingControlModeKind::timeScheduled and
+            self.mode <> RegulatingControlModeKind::temperature   and
+            self.Terminal.ConductingEquipment.oclIsKindOf( BusbarSection ) implies (
+                self.mode <> RegulatingControlModeKind::activePower and
+                self.mode <> RegulatingControlModeKind::reactivePower
+            )
+        )
+
+context RotatingMachine
+--docReference non-QoCDC Key=466a4d62-dc15-4f4f-aae7-f0819dad269d Profile=EQ
+--message The attribute cannot be a negative value.
+    inv EQ_RotatingMachine_ratedPowerFactor_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/RotatingMachine_ratedPowerFactor_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute cannot be a negative value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.ratedPowerFactor <> null implies self.ratedPowerFactor >= 0.0
+        )
+
+--docReference non-QoCDC Key=c55eb7f2-b438-430f-a473-77a1e879d0ee Profile=EQ
+--message The attribute shall have a positive value.
+    inv EQ_RotatingMachine_ratedS_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/RotatingMachine_ratedS_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall have a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.ratedS <> null implies self.ratedS >  0.0
+        )
+
+--docReference non-QoCDC Key=d4940b10-af05-4591-8fac-c9f7486e3948 Profile=EQ
+--message The attribute shall be a positive value.
+    inv EQ_RotatingMachine_ratedU_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/RotatingMachine_ratedU_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.ratedU <> null implies self.ratedU >  0.0
+        )
+
+context SeriesCompensator
+--docReference non-QoCDC Key=48ef745f-9e76-4a8b-9ee9-2fcf10377060 Profile=EQ
+--message It is a two terminal device.
+    inv EQ_SeriesCompensator_Terminals_numberOfTerminals
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/SeriesCompensator_Terminals_numberOfTerminals;'
+          + '0;'
+          + self.ID + ': It is a two terminal device.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.Terminals->size() = 2
+        )
+
+context ShuntCompensator
+--docReference non-QoCDC Key=9010a1ec-af99-4692-8926-cec01e9b3d75 Profile=EQ
+--message This should normally be within 10% of the voltage at which the capacitor is connected to the network.
+    inv EQ_ShuntCompensator_nominalVoltageDifference
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/ShuntCompensator_nominalVoltageDifference;'
+          + '0;'
+          + self.ID + ': This should normally be within 10% of the voltage at which the capacitor is connected to the network.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.EquipmentContainer <> null implies (
+        	    self.EquipmentContainer.oclIsKindOf( VoltageLevel ) implies
+                    self.EquipmentContainer.oclAsType( VoltageLevel ).BaseVoltage <> null implies
+                        let connU : Real = self.EquipmentContainer.oclAsType( VoltageLevel ).BaseVoltage.nominalVoltage in
+                        let diff  : Real = ( self.nomU - connU ).abs() in
+                        diff / connU <= 0.1
+            )
+        )
+
+--docReference non-QoCDC Key=1aaaa75b-7cfc-493b-ae61-e6daeaaeeb74 Profile=EQ
+--message ShuntCompensator is a single terminal device. 
+    inv EQ_ShuntCompensator_Terminals_numberOfTerminals
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/ShuntCompensator_Terminals_numberOfTerminals;'
+          + '0;'
+          + self.ID + ': ShuntCompensator is a single terminal device. '
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.Terminals->size() = 1
+        )
+
+--docReference non-QoCDC Key=e5d812ab-93be-45bc-a5a9-4561c3392bb9 Profile=EQ
+--message For ShuntCompensator, the association RegulatingCondEq.RequlatingControl shall only point to a RequlatingControl that has the following control modes for RegulatingControl.mode: voltage, reactivePower and powerFactor.
+    inv EQ_ShuntCompensator_controlMode
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/ShuntCompensator_controlMode;'
+          + '0;'
+          + self.ID + ': For ShuntCompensator, the association RegulatingCondEq.RequlatingControl shall only point to a RequlatingControl that has the following control modes for RegulatingControl.mode: voltage, reactivePower and powerFactor.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.RegulatingControl <> null implies
+                self.RegulatingControl.mode = RegulatingControlModeKind::voltage       or
+                self.RegulatingControl.mode = RegulatingControlModeKind::reactivePower or
+                self.RegulatingControl.mode = RegulatingControlModeKind::powerFactor
+        )
+
+context StaticVarCompensator
+--docReference non-QoCDC Key=08a06587-8f13-4dfb-903e-b73a492f6984 Profile=EQ
+--message Shall always be negative.  
+    inv EQ_StaticVarCompensator_inductiveRating_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/StaticVarCompensator_inductiveRating_valueRange;'
+          + '0;'
+          + self.ID + ': Shall always be negative.  '
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.inductiveRating <> null implies self.inductiveRating <  0.0
+        )
+context Switch
+--docReference non-QoCDC Key=09fd0764-e997-4087-8006-13818eb61bd3 Profile=EQ
+--message If the Switch has a status measurement the Discrete.normalValue is expected to match with the Switch.normalOpen.
+/*
+ * discrete.normalValue is unknown
+ * 
+inv Switch_09fd0764e9974087800613818eb61bd3: (      let discreteMeas : Set(Measurement) = self.Measurements->select(oclIsKindOf(Discrete) and measurementType = 'SwitchPosition') in
+        if discreteMeas->notEmpty() then
+            discreteMeas->size() = 1 and
+            let discrete : Discrete = self.Measurements->select(oclIsKindOf(Discrete) and measurementType = 'SwitchPosition')->asSequence()->first().oclAsType(Discrete) in
+            if self.normalOpen then discrete.normalValue = 1
+            else discrete.normalValue = 0 endif
+        else true endif)
+*/
+
+--docReference non-QoCDC Key=c185c3b8-db0f-460c-8fe5-ad3dde2617dc Profile=EQ
+--message All switches are two terminal devices including grounding switches. 
+    inv EQ_Switch_Terminals_numberOfTerminals
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/Switch_Terminals_numberOfTerminals;'
+          + '0;'
+          + self.ID + ': All switches are two terminal devices including grounding switches. '
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.Terminals->size() = 2
+        )
+
+--docReference non-QoCDC Key=2c2c8385-a285-4eb3-aa80-0b1d3098be46 Profile=EQ
+--message The attribute shall be a positive value.
+    inv EQ_Switch_ratedCurrent_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/Switch_ratedCurrent_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.ratedCurrent <> null implies self.ratedCurrent >  0.0
+        )
+
+context SynchronousMachine
+def : SSH_SV_TOT_P_DIFF : Real = 200
+--docReference non-QoCDC Key=83989ab2-a470-4492-ad61-0b1f8b82c6f3 Profile=EQ
+--message If only one SynchronousMachine is associated with the GeneratingUnit then the Equipment.aggregate flag shall be consistent between the SynchronousMachine and GeneratingUnit if it exists in both.
+    inv EQ_SynchronousMachine_aggregate
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/SynchronousMachine_aggregate;'
+          + '0;'
+          + self.ID + ': If only one SynchronousMachine is associated with the GeneratingUnit then the Equipment.aggregate flag shall be consistent between the SynchronousMachine and GeneratingUnit if it exists in both.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.GeneratingUnit <> null implies
+        	    self.GeneratingUnit.RotatingMachine->size() = 1 implies
+                    self.GeneratingUnit.aggregate = self.aggregate
+        )
+
+--docReference non-QoCDC Key=ed53a7d1-2c93-426e-9cd0-6ee7c1ea31d4 Profile=EQ
+--message For SynchronousMachine, the association RegulatingCondEq.RequlatingControl shall only point to a RequlatingControl that has the following control modes for RegulatingControl.mode: voltage, reactivePower and powerFactor.
+    inv EQ_SynchronousMachine_controlMode
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/SynchronousMachine_controlMode;'
+          + '0;'
+          + self.ID + ': For SynchronousMachine, the association RegulatingCondEq.RequlatingControl shall only point to a RequlatingControl that has the following control modes for RegulatingControl.mode: voltage, reactivePower and powerFactor.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.RegulatingControl <> null implies (
+                self.RegulatingControl.mode = RegulatingControlModeKind::voltage       or
+                self.RegulatingControl.mode = RegulatingControlModeKind::reactivePower or
+                self.RegulatingControl.mode = RegulatingControlModeKind::powerFactor
+            )
+        )
+
+context TapChanger
+--docReference non-QoCDC Key=89501af9-447d-4c56-aaeb-0c8f51b9d302 Profile=EQ
+--message The attribute shall be greater than lowStep.
+    inv EQ_TapChanger_highStep_valueRangePair
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/TapChanger_highStep_valueRangePair;'
+          + '0;'
+          + self.ID + ': The attribute shall be greater than lowStep.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.lowStep <> null and self.highStep <> null implies self.lowStep < self.highStep
+        )
+
+--docReference non-QoCDC Key=8f6b11ea-7800-4314-8139-1f7c64c30eeb Profile=EQ
+--message The attribute shall be equal to or greater than lowStep and equal or less than highStep.
+    inv EQ_TapChanger_neutralStep_valueRangePairFrom
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/TapChanger_neutralStep_valueRangePairFrom;'
+          + '0;'
+          + self.ID + ': The attribute shall be equal to or greater than lowStep and equal or less than highStep.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.neutralStep <> null and self.lowStep <> null implies
+                self.lowStep <= self.neutralStep
+        )
+
+--docReference non-QoCDC Key=2e88259f-0374-4d96-afcb-c806c61309f3 Profile=EQ
+--message The attribute shall be equal to or greater than lowStep and equal or less than highStep.
+    inv EQ_TapChanger_neutralStep_valueRangePairTo
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/TapChanger_neutralStep_valueRangePairTo;'
+          + '0;'
+          + self.ID + ': The attribute shall be equal to or greater than lowStep and equal or less than highStep.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.neutralStep <> null and self.highStep <> null implies
+                self.neutralStep <= self.highStep
+        )
+
+--docReference non-QoCDC Key=52945d61-a88f-43fc-b7c7-4c4693625c9e Profile=EQ
+--message The attribute shall be equal to or greater than lowStep and equal to or less than highStep.
+    inv EQ_TapChanger_normalStep_valueRangePairFrom
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/TapChanger_normalStep_valueRangePairFrom;'
+          + '0;'
+          + self.ID + ': The attribute shall be equal to or greater than lowStep and equal to or less than highStep.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.normalStep <> null and self.lowStep <> null implies
+                self.lowStep <= self.normalStep
+        )
+
+--docReference non-QoCDC Key=39b85149-3dce-486a-abdc-5f1210640c2c Profile=EQ
+--message The attribute shall be equal to or greater than lowStep and equal to or less than highStep.
+    inv EQ_TapChanger_normalStep_valueRangePairTo
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/TapChanger_normalStep_valueRangePairTo;'
+          + '0;'
+          + self.ID + ': The attribute shall be equal to or greater than lowStep and equal to or less than highStep.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.normalStep <> null and self.highStep <> null implies
+                self.normalStep <= self.highStep
+        )
+context TapChangerControl
+--docReference non-QoCDC Key=c3ae03f7-f777-407d-a560-7e73f5ea99b1 Profile=EQ
+--message No TapChangerControl is used for the converter transformer, the control function is described in the ACDCConverter-s.
+    inv EQ_TapChangerControl_tapChangerControl
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/TapChangerControl_tapChangerControl;'
+          + '0;'
+          + self.ID + ': No TapChangerControl is used for the converter transformer, the control function is described in the ACDCConverter-s.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.TapChanger->select( tp : TapChanger | tp.oclAsType( RatioTapChanger ).TransformerEnd.oclAsType( PowerTransformerEnd ).PowerTransformer.EquipmentContainer.oclIsKindOf( DCConverterUnit ))->isEmpty() and
+            self.TapChanger->select( tp : TapChanger | tp.oclAsType( PhaseTapChanger ).TransformerEnd.oclAsType( PowerTransformerEnd ).PowerTransformer.EquipmentContainer.oclIsKindOf( DCConverterUnit ))->isEmpty()
+        )
+context Terminal
+--docReference non-QoCDC Key=77ffb721-4438-4245-a093-504d31784d85 Profile=EQ
+--message Multiple tap changers can be combined within one power transformer, but to avoid interpretation issues only one phase shifting and one ratio changing tap changer shall be modelled on any given terminal.
+    inv EQ_Terminal_multipleTypes
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/Terminal_multipleTypes;'
+          + '0;'
+          + self.ID + ': Multiple tap changers can be combined within one power transformer, but to avoid interpretation issues only one phase shifting and one ratio changing tap changer shall be modelled on any given terminal.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.TransformerEnd->notEmpty() implies (
+                self.TransformerEnd->select( te : TransformerEnd | te.RatioTapChanger <> null )->size() <= 1 and
+                self.TransformerEnd->select( te : TransformerEnd | te.PhaseTapChanger <> null )->size() <= 1
+            )
+        )
+
+--docReference non-QoCDC Key=cf43df36-f68c-4e44-9d98-41c8ab092daf Profile=EQ
+--message The phase code on terminals connecting same ConnectivityNode or same TopologicalNode as well as for equipment between two terminals shall be consistent.
+    inv EQ_Terminal_consistencyConnectivityNode
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/Terminal_consistencyConnectivityNode;'
+          + '0;'
+          + self.ID + ': The phase code on terminals connecting same ConnectivityNode or same TopologicalNode as well as for equipment between two terminals shall be consistent.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.phases <> null and self.ConnectivityNode <> null implies (
+                self.ConnectivityNode.Terminals->select( t : Terminal | t.phases = self.phases )->size() = self.ConnectivityNode.Terminals->size()
+            )
+        )
+
+--docReference non-QoCDC Key=cbf91e96-82cc-44a2-91e0-00888c9991fb Profile=EQ
+--message The phase code on terminals connecting same ConnectivityNode or same TopologicalNode as well as for equipment between two terminals shall be consistent.
+    inv EQ_Terminal_consistencyEquipment
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/Terminal_consistencyEquipment;'
+          + '0;'
+          + self.ID + ': The phase code on terminals connecting same ConnectivityNode or same TopologicalNode as well as for equipment between two terminals shall be consistent.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.ConductingEquipment <> null and self.ConnectivityNode <> null implies (
+        	    self.phases <> null and self.ConductingEquipment.Terminals->size() >= 1 implies
+                self.ConductingEquipment.Terminals->select( phases = self.phases )->size() = self.ConductingEquipment.Terminals->size() and
+                self.ConnectivityNode   .Terminals->select( phases = self.phases )->size() = self.ConnectivityNode   .Terminals->size()
+            )
+        )
+
+context VoltageLimit
+--docReference non-QoCDC Key=f5e2996c-3b40-4595-88e8-86eb0b2b4f13 Profile=EQ
+--message The attribute shall be a positive value or zero.
+    inv EQ_VoltageLimit_normalValue_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/VoltageLimit_normalValue_valueRange;'
+          + '0;'
+          + self.ID + ': The attribute shall be a positive value or zero.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+        	self.normalValue <> null implies self.normalValue >= 0.0
+        )
+
+context VsConverter
+--docReference non-QoCDC Key=62367e0a-8eb0-415b-8624-8ab1c6c6b5b8 Profile=EQ
+--message A factor typically less than 1.
+    inv EQ_VsConverter_maxModulationIndex_valueRangeTypical
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/EQ/VsConverter_maxModulationIndex_valueRangeTypical;'
+          + '0;'
+          + self.ID + ': A factor typically less than 1.'
+        )
+    :
+        self.isInCoreEquipmentProfile() implies (
+            self.maxModulationIndex <> null implies self.maxModulationIndex <= 1.0
+        )
+
+endpackage
+
+

@@ -1,0 +1,118 @@
+/*
+*************************************************************************
+**  This file is part of the RiseClipse tool
+**
+**  The content of this file is based on data available on the ENTSO-E
+**  web site (https://www.entsoe.eu/digital/cim/cim-conformity-and-interoperability/)
+**
+**  This file is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
+**  
+**  Contributors:
+**      Computer Science Department, CentraleSupélec
+**      EDF R&D
+**  Contacts:
+**      dominique.marcadet@centralesupelec.fr
+**      aurelie.dehouck-neveu@edf.fr
+**  Web site:
+**      https://riseclipse.github.io/
+*************************************************************************
+*/
+
+import cim : 'http://iec.ch/TC57/CIM100'
+import md : 'http://iec.ch/TC57/61970-552/ModelDescription/1'
+import eu : 'http://iec.ch/TC57/CIM100-European#/'
+
+import '../Helpers/CheckProfile.ocl'
+
+
+package cim
+
+context OperationalLimitType
+-- kind must be set.
+    inv EU_EQ_ExtEuOperationalLimitType_kind
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EU_EQ/ExtEuOperationalLimitType_kind_must_be_set;'
+          + '0;'
+          + 'kind must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.kind <> null
+
+endpackage
+
+package eu
+
+context BoundaryPoint
+-- fromEndIsoCode must be set.
+    inv EU_EQ_BoundaryPoint_fromEndIsoCode
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EU_EQ/BoundaryPoint_fromEndIsoCode_must_be_set;'
+          + '0;'
+          + 'fromEndIsoCode must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.fromEndIsoCode <> null
+
+-- fromEndName must be set.
+    inv EU_EQ_BoundaryPoint_fromEndName
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EU_EQ/BoundaryPoint_fromEndName_must_be_set;'
+          + '0;'
+          + 'fromEndName must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.fromEndName <> null
+
+-- fromEndNameTso must be set.
+    inv EU_EQ_BoundaryPoint_fromEndNameTso
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EU_EQ/BoundaryPoint_fromEndNameTso_must_be_set;'
+          + '0;'
+          + 'fromEndNameTso must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.fromEndNameTso <> null
+
+-- toEndIsoCode must be set.
+    inv EU_EQ_BoundaryPoint_toEndIsoCode
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EU_EQ/BoundaryPoint_toEndIsoCode_must_be_set;'
+          + '0;'
+          + 'toEndIsoCode must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.toEndIsoCode <> null
+
+-- toEndName must be set.
+    inv EU_EQ_BoundaryPoint_toEndName
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EU_EQ/BoundaryPoint_toEndName_must_be_set;'
+          + '0;'
+          + 'toEndName must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.toEndName <> null
+
+-- toEndNameTso must be set.
+    inv EU_EQ_BoundaryPoint_toEndNameTso
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EU_EQ/BoundaryPoint_toEndNameTso_must_be_set;'
+          + '0;'
+          + 'toEndNameTso must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.toEndNameTso <> null
+
+-- ConnectivityNode must be set.
+    inv EU_EQ_BoundaryPoint_ConnectivityNode
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/EU_EQ/BoundaryPoint_ConnectivityNode_must_be_set;'
+          + '0;'
+          + 'ConnectivityNode must be set in ' + self.ID
+        )
+    :
+        self.isInCoreEquipmentProfile() implies self.ConnectivityNode <> null
+
+
+
+endpackage

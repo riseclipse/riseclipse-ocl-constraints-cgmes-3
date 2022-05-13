@@ -1,0 +1,58 @@
+/*
+*************************************************************************
+**  This file is part of the RiseClipse tool
+**
+**  The content of this file is based on data available on the ENTSO-E
+**  web site (https://www.entsoe.eu/digital/cim/cim-conformity-and-interoperability/)
+**
+**  This file is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
+**  
+**  Contributors:
+**      Computer Science Department, CentraleSupélec
+**      EDF R&D
+**  Contacts:
+**      dominique.marcadet@centralesupelec.fr
+**      aurelie.dehouck-neveu@edf.fr
+**  Web site:
+**      https://riseclipse.github.io/
+*************************************************************************
+*/
+
+import cim : 'http://iec.ch/TC57/CIM100'
+import md : 'http://iec.ch/TC57/61970-552/ModelDescription/1'
+
+import '../Helpers/CheckProfile.ocl'
+
+
+package cim
+
+
+context CoordinateSystem
+--docReference non-QoCDC Key=533ac50d-c381-4555-a933-8b07e88de294 Profile=GL
+--message CoordinateSystem.crsUrn: If not specified elsewhere, the CoordinateSystem.crsUrn uses WGS84 (latitude, longitude), i.e. urn:ogc:def:crs:EPSG::4326.
+    inv GL_CoordinateSystem_crsUrn_epsg
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/GL/CoordinateSystem_crsUrn_epsg;'
+          + '0;'
+          + self.ID + ': CoordinateSystem.crsUrn: If not specified elsewhere, the CoordinateSystem.crsUrn uses WGS84 (latitude, longitude), i.e. urn:ogc:def:crs:EPSG::4326.'
+        )
+    :
+        self.isInGeographicalLocationProfile() implies (
+            self.crsUrn = 'urn:ogc:def:crs:EPSG::4326'
+        )
+
+context Location
+--docReference non-QoCDC Key=57b9bf1c-9c7d-485f-b420-e35bd246331d Profile=GL
+--message IEC 61968-13 allows both PositionPoint and mainAddress to be exchanged. CGMES requires that PositionPoint is exchanged and mainAddress is not exchanged.
+    inv GL_Location_allowedProperties
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/GL/Location_allowedProperties;'
+          + '0;'
+          + self.ID + ': IEC 61968-13 allows both PositionPoint and mainAddress to be exchanged. CGMES requires that PositionPoint is exchanged and mainAddress is not exchanged.'
+        )
+    :
+        self.isInGeographicalLocationProfile() implies (
+            self.PositionPoints->notEmpty() and self.mainAddress = null
+        )
+
+endpackage

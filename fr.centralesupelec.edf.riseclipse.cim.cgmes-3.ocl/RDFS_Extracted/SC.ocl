@@ -1,0 +1,813 @@
+/*
+*************************************************************************
+**  This file is part of the RiseClipse tool
+**
+**  The content of this file is based on data available on the ENTSO-E
+**  web site (https://www.entsoe.eu/digital/cim/cim-conformity-and-interoperability/)
+**
+**  This file is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
+**  
+**  Contributors:
+**      Computer Science Department, CentraleSupélec
+**      EDF R&D
+**  Contacts:
+**      dominique.marcadet@centralesupelec.fr
+**      aurelie.dehouck-neveu@edf.fr
+**  Web site:
+**      https://riseclipse.github.io/
+*************************************************************************
+*/
+
+import cim : 'http://iec.ch/TC57/CIM100'
+import md : 'http://iec.ch/TC57/61970-552/ModelDescription/1'
+
+import '../Helpers/CheckProfile.ocl'
+
+
+package cim
+
+
+context PetersenCoil
+-- mode must be set.
+    inv SC_PetersenCoil_mode
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/PetersenCoil_mode_must_be_set;'
+          + '0;'
+          + 'mode must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.mode <> null
+
+-- nominalU must be set.
+    inv SC_PetersenCoil_nominalU
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/PetersenCoil_nominalU_must_be_set;'
+          + '0;'
+          + 'nominalU must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.nominalU <> null
+
+-- xGroundMax must be set.
+    inv SC_PetersenCoil_xGroundMax
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/PetersenCoil_xGroundMax_must_be_set;'
+          + '0;'
+          + 'xGroundMax must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.xGroundMax <> null
+
+-- xGroundMin must be set.
+    inv SC_PetersenCoil_xGroundMin
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/PetersenCoil_xGroundMin_must_be_set;'
+          + '0;'
+          + 'xGroundMin must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.xGroundMin <> null
+
+-- xGroundNominal must be set.
+    inv SC_PetersenCoil_xGroundNominal
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/PetersenCoil_xGroundNominal_must_be_set;'
+          + '0;'
+          + 'xGroundNominal must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.xGroundNominal <> null
+
+
+context MutualCoupling
+-- b0ch must be set.
+    inv SC_MutualCoupling_b0ch
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/MutualCoupling_b0ch_must_be_set;'
+          + '0;'
+          + 'b0ch must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.b0ch <> null
+
+-- distance11 must be set.
+    inv SC_MutualCoupling_distance11
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/MutualCoupling_distance11_must_be_set;'
+          + '0;'
+          + 'distance11 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.distance11 <> null
+
+-- distance12 must be set.
+    inv SC_MutualCoupling_distance12
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/MutualCoupling_distance12_must_be_set;'
+          + '0;'
+          + 'distance12 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.distance12 <> null
+
+-- distance21 must be set.
+    inv SC_MutualCoupling_distance21
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/MutualCoupling_distance21_must_be_set;'
+          + '0;'
+          + 'distance21 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.distance21 <> null
+
+-- distance22 must be set.
+    inv SC_MutualCoupling_distance22
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/MutualCoupling_distance22_must_be_set;'
+          + '0;'
+          + 'distance22 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.distance22 <> null
+
+-- g0ch must be set.
+    inv SC_MutualCoupling_g0ch
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/MutualCoupling_g0ch_must_be_set;'
+          + '0;'
+          + 'g0ch must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.g0ch <> null
+
+-- r0 must be set.
+    inv SC_MutualCoupling_r0
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/MutualCoupling_r0_must_be_set;'
+          + '0;'
+          + 'r0 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.r0 <> null
+
+-- x0 must be set.
+    inv SC_MutualCoupling_x0
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/MutualCoupling_x0_must_be_set;'
+          + '0;'
+          + 'x0 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.x0 <> null
+
+-- Second_Terminal must be set.
+    inv SC_MutualCoupling_Second_Terminal
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/MutualCoupling_Second_Terminal_must_be_set;'
+          + '0;'
+          + 'Second_Terminal must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.Second_Terminal <> null
+
+-- First_Terminal must be set.
+    inv SC_MutualCoupling_First_Terminal
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/MutualCoupling_First_Terminal_must_be_set;'
+          + '0;'
+          + 'First_Terminal must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.First_Terminal <> null
+
+
+context NonlinearShuntCompensatorPoint
+-- b0 must be set.
+    inv SC_NonlinearShuntCompensatorPoint_b0
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/NonlinearShuntCompensatorPoint_b0_must_be_set;'
+          + '0;'
+          + 'b0 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.b0 <> null
+
+-- g0 must be set.
+    inv SC_NonlinearShuntCompensatorPoint_g0
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/NonlinearShuntCompensatorPoint_g0_must_be_set;'
+          + '0;'
+          + 'g0 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.g0 <> null
+
+
+context ExternalNetworkInjection
+-- maxInitialSymShCCurrent must be set.
+    inv SC_ExternalNetworkInjection_maxInitialSymShCCurrent
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/ExternalNetworkInjection_maxInitialSymShCCurrent_must_be_set;'
+          + '0;'
+          + 'maxInitialSymShCCurrent must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.maxInitialSymShCCurrent <> null
+
+-- maxR0ToX0Ratio must be set.
+    inv SC_ExternalNetworkInjection_maxR0ToX0Ratio
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/ExternalNetworkInjection_maxR0ToX0Ratio_must_be_set;'
+          + '0;'
+          + 'maxR0ToX0Ratio must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.maxR0ToX0Ratio <> null
+
+-- maxR1ToX1Ratio must be set.
+    inv SC_ExternalNetworkInjection_maxR1ToX1Ratio
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/ExternalNetworkInjection_maxR1ToX1Ratio_must_be_set;'
+          + '0;'
+          + 'maxR1ToX1Ratio must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.maxR1ToX1Ratio <> null
+
+-- maxZ0ToZ1Ratio must be set.
+    inv SC_ExternalNetworkInjection_maxZ0ToZ1Ratio
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/ExternalNetworkInjection_maxZ0ToZ1Ratio_must_be_set;'
+          + '0;'
+          + 'maxZ0ToZ1Ratio must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.maxZ0ToZ1Ratio <> null
+
+-- minInitialSymShCCurrent must be set.
+    inv SC_ExternalNetworkInjection_minInitialSymShCCurrent
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/ExternalNetworkInjection_minInitialSymShCCurrent_must_be_set;'
+          + '0;'
+          + 'minInitialSymShCCurrent must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.minInitialSymShCCurrent <> null
+
+-- minR0ToX0Ratio must be set.
+    inv SC_ExternalNetworkInjection_minR0ToX0Ratio
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/ExternalNetworkInjection_minR0ToX0Ratio_must_be_set;'
+          + '0;'
+          + 'minR0ToX0Ratio must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.minR0ToX0Ratio <> null
+
+-- minR1ToX1Ratio must be set.
+    inv SC_ExternalNetworkInjection_minR1ToX1Ratio
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/ExternalNetworkInjection_minR1ToX1Ratio_must_be_set;'
+          + '0;'
+          + 'minR1ToX1Ratio must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.minR1ToX1Ratio <> null
+
+-- minZ0ToZ1Ratio must be set.
+    inv SC_ExternalNetworkInjection_minZ0ToZ1Ratio
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/ExternalNetworkInjection_minZ0ToZ1Ratio_must_be_set;'
+          + '0;'
+          + 'minZ0ToZ1Ratio must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.minZ0ToZ1Ratio <> null
+
+
+context LinearShuntCompensator
+-- b0PerSection must be set.
+    inv SC_LinearShuntCompensator_b0PerSection
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/LinearShuntCompensator_b0PerSection_must_be_set;'
+          + '0;'
+          + 'b0PerSection must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.b0PerSection <> null
+
+-- g0PerSection must be set.
+    inv SC_LinearShuntCompensator_g0PerSection
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/LinearShuntCompensator_g0PerSection_must_be_set;'
+          + '0;'
+          + 'g0PerSection must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.g0PerSection <> null
+
+
+context GroundingImpedance
+-- x must be set.
+    inv SC_GroundingImpedance_x
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/GroundingImpedance_x_must_be_set;'
+          + '0;'
+          + 'x must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.x <> null
+
+
+context PowerTransformer
+-- isPartOfGeneratorUnit must be set.
+    inv SC_PowerTransformer_isPartOfGeneratorUnit
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/PowerTransformer_isPartOfGeneratorUnit_must_be_set;'
+          + '0;'
+          + 'isPartOfGeneratorUnit must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.isPartOfGeneratorUnit <> null
+
+
+context ACLineSegment
+-- b0ch must be set.
+    inv SC_ACLineSegment_b0ch
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/ACLineSegment_b0ch_must_be_set;'
+          + '0;'
+          + 'b0ch must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.b0ch <> null
+
+-- g0ch must be set.
+    inv SC_ACLineSegment_g0ch
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/ACLineSegment_g0ch_must_be_set;'
+          + '0;'
+          + 'g0ch must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.g0ch <> null
+
+-- r0 must be set.
+    inv SC_ACLineSegment_r0
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/ACLineSegment_r0_must_be_set;'
+          + '0;'
+          + 'r0 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.r0 <> null
+
+-- shortCircuitEndTemperature must be set.
+    inv SC_ACLineSegment_shortCircuitEndTemperature
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/ACLineSegment_shortCircuitEndTemperature_must_be_set;'
+          + '0;'
+          + 'shortCircuitEndTemperature must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.shortCircuitEndTemperature <> null
+
+-- x0 must be set.
+    inv SC_ACLineSegment_x0
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/ACLineSegment_x0_must_be_set;'
+          + '0;'
+          + 'x0 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.x0 <> null
+
+
+context AsynchronousMachine
+-- converterFedDrive must be set.
+    inv SC_AsynchronousMachine_converterFedDrive
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/AsynchronousMachine_converterFedDrive_must_be_set;'
+          + '0;'
+          + 'converterFedDrive must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.converterFedDrive <> null
+
+-- efficiency must be set.
+    inv SC_AsynchronousMachine_efficiency
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/AsynchronousMachine_efficiency_must_be_set;'
+          + '0;'
+          + 'efficiency must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.efficiency <> null
+
+-- iaIrRatio must be set.
+    inv SC_AsynchronousMachine_iaIrRatio
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/AsynchronousMachine_iaIrRatio_must_be_set;'
+          + '0;'
+          + 'iaIrRatio must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.iaIrRatio <> null
+
+-- polePairNumber must be set.
+    inv SC_AsynchronousMachine_polePairNumber
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/AsynchronousMachine_polePairNumber_must_be_set;'
+          + '0;'
+          + 'polePairNumber must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.polePairNumber <> null
+
+-- ratedMechanicalPower must be set.
+    inv SC_AsynchronousMachine_ratedMechanicalPower
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/AsynchronousMachine_ratedMechanicalPower_must_be_set;'
+          + '0;'
+          + 'ratedMechanicalPower must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.ratedMechanicalPower <> null
+
+-- reversible must be set.
+    inv SC_AsynchronousMachine_reversible
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/AsynchronousMachine_reversible_must_be_set;'
+          + '0;'
+          + 'reversible must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.reversible <> null
+
+
+context SeriesCompensator
+-- r0 must be set.
+    inv SC_SeriesCompensator_r0
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/SeriesCompensator_r0_must_be_set;'
+          + '0;'
+          + 'r0 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.r0 <> null
+
+-- x0 must be set.
+    inv SC_SeriesCompensator_x0
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/SeriesCompensator_x0_must_be_set;'
+          + '0;'
+          + 'x0 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.x0 <> null
+
+-- varistorPresent must be set.
+    inv SC_SeriesCompensator_varistorPresent
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/SeriesCompensator_varistorPresent_must_be_set;'
+          + '0;'
+          + 'varistorPresent must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.varistorPresent <> null
+
+
+context SynchronousMachine
+-- earthing must be set.
+    inv SC_SynchronousMachine_earthing
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/SynchronousMachine_earthing_must_be_set;'
+          + '0;'
+          + 'earthing must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.earthing <> null
+
+-- x0 must be set.
+    inv SC_SynchronousMachine_x0
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/SynchronousMachine_x0_must_be_set;'
+          + '0;'
+          + 'x0 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.x0 <> null
+
+-- r0 must be set.
+    inv SC_SynchronousMachine_r0
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/SynchronousMachine_r0_must_be_set;'
+          + '0;'
+          + 'r0 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.r0 <> null
+
+-- x2 must be set.
+    inv SC_SynchronousMachine_x2
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/SynchronousMachine_x2_must_be_set;'
+          + '0;'
+          + 'x2 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.x2 <> null
+
+-- r2 must be set.
+    inv SC_SynchronousMachine_r2
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/SynchronousMachine_r2_must_be_set;'
+          + '0;'
+          + 'r2 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.r2 <> null
+
+-- r must be set.
+    inv SC_SynchronousMachine_r
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/SynchronousMachine_r_must_be_set;'
+          + '0;'
+          + 'r must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.r <> null
+
+-- satDirectSubtransX must be set.
+    inv SC_SynchronousMachine_satDirectSubtransX
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/SynchronousMachine_satDirectSubtransX_must_be_set;'
+          + '0;'
+          + 'satDirectSubtransX must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.satDirectSubtransX <> null
+
+
+context EquivalentBranch
+-- negativeR12 must be set.
+    inv SC_EquivalentBranch_negativeR12
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/EquivalentBranch_negativeR12_must_be_set;'
+          + '0;'
+          + 'negativeR12 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.negativeR12 <> null
+
+-- negativeR21 must be set.
+    inv SC_EquivalentBranch_negativeR21
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/EquivalentBranch_negativeR21_must_be_set;'
+          + '0;'
+          + 'negativeR21 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.negativeR21 <> null
+
+-- negativeX12 must be set.
+    inv SC_EquivalentBranch_negativeX12
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/EquivalentBranch_negativeX12_must_be_set;'
+          + '0;'
+          + 'negativeX12 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.negativeX12 <> null
+
+-- negativeX21 must be set.
+    inv SC_EquivalentBranch_negativeX21
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/EquivalentBranch_negativeX21_must_be_set;'
+          + '0;'
+          + 'negativeX21 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.negativeX21 <> null
+
+-- positiveR12 must be set.
+    inv SC_EquivalentBranch_positiveR12
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/EquivalentBranch_positiveR12_must_be_set;'
+          + '0;'
+          + 'positiveR12 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.positiveR12 <> null
+
+-- positiveR21 must be set.
+    inv SC_EquivalentBranch_positiveR21
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/EquivalentBranch_positiveR21_must_be_set;'
+          + '0;'
+          + 'positiveR21 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.positiveR21 <> null
+
+-- positiveX12 must be set.
+    inv SC_EquivalentBranch_positiveX12
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/EquivalentBranch_positiveX12_must_be_set;'
+          + '0;'
+          + 'positiveX12 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.positiveX12 <> null
+
+-- positiveX21 must be set.
+    inv SC_EquivalentBranch_positiveX21
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/EquivalentBranch_positiveX21_must_be_set;'
+          + '0;'
+          + 'positiveX21 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.positiveX21 <> null
+
+-- zeroR12 must be set.
+    inv SC_EquivalentBranch_zeroR12
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/EquivalentBranch_zeroR12_must_be_set;'
+          + '0;'
+          + 'zeroR12 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.zeroR12 <> null
+
+-- zeroR21 must be set.
+    inv SC_EquivalentBranch_zeroR21
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/EquivalentBranch_zeroR21_must_be_set;'
+          + '0;'
+          + 'zeroR21 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.zeroR21 <> null
+
+-- zeroX12 must be set.
+    inv SC_EquivalentBranch_zeroX12
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/EquivalentBranch_zeroX12_must_be_set;'
+          + '0;'
+          + 'zeroX12 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.zeroX12 <> null
+
+-- zeroX21 must be set.
+    inv SC_EquivalentBranch_zeroX21
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/EquivalentBranch_zeroX21_must_be_set;'
+          + '0;'
+          + 'zeroX21 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.zeroX21 <> null
+
+
+context PowerTransformerEnd
+-- b0 must be set.
+    inv SC_PowerTransformerEnd_b0
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/PowerTransformerEnd_b0_must_be_set;'
+          + '0;'
+          + 'b0 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.b0 <> null
+
+-- phaseAngleClock must be set.
+    inv SC_PowerTransformerEnd_phaseAngleClock
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/PowerTransformerEnd_phaseAngleClock_must_be_set;'
+          + '0;'
+          + 'phaseAngleClock must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.phaseAngleClock <> null
+
+-- g0 must be set.
+    inv SC_PowerTransformerEnd_g0
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/PowerTransformerEnd_g0_must_be_set;'
+          + '0;'
+          + 'g0 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.g0 <> null
+
+-- r0 must be set.
+    inv SC_PowerTransformerEnd_r0
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/PowerTransformerEnd_r0_must_be_set;'
+          + '0;'
+          + 'r0 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.r0 <> null
+
+-- x0 must be set.
+    inv SC_PowerTransformerEnd_x0
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/PowerTransformerEnd_x0_must_be_set;'
+          + '0;'
+          + 'x0 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.x0 <> null
+
+
+context EquivalentInjection
+-- r must be set.
+    inv SC_EquivalentInjection_r
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/EquivalentInjection_r_must_be_set;'
+          + '0;'
+          + 'r must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.r <> null
+
+-- r0 must be set.
+    inv SC_EquivalentInjection_r0
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/EquivalentInjection_r0_must_be_set;'
+          + '0;'
+          + 'r0 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.r0 <> null
+
+-- r2 must be set.
+    inv SC_EquivalentInjection_r2
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/EquivalentInjection_r2_must_be_set;'
+          + '0;'
+          + 'r2 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.r2 <> null
+
+-- x must be set.
+    inv SC_EquivalentInjection_x
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/EquivalentInjection_x_must_be_set;'
+          + '0;'
+          + 'x must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.x <> null
+
+-- x0 must be set.
+    inv SC_EquivalentInjection_x0
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/EquivalentInjection_x0_must_be_set;'
+          + '0;'
+          + 'x0 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.x0 <> null
+
+-- x2 must be set.
+    inv SC_EquivalentInjection_x2
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/EquivalentInjection_x2_must_be_set;'
+          + '0;'
+          + 'x2 must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.x2 <> null
+
+
+context TransformerEnd
+-- grounded must be set.
+    inv SC_TransformerEnd_grounded
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/TransformerEnd_grounded_must_be_set;'
+          + '0;'
+          + 'grounded must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.grounded <> null
+
+
+context IdentifiedObject
+-- mRID must be set.
+    inv SC_IdentifiedObject_mRID
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/SC/IdentifiedObject_mRID_must_be_set;'
+          + '0;'
+          + 'mRID must be set in ' + self.ID
+        )
+    :
+        self.isInShortCircuitProfile() implies self.mRID <> null
+
+
+
+endpackage

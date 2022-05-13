@@ -1,0 +1,123 @@
+/*
+*************************************************************************
+**  This file is part of the RiseClipse tool
+**
+**  The content of this file is based on data available on the ENTSO-E
+**  web site (https://www.entsoe.eu/digital/cim/cim-conformity-and-interoperability/)
+**
+**  This file is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
+**  
+**  Contributors:
+**      Computer Science Department, CentraleSupélec
+**      EDF R&D
+**  Contacts:
+**      dominique.marcadet@centralesupelec.fr
+**      aurelie.dehouck-neveu@edf.fr
+**  Web site:
+**      https://riseclipse.github.io/
+*************************************************************************
+*/
+
+import cim : 'http://iec.ch/TC57/CIM100'
+import md : 'http://iec.ch/TC57/61970-552/ModelDescription/1'
+
+import '../Helpers/CheckProfile.ocl'
+
+
+package cim
+
+
+context ConnectivityNode
+-- TopologicalNode must be set.
+    inv TP_ConnectivityNode_TopologicalNode
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/TP/ConnectivityNode_TopologicalNode_must_be_set;'
+          + '0;'
+          + 'TopologicalNode must be set in ' + self.ID
+        )
+    :
+        self.isInTopologyProfile() implies self.TopologicalNode <> null
+
+
+context DCTopologicalNode
+-- DCEquipmentContainer must be set.
+    inv TP_DCTopologicalNode_DCEquipmentContainer
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/TP/DCTopologicalNode_DCEquipmentContainer_must_be_set;'
+          + '0;'
+          + 'DCEquipmentContainer must be set in ' + self.ID
+        )
+    :
+        self.isInTopologyProfile() implies self.DCEquipmentContainer <> null
+
+
+context DCBaseTerminal
+-- DCTopologicalNode must be set.
+    inv TP_DCBaseTerminal_DCTopologicalNode
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/TP/DCBaseTerminal_DCTopologicalNode_must_be_set;'
+          + '0;'
+          + 'DCTopologicalNode must be set in ' + self.ID
+        )
+    :
+        self.isInTopologyProfile() implies self.DCTopologicalNode <> null
+
+
+context TopologicalNode
+-- BaseVoltage must be set.
+    inv TP_TopologicalNode_BaseVoltage
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/TP/TopologicalNode_BaseVoltage_must_be_set;'
+          + '0;'
+          + 'BaseVoltage must be set in ' + self.ID
+        )
+    :
+        self.isInTopologyProfile() implies self.BaseVoltage <> null
+
+-- ConnectivityNodeContainer must be set.
+    inv TP_TopologicalNode_ConnectivityNodeContainer
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/TP/TopologicalNode_ConnectivityNodeContainer_must_be_set;'
+          + '0;'
+          + 'ConnectivityNodeContainer must be set in ' + self.ID
+        )
+    :
+        self.isInTopologyProfile() implies self.ConnectivityNodeContainer <> null
+
+-- Terminal must be set.
+    inv TP_TopologicalNode_Terminal
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/TP/TopologicalNode_Terminal_must_be_set;'
+          + '0;'
+          + 'Terminal must be set in ' + self.ID
+        )
+    :
+        self.isInTopologyProfile() implies self.Terminal->size() > 0
+
+
+context DCNode
+-- DCTopologicalNode must be set.
+    inv TP_DCNode_DCTopologicalNode
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/TP/DCNode_DCTopologicalNode_must_be_set;'
+          + '0;'
+          + 'DCTopologicalNode must be set in ' + self.ID
+        )
+    :
+        self.isInTopologyProfile() implies self.DCTopologicalNode <> null
+
+
+context IdentifiedObject
+-- mRID must be set.
+    inv TP_IdentifiedObject_mRID
+        (   'ERROR;'
+          + 'OCL/RDFS_Extracted/TP/IdentifiedObject_mRID_must_be_set;'
+          + '0;'
+          + 'mRID must be set in ' + self.ID
+        )
+    :
+        self.isInTopologyProfile() implies self.mRID <> null
+
+
+
+endpackage

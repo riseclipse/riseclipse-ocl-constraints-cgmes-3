@@ -1,0 +1,160 @@
+/*
+*************************************************************************
+**  This file is part of the RiseClipse tool
+**
+**  The content of this file is based on data available on the ENTSO-E
+**  web site (https://www.entsoe.eu/digital/cim/cim-conformity-and-interoperability/)
+**
+**  This file is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
+**  
+**  Contributors:
+**      Computer Science Department, CentraleSupélec
+**      EDF R&D
+**  Contacts:
+**      dominique.marcadet@centralesupelec.fr
+**      aurelie.dehouck-neveu@edf.fr
+**  Web site:
+**      https://riseclipse.github.io/
+*************************************************************************
+*/
+
+import cim : 'http://iec.ch/TC57/CIM100'
+import md : 'http://iec.ch/TC57/61970-552/ModelDescription/1'
+
+import '../Helpers/CheckProfile.ocl'
+
+
+package cim
+
+
+context AccumulatorLimit
+--docReference non-QoCDC Key=c19ab462-4486-4169-90de-32cd4ad43294 Profile=OP
+--message The value is positive.
+    inv OP_AccumulatorLimit_value_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/OP/AccumulatorLimit_value_valueRange;'
+          + '0;'
+          + self.ID + ': The value is positive.'
+        )
+    :
+        self.isInOperationProfile() implies (
+            self.value <> null implies self.value >  0.0
+        )
+
+/*
+ * AccumulatorValue.value is unknown
+ * 
+context AccumulatorValue
+--docReference non-QoCDC Key=6dc4a06f-796c-4388-9fb7-e9ba93009176 Profile=OP
+--message The value is positive.
+    inv OP_AccumulatorValue_value_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/OP/AccumulatorValue_value_valueRange;'
+          + '0;'
+          + self.ID + ': The value is positive.'
+        )
+    :
+        self.isInOperationProfile() implies (self.value >  0.0)
+ */
+
+context Control
+--docReference non-QoCDC Key=ba78ae07-9967-4757-a01e-fdb363c2d94e Profile=OP
+--message It shall be unique among all specified types.
+    inv OP_Control_controlType_valueRange
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/OP/Control_controlType_valueRange;'
+          + '0;'
+          + self.ID + ': It shall be unique among all specified types.'
+        )
+    :
+        self.isInOperationProfile() implies (
+            Control.allInstances()->isUnique( self.controlType )
+        )
+
+context Measurement
+--docReference non-QoCDC Key=f5ac22f6-d987-44cc-8224-2f7d1cc3a48a Profile=OP
+--message If both a Terminal and PSR are associated, and the PSR is of type ConductingEquipment, the associated Terminal should belong to that ConductingEquipment instance.
+    inv OP_Measurement_valueType
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/OP/Measurement_valueType;'
+          + '0;'
+          + self.ID + ': If both a Terminal and PSR are associated, and the PSR is of type ConductingEquipment, the associated Terminal should belong to that ConductingEquipment instance.'
+        )
+    :
+        self.isInOperationProfile() implies (
+                self.PowerSystemResource <> null and self.Terminal <> null implies
+                    self.Terminal.oclIsKindOf( Terminal ) and self.PowerSystemResource.oclIsKindOf( ConductingEquipment ) implies
+                        self.PowerSystemResource = self.Terminal.oclAsType( Terminal ).ConductingEquipment
+        )
+
+--docReference non-QoCDC Key=aa1a8d1f-008a-4da6-ae28-9580d87a5915 Profile=OP
+--message For Accumulator, Measurement.measurementType is restricted to the following valid values: ApparentEnergy, ReactiveEnergy, ActiveEnergy.
+    inv OP_Measurement_measurementType_accumulatorValues
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/OP/Measurement_measurementType_accumulatorValues;'
+          + '0;'
+          + self.ID + ': For Accumulator, Measurement.measurementType is restricted to the following valid values: ApparentEnergy, ReactiveEnergy, ActiveEnergy.'
+        )
+    :
+        self.isInOperationProfile() implies (
+            self.measurementType = 'ApparentEnergy' or
+            self.measurementType = 'ReactiveEnergy' or
+            self.measurementType = 'ActiveEnergy'
+        )
+
+--docReference non-QoCDC Key=901dd8b0-b301-4d54-80e7-e18c37d09e87 Profile=OP
+--message For Discrete, Measurement.measurementType is restricted to the following valid values: SwitchPosition.
+    inv OP_Measurement_measurementType_discreteValues
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/OP/Measurement_measurementType_discreteValues;'
+          + '0;'
+          + self.ID + ': For Discrete, Measurement.measurementType is restricted to the following valid values: SwitchPosition.'
+        )
+    :
+        self.isInOperationProfile() implies (
+            self.measurementType = 'SwitchPosition'
+        )
+
+--docReference non-QoCDC Key=f69ee509-e927-4e25-b4d3-9a8ee6a703fd Profile=OP
+--message For Accumulator, Measurement.unitSymbol is restricted to the following valid values: VAh, VArh, Wh.
+    inv OP_Measurement_unitSymbol_accumulatorUnitValues
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/OP/Measurement_unitSymbol_accumulatorUnitValues;'
+          + '0;'
+          + self.ID + ': For Accumulator, Measurement.unitSymbol is restricted to the following valid values: VAh, VArh, Wh.'
+        )
+    :
+        self.isInOperationProfile() implies (
+            self.unitSymbol = UnitSymbol::VAh  or
+            self.unitSymbol = UnitSymbol::VArh or
+            self.unitSymbol = UnitSymbol::Wh
+        )
+
+--docReference non-QoCDC Key=8e5e83f5-9508-4e27-beb3-c6049ab18af5 Profile=OP
+--message For Discrete, Measurement.unitSymbol is restricted to the following valid values: none.
+    inv OP_Measurement_unitSymbol_discreteUnitValues
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/OP/Measurement_unitSymbol_discreteUnitValues;'
+          + '0;'
+          + self.ID + ': For Discrete, Measurement.unitSymbol is restricted to the following valid values: none.'
+        )
+    :
+        self.isInOperationProfile() implies (
+            self.unitSymbol = UnitSymbol::none
+        )
+
+context MeasurementValueSource
+--docReference non-QoCDC Key=c283e64e-2c51-4749-9834-249cde464231 Profile=OP
+--message For MeasurementValueSource, attribute IdentifiedObject.name is restricted to the following strings for MeasurementValueSource: ICCP, SCADA.
+    inv OP_MeasurementValueSource_name_name
+        (   'ERROR;'
+          + 'OCL/XLSX_Extracted/OP/MeasurementValueSource_name_name;'
+          + '0;'
+          + self.ID + ': For MeasurementValueSource, attribute IdentifiedObject.name is restricted to the following strings for MeasurementValueSource: ICCP, SCADA.'
+        )
+    :
+        self.isInOperationProfile() implies (
+            self.name = 'ICCP' or self.name = 'SCADA'
+        )
+
+endpackage
